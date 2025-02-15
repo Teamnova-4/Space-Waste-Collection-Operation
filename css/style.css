@@ -1,0 +1,130 @@
+/* style.css */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    background-color: #111;
+    color: #eee;
+    overflow: hidden; /* 화면 고정 */
+}
+
+.game-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.ui-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100; /* 다른 요소 위에 표시 */
+}
+
+.ui-bar .info {
+    margin-right: 20px;
+}
+
+.game-area {
+    flex-grow: 1;
+    background-color: #222;
+    position: relative; /* 드론과 폐기물 위치 기준 */
+    overflow: hidden; /* 게임 영역 벗어나는 요소 숨김 */
+    cursor: crosshair; /* 수동 청소 시 커서 변경 */
+}
+
+.upgrade-panel {
+    width: 250px;
+    background-color: #333;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 10; /* 게임 영역 위에 표시 */
+}
+
+.upgrade-panel h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.upgrade-item {
+    background-color: #444;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.upgrade-item:hover {
+    background-color: #555;
+}
+
+.message-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #444;
+    color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    z-index: 1000; /* 최상위 레이어 */
+}
+
+.message-box h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.message-box p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.message-box button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.message-box button:hover {
+    background-color: #666;
+}
+
+.debris {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: gray;
+    border-radius: 50%;
+}
+
+.drone {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: lightblue;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+
+.hidden {
+    display: none !important;
+}
