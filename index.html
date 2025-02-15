@@ -24,17 +24,12 @@
     <div class="title-screen-container">
         <h1 class="game-logo">우주 폐기물 수거 작전</h1>
         <div class="button-container">
-            <button class="game-button game-start-button">게임 시작</button>
+            <button class="game-button game-start-button" onclick="StartGame()">게임 시작</button>
             <button class="game-button options-button">옵션</button>
         </div>
-        <p class="creator-name">만든 사람: 오현석, 유상혁, 갈동건, 박상연 </p>
     </div>
-    
-    
     <canvas id="canvas"></canvas>
 
-    <script type="module" src="./Script/StructureCode/GameObject.js"></script>
-    <script type="module" src="./Script/StructureCode/GameLoop.js"></script>
-    <script type="module" src="./Script/GameObjects/testGameObject.js"></script>
+    <script type="module" src="./Script/StructureCode/GameSystem.js"></script>
 </body>
 </html>
