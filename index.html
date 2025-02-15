@@ -119,15 +119,15 @@
             document.getElementById("credit-display").style.display = 'block';
             document.getElementById("base-upgrade-container").style.display = 'block';
 
-
+            // 우주 쓰레기 생성
+            const trashFactory = new TrashFactory();
+            trashFactory.createTrash();
         });
 
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
 
-        // 우주 쓰레기 생성
-        const trashFactory = new TrashFactory();
-        trashFactory.createTrash();
+
 
         // 우주정거장 생성 현석
         let spacestation = new spaceStation();
