@@ -12,6 +12,7 @@ export class TrashFactory {
    
     // 우주 쓰레기 생성
      createTrash() {
+        console.log("쓰레기 생성 시작");
 
         // 이동속도와 초당 생성 개수 반영
         setInterval(() => {
