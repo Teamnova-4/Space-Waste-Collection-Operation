@@ -50,23 +50,41 @@ export class GameObject extends GameEvent{
         }
     }
 
+    /**
+     * 그리기 함수
+     * Update와 LateUpdate사이에서 호출됨
+    */
     OnDraw(ctx) {
         this.resource.draw(ctx);
+    }
+
+    /**
+     * 물리계산 함수
+     * Update와 LateUpdate사이에서 호출됨
+     */
+    OnCalculatePhysics(){
+        this.transform.position.x += this.physics.velocity.x * this.deltaTime;
+        this.transform.position.y += this.physics.velocity.y * this.deltaTime;
+
+        this.physics.velocity.x += this.physics.acceleration.x * this.deltaTime;
+        this.physics.velocity.y += this.physics.acceleration.y * this.deltaTime;
     }
 }
 
 class Transform {
     constructor() {
-        this.anchor = {x: 0.5, y: 0.5}
-        this.position = { x: 0, y: 0 };
+        this.anchor = {x: 0.5, y: 0.5} // 회전 고정점
+        this.position = { x: 0, y: 0 }; // 위치
         this.rotation = 0; // 회전 각도 (도 단위)
-        this.scale = { x: 1, y: 1 };
+        this.scale = { x: 1, y: 1 }; // 크기
     }
 }
 
 class Physics{
     constructor() {
+        // 오브젝트의 이동속도
         this.velocity = { x: 0, y: 0 };
+        // 오브젝트의 가속도
         this.acceleration = { x: 0, y: 0 };
     }
 }
@@ -186,6 +204,7 @@ export class GameLoop {
         this.objects.forEach(object => {
             object.Update();
             object.OnDraw(this.ctx);
+            object.OnCalculatePhysics();
             object.LateUpdate();
         }); 
 
