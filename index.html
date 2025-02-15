@@ -33,12 +33,12 @@
         </div>
     </div>
 
-     <!-- 크레딧 표시 (드론 업그레이드 왼쪽) -->
-     <div id="credit-display" style="display: none;" class="credit-left">
+    <!-- 크레딧 표시 (드론 업그레이드 바로 왼쪽) 현석-->
+    <div id="credit-display" style="display: none;" class="credit-left">
         <p>현재 크레딧: <span id="credits">100</span></p>
     </div>
 
-    <!-- 드론 업그레이드 (오른쪽) -->
+    <!-- 드론 업그레이드 (오른쪽) 현석 -->
     <div id="upgrade-system" style="display: none;">
         <h1>드론 업그레이드</h1>
         <div id="drone-upgrade">
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <!-- 기지 업그레이드 (오른쪽 하단) -->
+    <!-- 기지 업그레이드 (오른쪽 하단) 현석 -->
     <div id="base-upgrade-container" style="display: none;" class="base-right">
         <h1>기지 업그레이드</h1>
         <div id="base-upgrade">
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <!-- 알림 모달 -->
+    <!-- 알림 모달 현석 -->
     <div id="modal" style="display: none;">
         <div id="modal-message"></div>
         <button id="modal-close-btn">닫기</button>
@@ -73,6 +73,7 @@
 
     <script type="module">
         import { GameLoop } from "./Script/StructureCode/GameSystem.js";
+        // 우주 정거장 추가 - 현석
         import { spaceStation } from "./Script/GameObjects/spaceStation.js";
 
         // 캔버스 및 WebGL 컨텍스트 가져오기
@@ -100,29 +101,29 @@
         document.querySelector('.game-start-button').addEventListener('click', () => {
             console.log("StartGame");
 
-            // 타이틀 화면 제거
+            // 타이틀 화면 제거 현석
             const titleScreen = document.querySelector('.title-screen-container');
             if (titleScreen) {
                 titleScreen.remove();
             }
 
-            // 캔버스 및 UI 표시
+            // 캔버스 및 UI 표시 현석
             document.getElementById("canvas").style.display = 'block';
             document.getElementById("upgrade-system").style.display = 'block';
             document.getElementById("credit-display").style.display = 'block';
 
-            // 기지 업그레이드 UI 표시 추가해야 함
+            // 기지 업그레이드 UI 표시 현석
             document.getElementById("base-upgrade-container").style.display = 'block';
         });
 
-        // 업그레이드 로직
+        // 업그레이드 로직 현석
         let credits = 100;
         let droneSpeedLevel = 1;
         let droneCapacityLevel = 0;
         let baseDefenseLevel = 1;
         let baseStorageLevel = 0;
 
-        // 드론 속도 업그레이드
+        // 드론 속도 업그레이드 현석
         document.getElementById("drone-speed-btn").addEventListener("click", () => {
             if (credits >= 10) {
                 credits -= 10;
@@ -134,7 +135,7 @@
             }
         });
 
-        // 드론 적재 용량 업그레이드
+        // 드론 적재 용량 업그레이드 현석
         document.getElementById("drone-capacity-btn").addEventListener("click", () => {
             if (credits >= 15) {
                 credits -= 15;
@@ -146,7 +147,7 @@
             }
         });
 
-        // 기지 방어력 업그레이드
+        // 기지 방어력 업그레이드 현석
         document.getElementById("base-defense-btn").addEventListener("click", () => {
             if (credits >= 20) {
                 credits -= 20;
@@ -158,7 +159,7 @@
             }
         });
 
-        // 기지 저장 공간 업그레이드
+        // 기지 저장 공간 업그레이드 현석
         document.getElementById("base-storage-btn").addEventListener("click", () => {
             if (credits >= 25) {
                 credits -= 25;
@@ -172,6 +173,7 @@
 
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
+        // 우주정거장 생성 현석석
         let test = new spaceStation();
 
 

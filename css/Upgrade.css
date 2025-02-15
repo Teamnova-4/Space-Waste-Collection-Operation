@@ -47,7 +47,7 @@
 .credit-left {
     position: absolute;
     top: 20px;
-    left: 20px;
+    left: 1500px; /* 드론 업그레이드 왼쪽에 배치 */
     color: white;
     font-size: 20px;
 }
