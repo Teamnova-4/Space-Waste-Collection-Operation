@@ -167,7 +167,7 @@ class GameResource {
         console.log("img "+ this.image);
         this.image.src = "";
         this.gameObject = gameObject;
-        console.log("this.gameObject "+ this.gameObject.Image);
+        console.log("this.gameObject "+ this.gameObject);
         console.log("this.image.src "+this.image.src);
 
         this.image.onload = () => {

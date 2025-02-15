@@ -114,9 +114,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("base-defense-btn").addEventListener("click", () => {
         upgradeFeature("defense");
     });
-    document.getElementById("base-storage-btn").addEventListener("click", () => {
-        upgradeFeature("storage");
-    });
+    // document.getElementById("base-storage-btn").addEventListener("click", () => {
+    //     upgradeFeature("storage");
+    // });
 
     // 초기 UI 설정
     updateUI();
