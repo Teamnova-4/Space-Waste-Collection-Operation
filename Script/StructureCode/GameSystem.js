@@ -1,3 +1,6 @@
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d")
+
 export class GameEvent{
     constructor() {
         if (this.constructor === GameEvent) {
@@ -54,6 +57,7 @@ export class GameObject extends GameEvent{
 
 class Transform {
     constructor() {
+        this.anchor = {x: 0.5, y: 0.5}
         this.position = { x: 0, y: 0 };
         this.rotation = 0; // 회전 각도 (도 단위)
         this.scale = { x: 1, y: 1 };
@@ -84,20 +88,24 @@ class GameResource {
     draw(ctx) {
         const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
     
+        const size = { 
+            x: this.gameObject.transform.scale.x * this.image.width,
+            y:this.gameObject.transform.scale.y * this.image.height 
+        }
+
         // 캔버스 상태 저장
         ctx.save();
 
         // 회전의 중심을 이미지의 중심으로 설정
-        ctx.translate(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
+        ctx.translate(this.gameObject.transform.position.x + size.x * (this.gameObject.transform.anchor.x - 1) , this.gameObject.transform.position.y + size.y * (this.gameObject.transform.anchor.y - 1));
         ctx.rotate(radians);
         ctx.translate(-this.gameObject.transform.position.x, -this.gameObject.transform.position.y);
     
         ctx.drawImage(this.image, 
             0, 0, this.image.width, this.image.height,
-            this.gameObject.transform.position.x - this.gameObject.transform.scale.x / 2.0 * this.image.width,
-            this.gameObject.transform.position.y - this.gameObject.transform.scale.y / 2.0 * this.image.height,
-            this.gameObject.transform.scale.x * this.image.width,
-            this.gameObject.transform.scale.y * this.image.height);
+            this.gameObject.transform.position.x - size.x * this.gameObject.transform.anchor.x,
+            this.gameObject.transform.position.y - size.y * this.gameObject.transform.anchor.y,
+            size.x, size.y);
 
     
 
@@ -185,28 +193,3 @@ export class GameLoop {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 }
-
-// 캔버스 및 WebGL 컨텍스트 가져오기
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d")
-
-// 디바이스 픽셀 비율 가져오기
-const ratio = window.devicePixelRatio || 1;
-
-// 브라우저 창의 너비와 높이 가져오기
-const width = window.innerWidth;
-const height = window.innerHeight;
-
-// 캔버스 크기를 브라우저 창 크기에 맞게 조정
-canvas.width = width * ratio;   // 실제 캔버스 크기
-canvas.height = height * ratio; // 실제 캔버스 크기
-
-// 화면에 표시되는 캔버스 크기는 그대로 유지 (CSS로 설정)
-canvas.style.width = `${width}px`;
-canvas.style.height = `${height}px`;
-
-// 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
-ctx.scale(ratio, ratio);
-
-// 게임 루프 인스턴스 생성
-const gameLoop = new GameLoop(canvas, ctx);
