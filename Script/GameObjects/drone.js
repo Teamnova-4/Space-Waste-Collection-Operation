@@ -16,8 +16,8 @@ export class Drone extends GameObject {
         this.resource.image.src = "Resources/drone.png";  // 드론 이미지 로드
         this.transform.position.x = 100;  // 초기 X 위치
         this.transform.position.y = 100;  // 초기 Y 위치
-        this.transform.scale.x = 10;  // 크기 설정
-        this.transform.scale.y = 10;  // 크기 설정
+        this.transform.scale.x = 0.5;  // 크기 설정
+        this.transform.scale.y = 0.5;  // 크기 설정
         this.transform.anchor.x = 0.5;  // 앵커 설정
         this.transform.anchor.y = 0.5;  // 앵커 설정
         this.transform.rotation = 0;  // 초기 회전 값
