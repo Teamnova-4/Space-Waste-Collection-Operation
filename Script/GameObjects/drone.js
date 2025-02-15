@@ -1,15 +1,18 @@
-import { GameObject } from "../StructureCode/GameSystem.js";
+import { GameLoop, GameObject } from "../StructureCode/GameSystem.js";
 
 export class Drone extends GameObject {
     constructor() {
         super();  // 부모 클래스(GameObject)의 생성자 호출
-        this.speed = 0.001;  // 드론의 이동 속도 (1초에 5픽셀 이동)
+        this.speed = 5;  // 드론의 이동 속도 (1초에 5픽셀 이동)
         this.capacity = 0;  // 드론의 적재 용량
         this.isMoving = false;  // 드론의 이동 상태
         this.targetX = 0;  // 목표 X 좌표
         this.targetY = 0;  // 목표 Y 좌표
         this.moveAnimation = null;  // 애니메이션 함수
         this.clickListenerAdded = false; // 이벤트 리스너 등록 여부
+        this.CountdownTimer = 0;
+        const deltaX = this.targetX - this.transform.position.x;
+        const deltaY = this.targetY - this.transform.position.y;
     }
 
     Start() {
@@ -28,16 +31,15 @@ export class Drone extends GameObject {
 
         // 드론의 클릭 이벤트
         if (!this.clickListenerAdded) { // 이벤트 리스너가 등록되지 않았을 때만
-            console.log("클릭 이벤트가 등록되지 않았습니다 :" + this.clickListenerAdded);
+
             this.addClickListener();
             this.clickListenerAdded = true; // 이벤트 리스너 등록 상태로 변경
-            console.log("클릭 이벤트 상태1 :" + this.clickListenerAdded);
+
         }
 
-        console.log("클릭 이벤트 상태2 :" + this.clickListenerAdded);
         document.removeEventListener('click', this.addClickListener); // 이벤트 리스너 제거
         this.clickListenerAdded = false; // 이벤트 리스너 등록 상태 초기화
-        console.log("클릭 이벤트 상태3 :" + this.clickListenerAdded);
+
     }
 
     // 클릭 이벤트 리스너
@@ -54,10 +56,12 @@ export class Drone extends GameObject {
             this.targetX = targetX;
             this.targetY = targetY;
 
+            this.CountdownTimer = 0;
+
             // 드론의 이동 구현 (선택사항, 클릭된 좌표로 이동하도록 할 수 있음)
-            this.startMoving();
+            // this.startMoving();
             // 클릭된 방향으로 회전
-            this.rotateToTarget();
+            // this.rotateToTarget();
         });
     }
 
@@ -65,7 +69,11 @@ export class Drone extends GameObject {
         // 드론의 상태 업데이트
         if (this.isMoving) {
             // 애니메이션이 계속 반복되도록 처리 (부드럽게 이동)
-            this.moveToTarget();
+            // this.moveToTarget();
+            // 움직임 위치 x,y
+            this.CountdownTimer += GameLoop.deltaTime;
+            this.transform.moveWithRotationEase([deltaX, deltaY], this.speed, this.CountdownTimer);
+
         }
     }
 
