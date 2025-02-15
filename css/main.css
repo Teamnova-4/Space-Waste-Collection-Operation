@@ -8,9 +8,3 @@
 
 /* 타이틀 화면 */
 @import url("./screen/title.css");
-
-/* 게임 캔버스 레이아웃 */
-@import url("./layout/canvas.css");
-
-/* 게임 화면 */
-

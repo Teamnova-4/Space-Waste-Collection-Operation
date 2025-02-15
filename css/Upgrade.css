@@ -11,6 +11,7 @@
     align-items: center;
     z-index: 1000; /* 다른 요소들 위에 표시 */
     overflow: auto; /* 화면 밖으로 나가지 않도록 */
+    color: black; /* 텍스트 색상을 하얀색으로 설정 */
 }
 
 /* 모달 콘텐츠 */
@@ -40,4 +41,31 @@
 
 #modal-close-btn:hover {
     background-color: #0056b3;
+}
+
+/* 크레딧 UI (드론 업그레이드 왼쪽) */
+.credit-left {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    font-size: 20px;
+}
+
+/* 드론 업그레이드 (오른쪽) */
+#upgrade-system {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 18px;
+}
+
+/* 기지 업그레이드 (오른쪽 하단) */
+.base-right {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    font-size: 18px;
 }
