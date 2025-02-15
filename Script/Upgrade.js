@@ -15,11 +15,10 @@
 // _getUpgradeCost(upgradeType): 주어진 업그레이드 타입의 현재 레벨에 따른 비용을 반환합니다. (private 메서드)
 
 
-// User 클래스 정의
 class User {
     constructor(initialCredits, initialUpgrades) {
-        this.credits = initialCredits || 0; // 초기 크레딧 (기본값 0)
-        this.upgrades = initialUpgrades || {}; // 초기 업그레이드 상태 (기본값 빈 객체)
+        this.credits = initialCredits || 0;
+        this.upgrades = initialUpgrades || {};
     }
 
     upgrade(upgradeType) {
@@ -47,69 +46,76 @@ class User {
     // private 메서드
     _getUpgradeCost(upgradeType) {
         const currentLevel = this.getUpgradeLevel(upgradeType);
-        // 업그레이드 비용 계산 로직 (임시)
         switch (upgradeType) {
             case "speed":
-                return 10 * (currentLevel + 1); // 속도 업그레이드 비용
+                return 10 * (currentLevel + 1);
             case "capacity":
-                return 15 * (currentLevel + 1); // 용량 업그레이드 비용
+                return 15 * (currentLevel + 1);
+            case "defense":
+                return 20 * (currentLevel + 1);
+            case "storage":
+                return 25 * (currentLevel + 1);
             default:
-                return Infinity; // 알 수 없는 업그레이드 타입은 무한대 비용 (구매 불가)
+                return Infinity;
         }
     }
-
 }
 
-// DOM이 로드된 후 실행하도록 처리
 document.addEventListener("DOMContentLoaded", function () {
-    // User 객체 생성
     const user = new User(100, { "speed": 1 });
 
     // UI 업데이트 함수
     function updateUI() {
         document.getElementById("credits").textContent = user.credits;
-        document.getElementById("speed-level").textContent = user.getUpgradeLevel("speed");
-        document.getElementById("capacity-level").textContent = user.getUpgradeLevel("capacity");
+        document.getElementById("drone-speed-level").textContent = user.getUpgradeLevel("speed");
+        document.getElementById("drone-capacity-level").textContent = user.getUpgradeLevel("capacity");
+        document.getElementById("base-defense-level").textContent = user.getUpgradeLevel("defense");
+        document.getElementById("base-storage-level").textContent = user.getUpgradeLevel("storage");
     }
 
     // 업그레이드 버튼 클릭 시 실행될 함수
     function upgradeFeature(type) {
-        if (user.upgrade(type)) {
+        if (user.upgrade(type)) { // 여기서 user 객체를 사용합니다.
             console.log(`${type} 업그레이드 성공!`);
         } else {
-            showModal("크레딧이 부족합니다");  // 오타 수정
+            showModal("크레딧이 부족합니다");
             console.log(`${type} 업그레이드 실패 (크레딧 부족)!`);
         }
 
         updateUI();
     }
 
-    // 버튼에 이벤트 리스너 추가 (함수 실행 순서 보장)
-    document.getElementById("drone-speed-btn").addEventListener("click", function () {
-        upgradeFeature("speed");
-    });
-
-    document.getElementById("drone-capacity-btn").addEventListener("click", function () {
-        upgradeFeature("capacity");
-    });
-
     // 알림창 띄우는 함수
     function showModal(message) {
         const modal = document.getElementById("modal");
         const modalMessage = document.getElementById("modal-message");
         modalMessage.textContent = message;
-        modal.style.display = "flex"; // 모달을 화면에 표시
+        modal.style.display = "flex";
     }
 
     // 모달 닫기 함수
     function closeModal() {
         const modal = document.getElementById("modal");
-        modal.style.display = "none"; // 모달을 숨김
+        modal.style.display = "none";
     }
 
     // 모달 닫기 버튼 클릭 이벤트 리스너 추가
-    document.getElementById("modal-close-btn").addEventListener("click", function() {
+    document.getElementById("modal-close-btn").addEventListener("click", function () {
         closeModal();
+    });
+    
+    // 업그레이드 버튼 클릭 이벤트 리스너 추가
+    document.getElementById("drone-speed-btn").addEventListener("click", () => {
+        upgradeFeature("speed");
+    });
+    document.getElementById("drone-capacity-btn").addEventListener("click", () => {
+        upgradeFeature("capacity");
+    });
+    document.getElementById("base-defense-btn").addEventListener("click", () => {
+        upgradeFeature("defense");
+    });
+    document.getElementById("base-storage-btn").addEventListener("click", () => {
+        upgradeFeature("storage");
     });
 
     // 초기 UI 설정

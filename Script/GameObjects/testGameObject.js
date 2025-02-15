@@ -3,7 +3,8 @@ import { GameObject } from "../StructureCode/GameSystem.js";
 export class testGameObject extends GameObject {
 
     Start(){
-        this.resource.image.src = "../../Resources/TransparentImageTest.png";
+        console.log("testGameObject Start");
+        this.resource.image.src = "Resources/TransparentImageTest.png";
         this.transform.position.x = 600;
         this.transform.position.y = 600;
         this.transform.scale.x = 0.4;

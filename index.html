@@ -75,6 +75,8 @@
         import { GameLoop } from "./Script/StructureCode/GameSystem.js";
         // 우주 정거장 추가 - 현석
         import { spaceStation } from "./Script/GameObjects/spaceStation.js";
+        // 드론 추가 - 현석
+        import { Drone } from "./Script/GameObjects/drone.js";
 
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
@@ -107,74 +109,20 @@
                 titleScreen.remove();
             }
 
-            // 캔버스 및 UI 표시 현석
+            // 캔버스 및 UI 표시
             document.getElementById("canvas").style.display = 'block';
+            // 업그레이드시스템, 크레딧 표시시
             document.getElementById("upgrade-system").style.display = 'block';
             document.getElementById("credit-display").style.display = 'block';
-
-            // 기지 업그레이드 UI 표시 현석
             document.getElementById("base-upgrade-container").style.display = 'block';
         });
 
-        // 업그레이드 로직 현석
-        let credits = 100;
-        let droneSpeedLevel = 1;
-        let droneCapacityLevel = 0;
-        let baseDefenseLevel = 1;
-        let baseStorageLevel = 0;
-
-        // 드론 속도 업그레이드 현석
-        document.getElementById("drone-speed-btn").addEventListener("click", () => {
-            if (credits >= 10) {
-                credits -= 10;
-                droneSpeedLevel++;
-                document.getElementById("credits").innerText = credits;
-                document.getElementById("drone-speed-level").innerText = droneSpeedLevel;
-            } else {
-                alert("크레딧이 부족합니다!");
-            }
-        });
-
-        // 드론 적재 용량 업그레이드 현석
-        document.getElementById("drone-capacity-btn").addEventListener("click", () => {
-            if (credits >= 15) {
-                credits -= 15;
-                droneCapacityLevel++;
-                document.getElementById("credits").innerText = credits;
-                document.getElementById("drone-capacity-level").innerText = droneCapacityLevel;
-            } else {
-                alert("크레딧이 부족합니다!");
-            }
-        });
-
-        // 기지 방어력 업그레이드 현석
-        document.getElementById("base-defense-btn").addEventListener("click", () => {
-            if (credits >= 20) {
-                credits -= 20;
-                baseDefenseLevel++;
-                document.getElementById("credits").innerText = credits;
-                document.getElementById("base-defense-level").innerText = baseDefenseLevel;
-            } else {
-                alert("크레딧이 부족합니다!");
-            }
-        });
-
-        // 기지 저장 공간 업그레이드 현석
-        document.getElementById("base-storage-btn").addEventListener("click", () => {
-            if (credits >= 25) {
-                credits -= 25;
-                baseStorageLevel++;
-                document.getElementById("credits").innerText = credits;
-                document.getElementById("base-storage-level").innerText = baseStorageLevel;
-            } else {
-                alert("크레딧이 부족합니다!");
-            }
-        });
-
+    
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
-        // 우주정거장 생성 현석석
-        let test = new spaceStation();
+        // 우주정거장 생성 현석
+        let spacestation = new spaceStation();
+        let drone = new Drone();
 
 
     </script>
