@@ -58,15 +58,7 @@ export class GameObject extends GameEvent {
     OnDraw(ctx) {
         this.resource.draw(ctx);
     }
-}
 
-class Transform {
-    constructor() {
-        this.anchor = { x: 0.5, y: 0.5 } // 앵커 포인트: 회전, 크기 조절의 기준점, (0, 0)은 왼쪽 상단, (1, 1)은 오른쪽 하단, (0.5, 0.5)는 중앙
-        this.position = { x: 0, y: 0 }; // 게임 오브젝트의 2D 위치 좌표 (x, y)
-        this.rotation = 0; // 게임 오브젝트의 회전 각도 (도 단위, 시계 방향)
-        this.scale = { x: 1, y: 1 };  // 게임 오브젝트의 크기 비율 (x축 스케일, y축 스케일, 1은 원래 크기)
-    }
     /**
      * 물리계산 함수
      * Update와 LateUpdate사이에서 호출됨
@@ -86,10 +78,10 @@ class Transform {
  */
 class Transform {
     constructor() {
-        this.anchor = { x: 0.5, y: 0.5 } // 회전 고정점
-        this.position = { x: 0, y: 0 }; // 위치
-        this.rotation = 0; // 회전 각도 (도 단위)
-        this.scale = { x: 1, y: 1 }; // 크기
+        this.anchor = { x: 0.5, y: 0.5 } // 앵커 포인트: 회전, 크기 조절의 기준점, (0, 0)은 왼쪽 상단, (1, 1)은 오른쪽 하단, (0.5, 0.5)는 중앙
+        this.position = { x: 0, y: 0 }; // 게임 오브젝트의 2D 위치 좌표 (x, y)
+        this.rotation = 0; // 게임 오브젝트의 회전 각도 (도 단위, 시계 방향)
+        this.scale = { x: 1, y: 1 };  // 게임 오브젝트의 크기 비율 (x축 스케일, y축 스케일, 1은 원래 크기)
     }
 }
 

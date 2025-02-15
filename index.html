@@ -5,19 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGL 풀스크린 예제</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        canvas {
-            display: block;
-            width: 100vw;
-            height: 100vh;
-        }
-    </style>
     <link rel="stylesheet" href="css/main.css">
 
 </head>
@@ -32,6 +19,7 @@
             <button class="game-button options-button">옵션</button>
         </div>
     </div>
+
     <canvas id="canvas" style="display: none;"></canvas>
 
     <script type="module">
@@ -48,11 +36,11 @@
         const width = window.innerWidth;
         const height = window.innerHeight;
 
-        // 캔버스 크기를 브라우저 창 크기에 맞게 조정
-        canvas.width = width * ratio;   // 실제 캔버스 크기
-        canvas.height = height * ratio; // 실제 캔버스 크기
+        // 캔버스 크기를 브라우저 창 크기에 맞게 조정 (실제 픽셀 크기, 고해상도 대응)
+        canvas.width = width * ratio;   // 실제 캔버스 너비 (디바이스 픽셀 비율 적용)
+        canvas.height = height * ratio; // 실제 캔버스 높이 (디바이스 픽셀 비율 적용)
 
-        // 화면에 표시되는 캔버스 크기는 그대로 유지 (CSS로 설정)
+        // 화면에 표시되는 캔버스 크기는 그대로 유지
         canvas.style.width = `${width}px`;
         canvas.style.height = `${height}px`;
 
@@ -63,13 +51,14 @@
             console.log("StartGame");
             const titleScreen = document.querySelector('.title-screen-container');
             if (titleScreen) {
-                titleScreen.remove();  // div 제거
+                console.log('타이틀 화면 숨김');
+                titleScreen.style.display = 'none'  // div 숨김
                 canvas.style.display = 'block'; // 캔버스 표시
             }
             // 게임 루프 인스턴스 생성
             const gameLoop = new GameLoop(canvas, ctx);
 
-            let test =  new trash();
+            let test = new trash();
         });
     </script>
 </body>
