@@ -3,24 +3,44 @@ import { GameObject } from "../StructureCode/GameSystem.js";
 export class Drone extends GameObject {
     constructor() {
         super();  // 부모 클래스(GameObject)의 생성자 호출
-        this.speed = 0;  // 드론의 속도
+        this.speed = 5;  // 드론의 이동 속도 (1초에 5픽셀 이동)
         this.capacity = 0;  // 드론의 적재 용량
         this.isMoving = false;  // 드론의 이동 상태
+        this.targetX = 0;  // 목표 X 좌표
+        this.targetY = 0;  // 목표 Y 좌표
+        this.moveAnimation = null;  // 애니메이션 함수
     }
 
     Start() {
         // 드론 초기화
         console.log("Drone Start");
-
         // 드론의 초기 상태 설정
-        this.resource.image.src = "Resources/drone.png";  // 드론 이미지 로드
-        this.transform.position.x = 100;  // 초기 X 위치
+        this.resource.image.src = "./Resources/drone.png";  // 드론 이미지 로드
+        this.transform.position.x = 200;  // 초기 X 위치
         this.transform.position.y = 100;  // 초기 Y 위치
         this.transform.scale.x = 0.5;  // 크기 설정
         this.transform.scale.y = 0.5;  // 크기 설정
         this.transform.anchor.x = 0.5;  // 앵커 설정
         this.transform.anchor.y = 0.5;  // 앵커 설정
         this.transform.rotation = 0;  // 초기 회전 값
+
+        // 드론의 클릭 이벤트
+        this.addClickListener();
+    }
+
+    // 클릭 이벤트 리스너
+    addClickListener() {
+        // 이벤트 리스너 추가 (click 이벤트)
+        document.addEventListener('click', (event) => {
+            const targetX = event.clientX;  // 클릭된 X 좌표
+            const targetY = event.clientY;  // 클릭된 Y 좌표
+
+            // 좌표 출력
+            console.log(`Click Position: X = ${targetX}, Y = ${targetY}`);
+
+            // 드론의 이동 구현 (선택사항, 클릭된 좌표로 이동하도록 할 수 있음)
+            this.startMoving(targetX, targetY);
+        });
     }
 
     Update() {
@@ -31,7 +51,8 @@ export class Drone extends GameObject {
             this.transform.position.y += this.speed;
 
             // 이동 로그
-            // console.log(`Drone Position: (${this.transform.position.x}, ${this.transform.position.y})`);
+            console.log(`Drone Position: (${this.transform.position.x}, ${this.transform.position.y})`);
+            // this.addEventListener();
         }
     }
 
@@ -62,11 +83,40 @@ export class Drone extends GameObject {
         console.log(`Drone Capacity Upgraded: ${this.capacity}`);
     }
 
-    // 드론의 이동 시작
+    // 드론의 부드러운 이동 시작
     startMoving() {
-        this.isMoving = true;
-        console.log("Drone started moving");
+        // 드론이 움직이지 않으면 이동을 시작
+        if (!this.isMoving) {
+            this.isMoving = true;
+
+            // 이동 애니메이션을 시작
+            this.moveAnimation = requestAnimationFrame(this.moveToTarget.bind(this));
+        }
     }
+
+    // 목표 지점으로 부드럽게 이동
+    moveToTarget() {
+        // 현재 위치와 목표 지점의 차이 계산
+        const deltaX = this.targetX - this.transform.position.x;
+        const deltaY = this.targetY - this.transform.position.y;
+
+        // 목표 지점에 도달했으면 이동을 멈춤
+        if (Math.abs(deltaX) < this.speed && Math.abs(deltaY) < this.speed) {
+            this.transform.position.x = this.targetX;
+            this.transform.position.y = this.targetY;
+            this.isMoving = false;  // 이동 멈춤
+            console.log("Drone reached the target.");
+            return;
+        }
+
+        // 부드럽게 이동 (속도만큼 이동)
+        this.transform.position.x += deltaX * 0.05;  // X축으로 목표 지점에 다가감
+        this.transform.position.y += deltaY * 0.05;  // Y축으로 목표 지점에 다가감
+
+        // 이동 애니메이션을 계속해서 호출 (프레임마다 계속 호출)
+        this.moveAnimation = requestAnimationFrame(this.moveToTarget.bind(this));
+    }
+
 
     // 드론의 이동 정지
     stopMoving() {

@@ -27,11 +27,9 @@ export class testGameObject extends GameObject {
     OnDestroy() {
 
     }
-
     OnLoad(image) {
         console.log("testGameObject OnLoad" + image.src);
     }
-
     OnClick(){
         console.log("testGameObject OnClick");
     }
