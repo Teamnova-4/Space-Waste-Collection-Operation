@@ -37,6 +37,7 @@ export class GameObject extends GameEvent{
 
         this.transform = new Transform();
         this.resource = new GameResource(this);
+        this.physics = new Physics();
         GameLoop.AddObject(this);
     }
 
@@ -63,11 +64,11 @@ export class GameObject extends GameEvent{
      * Update와 LateUpdate사이에서 호출됨
      */
     OnCalculatePhysics(){
-        this.transform.position.x += this.physics.velocity.x * this.deltaTime;
-        this.transform.position.y += this.physics.velocity.y * this.deltaTime;
+        this.transform.position.x += this.physics.velocity.x * GameLoop.deltaTime;
+        this.transform.position.y += this.physics.velocity.y * GameLoop.deltaTime;
 
-        this.physics.velocity.x += this.physics.acceleration.x * this.deltaTime;
-        this.physics.velocity.y += this.physics.acceleration.y * this.deltaTime;
+        this.physics.velocity.x += this.physics.acceleration.x * GameLoop.deltaTime;
+        this.physics.velocity.y += this.physics.acceleration.y * GameLoop.deltaTime;
     }
 }
 
@@ -168,6 +169,9 @@ export class GameLoop {
 
         GameLoop.instance = this;
         GameLoop.instance.start();
+
+        canvas.addEventListener('click', this.onClickCanvas);
+
     }
 
     static AddObject(object) {
@@ -231,5 +235,13 @@ export class GameLoop {
     backgroundRender() { 
         // 게임 화면 렌더링 (예: 그리기 작업)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    onClickCanvas(event){
+        const mouseX = event.offsetX;
+        const mouseY = event.offsetY;
+
+        console.log(`Mouse clicked at (${mouseX}, ${mouseY})`);
+
     }
 }
