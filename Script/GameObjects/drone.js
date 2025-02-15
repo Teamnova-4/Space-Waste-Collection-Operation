@@ -61,7 +61,7 @@ export class Drone extends GameObject {
             // 드론의 이동 구현 (선택사항, 클릭된 좌표로 이동하도록 할 수 있음)
             // this.startMoving();
             // 클릭된 방향으로 회전
-            // this.rotateToTarget();
+            // this.rotateToTarget();sssss
         });
     }
 
