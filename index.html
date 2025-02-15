@@ -67,6 +67,8 @@
     </div>
 
 
+    <button id="rateUp">생산량 증가</button><button id="rateDown">생산량 감소</button>
+    <button id="speedUp">속도 증가</button><button id="speedDown">속도 감소</button>
     <script src="Script/Upgrade.js"></script>
 
     <canvas id="canvas" style="display: none;"></canvas>
@@ -102,6 +104,8 @@
         // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
         ctx.scale(ratio, ratio);
 
+        let trashFactory = null; // 우주 쓰레기 생성 공장
+
         document.querySelector('.game-start-button').addEventListener('click', () => {
             console.log("StartGame");
 
@@ -119,9 +123,24 @@
             document.getElementById("base-upgrade-container").style.display = 'block';
 
             // 우주 쓰레기 생성
-            const trashFactory = new TrashFactory();
-            trashFactory.createTrash();
+            trashFactory = new TrashFactory();
+            trashFactory.startTrashSpawn();
         });
+
+        // 우주 쓰레기 팩토리 테스트
+        document.getElementById("rateUp").onclick = function () {
+            trashFactory.setSpawnRate(trashFactory.spawnRate + 1);
+        }
+        document.getElementById("rateDown").onclick = function () {
+            trashFactory.setSpawnRate(trashFactory.spawnRate - 1);
+        }
+        document.getElementById("speedUp").onclick = function () {
+            trashFactory.setSpeed(trashFactory.speed + 1);
+        }
+        document.getElementById("speedDown").onclick = function () {
+            trashFactory.setSpeed(trashFactory.speed - 1);
+        }
+
 
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
