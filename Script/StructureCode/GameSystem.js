@@ -87,7 +87,7 @@ export class GameObject extends GameEvent {
      * @param {*} point 
      * @returns 
      */
-    IsOverlapPoint(point){
+    isOverlapPoint(point) {
         const [p1, p2, p3, p4] = this.physics.corners;
 
         const d1 = (point.x - p2.x) * (p1.y - p2.y) - (point.y - p2.y) * (p1.x - p2.x);
@@ -101,19 +101,6 @@ export class GameObject extends GameEvent {
 
         return !(hasNeg && hasPos);
     }
-
-    DistanceTo(target){
-        let targetPos = {};
-        if(target instanceof GameObject){
-            targetPos = target.transform.position;
-        }else if (target instanceof Transform){ 
-            targetPos = target.position;
-        } else {
-            targetPos = target;
-        } 
-        return Math.sqrt(Math.pow(this.transform.position.x - targetPos.x, 2) + Math.pow(this.transform.position.y - targetPos.y, 2));
-    }
-
 }
 
 /**
@@ -126,6 +113,51 @@ class Transform {
         this.position = { x: 0, y: 0 }; // 위치
         this.rotation = 0; // 회전 각도 (도 단위)
         this.scale = { x: 1, y: 1 }; // 크기
+    }
+
+    // 선형 보간 (Lerp) 함수
+    lerp(start, end, t) {
+        return start + (end - start) * t;
+    }
+    // Ease-in Ease-out 함수 
+    easeInOut(t) { 
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; 
+    }
+
+    moveWithRotationEase(targetPosition, speed, duration) {
+        const startPosition = { x: this.position.x, y: this.position.y };
+        const startRotation = this.rotation;
+        const startTime = performance.now();
+        
+        // 목표 위치와 회전 각도 계산
+        const dx = targetPosition.x - startPosition.x;
+        const dy = targetPosition.y - startPosition.y;
+        const targetRotation = Math.atan2(dy, dx);
+
+        function update(transform) {
+            const currentTime = performance.now();
+            const elapsedTime = (currentTime - startTime) / 1000; // 경과 시간 (초)
+
+            if (elapsedTime < duration) {
+                // Ease-in, Ease-out으로 부드럽게 회전
+                const t = elapsedTime / duration;
+                const easedT = transform.easeInOut(t);
+                transform.rotation = transform.lerp(startRotation, targetRotation, easedT);
+
+                // 부드러운 이동
+                const movementSpeed = speed * elapsedTime; // 이동 거리 계산
+                transform.position.x += movementSpeed * Math.cos(transform.rotation);
+                transform.position.y += movementSpeed * Math.sin(transform.rotation);
+
+                requestAnimationFrame(update); // 계속 업데이트
+            } else {
+                // 목표 위치에 정확히 도달
+                transform.position = targetPosition;
+                transform.rotation = targetRotation;
+            }
+        }
+
+        update(this); // 첫 번째 호출
     }
 }
 
@@ -177,8 +209,11 @@ class Physics {
 class GameResource {
     constructor(gameObject) {
         this.image = new Image();
+        console.log("img "+ this.image);
         this.image.src = "";
         this.gameObject = gameObject;
+        console.log("this.gameObject "+ this.gameObject.Image);
+        console.log("this.image.src "+this.image.src);
 
         this.image.onload = () => {
             console.log(`[이미지 로드 완료] ${this.image.src}`);
@@ -331,7 +366,7 @@ export class GameLoop {
 
         // 클릭한 위치 확인
         GameLoop.instance.objects.forEach(object => {
-            if(object.IsOverlapPoint({x: mouseX, y: mouseY})){
+            if (object.isOverlapPoint({ x: mouseX, y: mouseY })) {
                 object.OnClick();
             }
         });
