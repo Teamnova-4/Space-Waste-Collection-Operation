@@ -33,7 +33,7 @@ export class trash extends GameObject {
     // 매 프레임마다 오른쪽으로 1px씩 이동
     this.transform.position.x += this.speed;
 
-    if (this.transform.position.x > canvas.width) {
+    if (this.transform.position.x > canvas.width + 200) {
       this.Destroy();
     }
   }
