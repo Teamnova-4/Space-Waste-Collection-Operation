@@ -1,5 +1,3 @@
-import { testGameObject} from "../GameObjects/testGameObject.js";
-
 export class GameEvent{
     constructor() {
         if (this.constructor === GameEvent) {
@@ -212,8 +210,3 @@ ctx.scale(ratio, ratio);
 
 // 게임 루프 인스턴스 생성
 const gameLoop = new GameLoop(canvas, ctx);
-
-function StartGame() {
-    console.log("test")
-    let test = new testGameObject();
-}
