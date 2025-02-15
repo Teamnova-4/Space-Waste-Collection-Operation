@@ -87,7 +87,7 @@ export class GameObject extends GameEvent {
      * @param {*} point 
      * @returns 
      */
-    IsOverlapPoint(point){
+    isOverlapPoint(point) {
         const [p1, p2, p3, p4] = this.physics.corners;
 
         const d1 = (point.x - p2.x) * (p1.y - p2.y) - (point.y - p2.y) * (p1.x - p2.x);
@@ -101,19 +101,6 @@ export class GameObject extends GameEvent {
 
         return !(hasNeg && hasPos);
     }
-
-    DistanceTo(target){
-        let targetPos = {};
-        if(target instanceof GameObject){
-            targetPos = target.transform.position;
-        }else if (target instanceof Transform){ 
-            targetPos = target.position;
-        } else {
-            targetPos = target;
-        } 
-        return Math.sqrt(Math.pow(this.transform.position.x - targetPos.x, 2) + Math.pow(this.transform.position.y - targetPos.y, 2));
-    }
-
 }
 
 /**
@@ -180,7 +167,7 @@ class GameResource {
         console.log("img "+ this.image);
         this.image.src = "";
         this.gameObject = gameObject;
-        console.log("this.gameObject "+ this.gameObject);
+        console.log("this.gameObject "+ this.gameObject.Image);
         console.log("this.image.src "+this.image.src);
 
         this.image.onload = () => {
@@ -334,7 +321,7 @@ export class GameLoop {
 
         // 클릭한 위치 확인
         GameLoop.instance.objects.forEach(object => {
-            if(object.IsOverlapPoint({x: mouseX, y: mouseY})){
+            if (object.isOverlapPoint({ x: mouseX, y: mouseY })) {
                 object.OnClick();
             }
         });
