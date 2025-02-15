@@ -103,14 +103,17 @@ export class GameObject extends GameEvent{
     }
 
     DistanceTo(target){
+        let targetPos = {};
         if(target instanceof GameObject){
-
+            targetPos = target.transform.position;
         }else if (target instanceof Transform){ 
-
+            targetPos = target.position;
         } else {
-
+            targetPos = target;
         } 
+        return Math.sqrt(Math.pow(this.transform.position.x - targetPos.x, 2) + Math.pow(this.transform.position.y - targetPos.y, 2));
     }
+
 }
 
 /**
