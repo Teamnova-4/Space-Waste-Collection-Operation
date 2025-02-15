@@ -1,0 +1,69 @@
+/*
+    타이틀 화면을 꾸미기 위한 css
+*/
+
+body {
+    margin: 0;
+    overflow: hidden; /* body 스크롤바 제거 */
+    font-family: "Arial", sans-serif;
+    background-color: #000; /* 검정 배경 */
+    color: #fff; /* 흰색 기본 글자색 */
+  }
+  
+  .game-container {
+   
+  }
+  
+  .title-screen-container {
+    height: 100vh; /* 화면 높이 전체 */
+    background-image: url("background.jpg"); /* 배경 이미지 */
+    background-size: cover; /* 배경 이미지 꽉 채우기 */
+    background-position: center; /* 배경 이미지 중앙 정렬 */
+    position: relative; /* 배경 이미지 위에 콘텐츠를 겹치기 위해 */
+    position: relative; /* 오버레이 위에 콘텐츠를 표시하기 위해 */
+    z-index: 1; /* 오버레이보다 위에 */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    border-radius: 10px;
+    /* 배경색을 약간 투명하게 하여 뒷 배경이 보이도록 할 수 있습니다. */
+    /* background-color: rgba(0, 0, 0, 0.5); */
+  }
+  
+  .game-logo {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 3px #00f, -2px -2px 3px #f00; /* 네온 효과 */
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 버튼 사이 간격 */
+    margin-bottom: 30px;
+  }
+  
+  .game-button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .game-button:hover {
+    background-color: #fff;
+    color: #000;
+    border-color: #fff;
+  }
+  
+  .creator-name {
+    font-size: 0.9em;
+    color: #ccc;
+  }
+  
