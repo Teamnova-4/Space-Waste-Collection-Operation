@@ -1,9 +1,11 @@
 // User 클래스:
+
 // 속성 (Properties):
 // credits: 사용자의 현재 크레딧 (임시)
 // upgrades: 업그레이드 상태를 저장하는 객체. 키는 업그레이드 종류(문자열), 값은 레벨(숫자)로 구성됩니다. (예: { "speed": 2, "capacity": 1 })
 
 // 메서드 (Methods):
+
 // constructor(): 생성자. 초기 크레딧과 업그레이드 상태를 설정합니다.
 // upgrade(upgradeType): 특정 업그레이드 레벨을 올립니다.
 // 업그레이드 비용을 확인하고, 크레딧이 충분하면 업그레이드를 진행하고 크레딧을 차감합니다.
@@ -13,6 +15,7 @@
 // _getUpgradeCost(upgradeType): 주어진 업그레이드 타입의 현재 레벨에 따른 비용을 반환합니다. (private 메서드)
 
 
+// User 클래스 정의
 class User {
     constructor(initialCredits, initialUpgrades) {
         this.credits = initialCredits || 0; // 초기 크레딧 (기본값 0)
@@ -40,7 +43,8 @@ class User {
         const cost = this._getUpgradeCost(upgradeType);
         return this.credits >= cost;
     }
-    //private 메서드
+
+    // private 메서드
     _getUpgradeCost(upgradeType) {
         const currentLevel = this.getUpgradeLevel(upgradeType);
         // 업그레이드 비용 계산 로직 (임시)
@@ -49,22 +53,43 @@ class User {
                 return 10 * (currentLevel + 1); // 속도 업그레이드 비용
             case "capacity":
                 return 15 * (currentLevel + 1); // 용량 업그레이드 비용
-            // 다른 업그레이드 종류 추가...
             default:
                 return Infinity; // 알 수 없는 업그레이드 타입은 무한대 비용 (구매 불가)
         }
     }
 }
 
-// 사용 예시:
-const user = new User(100, { "speed": 1 }); // 초기 크레딧 100, 속도 레벨 1
-console.log("초기 크레딧:", user.credits);
-console.log("초기 속도 레벨:", user.getUpgradeLevel("speed"));
+// DOM이 로드된 후 실행하도록 처리
+document.addEventListener("DOMContentLoaded", function () {
+    // User 객체 생성
+    const user = new User(100, { "speed": 1 });
 
-user.upgrade("speed"); // 속도 업그레이드 시도
-console.log("현재 크레딧:", user.credits);
-console.log("현재 속도 레벨:", user.getUpgradeLevel("speed"));
+    // UI 업데이트 함수
+    function updateUI() {
+        document.getElementById("credits").textContent = user.credits;
+        document.getElementById("speed-level").textContent = user.getUpgradeLevel("speed");
+        document.getElementById("capacity-level").textContent = user.getUpgradeLevel("capacity");
+    }
 
-user.upgrade("capacity"); // 용량 업그레이드 시도 (크레딧 부족)
-console.log("현재 크레딧:", user.credits);
-console.log("현재 용량 레벨:", user.getUpgradeLevel("capacity")); // 레벨 0 (업그레이드 안됨)
+    // 업그레이드 버튼 클릭 시 실행될 함수
+    function upgradeFeature(type) {
+        if (user.upgrade(type)) {
+            console.log(`${type} 업그레이드 성공!`);
+        } else {
+            console.log(`${type} 업그레이드 실패 (크레딧 부족)!`);
+        }
+        updateUI();
+    }
+
+    // 버튼에 이벤트 리스너 추가 (함수 실행 순서 보장)
+    document.getElementById("speed-btn").addEventListener("click", function () {
+        upgradeFeature("speed");
+    });
+
+    document.getElementById("capacity-btn").addEventListener("click", function () {
+        upgradeFeature("capacity");
+    });
+
+    // 초기 UI 설정
+    updateUI();
+});
