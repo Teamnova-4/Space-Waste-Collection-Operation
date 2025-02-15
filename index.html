@@ -1,49 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>우주 폐기물 수거 작전</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL 풀스크린 예제</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="ui-bar">
-            <div class="info">시간: <span id="time">10:00</span></div>
-            <div class="info">부품: <span id="parts">0</span></div>
-            <div class="info">폐기물: <span id="debris-count">0</span> / <span id="debris-limit">100</span></div>
-        </div>
-        <div class="game-area" id="game-area">
-            <!-- 드론과 폐기물이 여기에 표시됩니다 -->
-        </div>
-        <div class="upgrade-panel">
-            <h2>업그레이드</h2>
-            <div class="upgrade-item" onclick="upgradeDroneSpeed()">
-                속도 강화 (비용: <span id="speed-upgrade-cost">10</span> 부품)
-            </div>
-            <div class="upgrade-item" onclick="upgradeDroneCapacity()">
-                저장 용량 증가 (비용: <span id="capacity-upgrade-cost">15</span> 부품)
-            </div>
-            <div class="upgrade-item" onclick="buyNewDrone()">
-                새로운 드론 구매 (비용: <span id="new-drone-cost">20</span> 부품)
-            </div>
-        </div>
-        <div id="message-box" class="message-box">
-            <p id="message-text"></p>
-            <button onclick="closeMessageBox()">확인</button>
-        </div>
-        <div id="tutorial-box" class="message-box">
-            <h2>튜토리얼</h2>
-            <p>환영합니다! 우주 폐기물 수거 작전에 오신 것을 환영합니다. 당신의 목표는 제한 시간 안에 우주 폐기물을 최대한 많이 수거하는 것입니다.</p>
-            <p>1. 마우스를 클릭하여 폐기물을 수동으로 수거하세요.</p>
-            <p>2. 부품을 모아 드론을 업그레이드하거나 새로운 드론을 구매하세요.</p>
-            <p>3. 시간 내에 목표 폐기물 양을 달성하세요!</p>
-            <button onclick="closeTutorialBox()">게임 시작</button>
-        </div>
-        <div id="gameover-box" class="message-box">
-            <h2>게임 오버</h2>
-            <p id="gameover-message"></p>
-            <button onclick="restartGame()">재시작</button>
-        </div>
-    </div>
-    <script src="script.js"></script>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // 캔버스 및 WebGL 컨텍스트 가져오기
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d")
+
+        // 이미지 테스트 코드
+        // 이미지 객체 생성
+        const image1 = new Image();
+        const image2 = new Image();
+        image1.src = "./Resources/TransparentImageTest.png"; // 이미지 URL
+        image2.src = "./Resources/TransparentImageTest.png"; // 이미지 URL
+
+        // 이미지 초기 위치 설정
+        let x1 = 10, y1 = 10;
+        let x2 = 20, y2 = 20;
+        let speed1 = 2, speed2 = 2;
+
+        // 첫 번째 이미지와 두 번째 이미지가 로드되면 애니메이션 시작
+        let imagesLoaded = false;
+        image1.onload = image2.onload = () => {
+            if (image1.complete && image2.complete) {
+                imagesLoaded = true;
+                animate(); // 이미지들이 모두 로드되면 애니메이션 시작
+            }
+        };
+
+        // 애니메이션 함수
+        function animate() {
+            if (!imagesLoaded) return;
+
+            // 캔버스 지우기
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 첫 번째 이미지 그리기 (움직이게)
+            ctx.drawImage(image1, x1, y1, 40, 40);
+
+            // 두 번째 이미지 그리기 (움직이게)
+            ctx.drawImage(image2, x2, y2, 40, 40);
+
+            // 첫 번째 이미지 위치 업데이트
+            x1 += speed1;
+            y1 += speed1;
+
+            // 두 번째 이미지 위치 업데이트
+            x2 += speed2;
+            y2 += speed2;
+
+            // 이미지가 캔버스를 벗어나면 반대 방향으로 이동
+            if (x1 + 40 > canvas.width || x1 < 0) speed1 = -speed1;
+            if (y1 + 40 > canvas.height || y1 < 0) speed1 = -speed1;
+
+            if (x2 + 40 > canvas.width || x2 < 0) speed2 = -speed2;
+            if (y2 + 40 > canvas.height || y2 < 0) speed2 = -speed2;
+
+            // 애니메이션을 계속 반복
+            requestAnimationFrame(animate);
+        }
+
+    </script>
+    <script src="Script/"></script>
 </body>
 </html>
