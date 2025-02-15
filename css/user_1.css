@@ -1,0 +1,40 @@
+/* 모달 배경 */
+#modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+    display: none; /* 기본적으로 숨겨짐 */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* 모달 콘텐츠 */
+#modal-message {
+    background-color: white;
+    padding: 50px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* 닫기 버튼 */
+#modal-close-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#modal-close-btn:hover {
+    background-color: #0056b3;
+}
