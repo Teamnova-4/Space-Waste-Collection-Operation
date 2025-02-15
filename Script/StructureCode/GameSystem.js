@@ -232,6 +232,7 @@ export class GameLoop {
         this.isRunning = false;  // 게임 루프가 실행 중인지 여부
         this.objects = [];
         this.destroyedObjects = [];
+        this.newObjects = [];
 
         GameLoop.instance = this;
         GameLoop.instance.start();
@@ -242,9 +243,7 @@ export class GameLoop {
 
     static AddObject(object) {
         if (object instanceof GameObject){
-            GameLoop.instance.objects.push(object);
-
-            object.Start();
+            GameLoop.instance.newObjects.push(object);
         } else {
             console.error("Object must be an instance of GameEvent");
         }
@@ -277,6 +276,12 @@ export class GameLoop {
         // 현재 시간 기록
         const currentTime = performance.now();
         GameLoop.deltaTime = currentTime - this.lastFrameTime;
+
+        this.newObjects.forEach(object => {
+            this.objects.push(object);
+            object.Start();
+        });
+        this.newObjects.length = 0; // 배열 초기화
 
         this.objects.forEach(object => {
             object.Update();
