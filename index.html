@@ -16,13 +16,29 @@
             height: 100vh;
         }
     </style>
+        <link rel="stylesheet" href="css/main.css">
+
 </head>
 <body>
+
+    <div class="title-screen-container">
+        <h1 class="game-logo">우주 폐기물 수거 작전</h1>
+        <div class="button-container">
+            <button class="game-button game-start-button">게임 시작</button>
+            <button class="game-button options-button">옵션</button>
+        </div>
+        <p class="creator-name">만든 사람: 오현석, 유상혁, 갈동건, 박상연 </p>
+    </div>
+    
+    
     <canvas id="canvas"></canvas>
 
     <script>
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
+        
+        canvas.style.display = "none"; // 타이틀 화면에서는 canvas 숨김
+
         const ctx = canvas.getContext("2d")
 
         // 이미지 테스트 코드
