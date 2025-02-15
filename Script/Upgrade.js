@@ -85,11 +85,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 버튼에 이벤트 리스너 추가 (함수 실행 순서 보장)
-    document.getElementById("speed-btn").addEventListener("click", function () {
+    document.getElementById("drone-speed-btn").addEventListener("click", function () {
         upgradeFeature("speed");
     });
 
-    document.getElementById("capacity-btn").addEventListener("click", function () {
+    document.getElementById("drone-capacity-btn").addEventListener("click", function () {
         upgradeFeature("capacity");
     });
 

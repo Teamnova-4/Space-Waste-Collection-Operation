@@ -17,7 +17,6 @@ export class trash extends GameObject {
     }
 
     Update() {
-        console.log("testGameObject Update");
         console.log(this.transform.position.x, this.transform.position.y);
         
         // 매 프레임마다 오른쪽으로 1px씩 이동
@@ -31,7 +30,6 @@ export class trash extends GameObject {
     }
 
     LateUpdate() {
-        console.log("testGameObject LateUpdate");
     }
 
     OnDestroy() {

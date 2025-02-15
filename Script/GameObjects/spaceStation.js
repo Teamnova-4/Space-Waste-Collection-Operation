@@ -35,7 +35,6 @@ export class spaceStation extends GameObject {
 
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
     Update() {
-        console.log("testGameObject Update");
 
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
         this.transform.rotation += 0;
@@ -43,7 +42,6 @@ export class spaceStation extends GameObject {
 
     // 게임 오브젝트가 매 프레임의 마지막에 업데이트될 때 호출되는 메서드
     LateUpdate() {
-        console.log("testGameObject LateUpdate");
         // 이 메서드는 후속 업데이트에서 발생할 수 있는 부수적인 작업을 처리하는 데 사용됩니다.
         // 예를 들어, 충돌 체크나 화면 업데이트 등.
     }
