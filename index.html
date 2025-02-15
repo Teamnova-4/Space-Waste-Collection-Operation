@@ -78,6 +78,8 @@
         import { spaceStation } from "./Script/GameObjects/spaceStation.js";
         // 드론 추가 - 현석
         import { Drone } from "./Script/GameObjects/drone.js";
+        // 우주 쓰레기 추가
+        import { TrashFactory } from "./Script/TrashFactory.js";
 
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
@@ -116,15 +118,20 @@
             document.getElementById("upgrade-system").style.display = 'block';
             document.getElementById("credit-display").style.display = 'block';
             document.getElementById("base-upgrade-container").style.display = 'block';
+
+
         });
 
-    
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
+
+        // 우주 쓰레기 생성
+        const trashFactory = new TrashFactory();
+        trashFactory.createTrash();
+
         // 우주정거장 생성 현석
         let spacestation = new spaceStation();
         let drone = new Drone();
-
 
     </script>
 </body>
