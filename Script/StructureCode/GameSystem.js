@@ -37,6 +37,7 @@ export class GameObject extends GameEvent {
 
         this.transform = new Transform();
         this.resource = new GameResource(this);
+        this.physics = new Physics();
         GameLoop.AddObject(this);
     }
 
@@ -50,6 +51,10 @@ export class GameObject extends GameEvent {
         }
     }
 
+    /**
+     * 그리기 함수
+     * Update와 LateUpdate사이에서 호출됨
+    */
     OnDraw(ctx) {
         this.resource.draw(ctx);
     }
@@ -62,8 +67,47 @@ class Transform {
         this.rotation = 0; // 게임 오브젝트의 회전 각도 (도 단위, 시계 방향)
         this.scale = { x: 1, y: 1 };  // 게임 오브젝트의 크기 비율 (x축 스케일, y축 스케일, 1은 원래 크기)
     }
+    /**
+     * 물리계산 함수
+     * Update와 LateUpdate사이에서 호출됨
+     */
+    OnCalculatePhysics() {
+        this.transform.position.x += this.physics.velocity.x * GameLoop.deltaTime;
+        this.transform.position.y += this.physics.velocity.y * GameLoop.deltaTime;
+
+        this.physics.velocity.x += this.physics.acceleration.x * GameLoop.deltaTime;
+        this.physics.velocity.y += this.physics.acceleration.y * GameLoop.deltaTime;
+        console.log(this.physics.velocity);
+    }
 }
 
+/**
+ * 오브젝트의 위치, 회전, 크기를 관리하는 클래스
+ */
+class Transform {
+    constructor() {
+        this.anchor = { x: 0.5, y: 0.5 } // 회전 고정점
+        this.position = { x: 0, y: 0 }; // 위치
+        this.rotation = 0; // 회전 각도 (도 단위)
+        this.scale = { x: 1, y: 1 }; // 크기
+    }
+}
+
+/**
+ * 오브젝트의 물리적 속성을 관리하는 클래스
+ */
+class Physics {
+    constructor() {
+        // 오브젝트의 이동속도
+        this.velocity = { x: 0, y: 0 };
+        // 오브젝트의 가속도
+        this.acceleration = { x: 0, y: 0 };
+    }
+}
+
+/**
+ * 오브젝트에 할당되는 이미지 리소스를 관리하는 클래스
+ */
 class GameResource {
     constructor(gameObject) {
         this.image = new Image(); // Image 객체 생성, 이미지 로딩 및 렌더링에 사용
@@ -104,6 +148,15 @@ class GameResource {
         ctx.rotate(radians);  // 캔버스 회전 (라디안 단위)
         ctx.translate(-this.gameObject.transform.position.x, -this.gameObject.transform.position.y);
 
+
+        console.log(
+            "GameSystem.js GameResource.draw() : 이미지 그리기에 사용된 값",
+            size.x, size.y,
+            this.gameObject.transform.position.x - size.x * this.gameObject.transform.anchor.x,
+            this.gameObject.transform.position.y - size.y * this.gameObject.transform.anchor.y,
+            size.x * this.gameObject.transform.anchor.x,
+            size.y * this.gameObject.transform.anchor.y);
+
         // 이미지 그리기
         ctx.drawImage(this.image,  // 그릴 이미지 객체
             0, 0, this.image.width, this.image.height,  // 원본 이미지의 시작 x, y 좌표, 너비, 높이 (전체 이미지 사용)
@@ -132,6 +185,9 @@ export class GameLoop {
 
         GameLoop.instance = this;
         GameLoop.instance.start();
+
+        canvas.addEventListener('click', this.onClickCanvas);
+
     }
 
     static AddObject(object) {
@@ -177,6 +233,7 @@ export class GameLoop {
         this.objects.forEach(object => {
             object.Update();
             object.OnDraw(this.ctx);
+            object.OnCalculatePhysics();
             object.LateUpdate();
         });
 
@@ -187,6 +244,7 @@ export class GameLoop {
         })
         this.destroyedObjects.length = 0; // 배열 초기화
 
+        this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
         // requestAnimationFrame을 사용해 다음 프레임을 요청
         requestAnimationFrame(() => this.loop());
     }
@@ -194,5 +252,13 @@ export class GameLoop {
     backgroundRender() {
         // 게임 화면 렌더링 (예: 그리기 작업)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    onClickCanvas(event) {
+        const mouseX = event.offsetX;
+        const mouseY = event.offsetY;
+
+        console.log(`Mouse clicked at (${mouseX}, ${mouseY})`);
+
     }
 }

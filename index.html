@@ -32,7 +32,7 @@
             <button class="game-button options-button">옵션</button>
         </div>
     </div>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" style="display: none;"></canvas>
 
     <script type="module">
         import { GameLoop } from "./Script/StructureCode/GameSystem.js";
@@ -64,6 +64,7 @@
             const titleScreen = document.querySelector('.title-screen-container');
             if (titleScreen) {
                 titleScreen.remove();  // div 제거
+                canvas.style.display = 'block'; // 캔버스 표시
             }
             // 게임 루프 인스턴스 생성
             const gameLoop = new GameLoop(canvas, ctx);
