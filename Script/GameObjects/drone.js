@@ -13,7 +13,8 @@ export class Drone extends GameObject {
         console.log("Drone Start");
 
         // 드론의 초기 상태 설정
-        this.resource.image.src = "Resources/drone.png";  // 드론 이미지 로드
+        this.resource.image.src = "Resources/drone.png"; // 드론 이미지 로드
+
         this.transform.position.x = 100;  // 초기 X 위치
         this.transform.position.y = 100;  // 초기 Y 위치
         this.transform.scale.x = 0.5;  // 크기 설정

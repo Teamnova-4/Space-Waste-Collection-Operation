@@ -41,10 +41,13 @@ export class trash extends GameObject {
   LateUpdate() {}
 
   OnDestroy() {
-    console.log("testGameObject OnDestroy");
   }
 
   OnLoad(image) {
     console.log("testGameObject OnLoad" + image.src);
+  }
+
+  OnClick(){
+    this.Destroy();
   }
 }
