@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,15 +11,17 @@
             padding: 0;
             overflow: hidden;
         }
+
         canvas {
             display: block;
             width: 100vw;
             height: 100vh;
         }
     </style>
-        <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/main.css">
 
 </head>
+
 <body>
     <script type="module" src="./Script/StructureCode/GameSystem.js"></script>
 
@@ -33,7 +36,7 @@
 
     <script type="module">
         import { GameLoop } from "./Script/StructureCode/GameSystem.js";
-        import { testGameObject } from "./Script/GameObjects/testGameObject.js";
+        import { trash } from "./Script/GameObjects/trash.js";
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d")
@@ -56,7 +59,7 @@
         // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
         ctx.scale(ratio, ratio);
 
-        document.querySelector('.game-start-button').addEventListener('click', ()=>{
+        document.querySelector('.game-start-button').addEventListener('click', () => {
             console.log("StartGame");
             const titleScreen = document.querySelector('.title-screen-container');
             if (titleScreen) {
@@ -65,8 +68,9 @@
             // 게임 루프 인스턴스 생성
             const gameLoop = new GameLoop(canvas, ctx);
 
-            let test = new testGameObject();
+            let test =  new trash();
         });
     </script>
 </body>
+
 </html>
