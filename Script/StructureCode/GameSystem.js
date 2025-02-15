@@ -71,6 +71,9 @@ export class GameObject extends GameEvent{
     }
 }
 
+/**
+ * 오브젝트의 위치, 회전, 크기를 관리하는 클래스
+ */
 class Transform {
     constructor() {
         this.anchor = {x: 0.5, y: 0.5} // 회전 고정점
@@ -80,6 +83,9 @@ class Transform {
     }
 }
 
+/**
+ * 오브젝트의 물리적 속성을 관리하는 클래스
+ */
 class Physics{
     constructor() {
         // 오브젝트의 이동속도
@@ -89,6 +95,9 @@ class Physics{
     }
 }
 
+/**
+ * 오브젝트에 할당되는 이미지 리소스를 관리하는 클래스
+ */
 class GameResource {
     constructor(gameObject) {
         this.image = new Image();
