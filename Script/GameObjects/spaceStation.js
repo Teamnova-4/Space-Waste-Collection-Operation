@@ -6,7 +6,7 @@ export class spaceStation extends GameObject {
     
     // 게임 오브젝트가 시작될 때 호출되는 메서드
     Start() {
-        console.log("testGameObject Start");
+        console.log("spaceStation Start");
 
         // 이미지 파일을 로드합니다. 여기서 'Resources/test.png'는 이미지 경로입니다.
         // this.resource.image.src = "Resources/TransparentImageTest.png";
@@ -35,29 +35,29 @@ export class spaceStation extends GameObject {
 
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
     Update() {
-        console.log("testGameObject Update");
+        // console.log("spaceStation Update");
 
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
-        this.transform.rotation += 0;
+        // this.transform.rotation += 0;
     }
 
     // 게임 오브젝트가 매 프레임의 마지막에 업데이트될 때 호출되는 메서드
     LateUpdate() {
-        console.log("testGameObject LateUpdate");
+        // console.log("spaceStation LateUpdate");
         // 이 메서드는 후속 업데이트에서 발생할 수 있는 부수적인 작업을 처리하는 데 사용됩니다.
         // 예를 들어, 충돌 체크나 화면 업데이트 등.
     }
 
     // 게임 오브젝트가 파괴될 때 호출되는 메서드
     OnDestroy() {
-        console.log("testGameObject OnDestroy");
+        console.log("spaceStation OnDestroy");
         // 오브젝트가 파괴되면 호출됩니다.
         // 예를 들어, 자원 해제 작업이나 관련 데이터 삭제 등이 가능합니다.
     }
 
     // 게임 오브젝트의 이미지가 로드될 때 호출되는 메서드
     OnLoad(image) {
-        console.log("testGameObject OnLoad" + image.src);
+        console.log("spaceStation OnLoad" + image.src);
         // 이미지가 로드되었을 때 호출되어 해당 이미지를 확인하거나 초기화 작업을 할 수 있습니다.
     }
 }
