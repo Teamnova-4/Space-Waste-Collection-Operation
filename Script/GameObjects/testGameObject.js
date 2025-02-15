@@ -1,18 +1,20 @@
-import { GameObject } from "../StructureCode/GameObject.js";
+import { GameObject } from "../StructureCode/GameSystem.js";
 
-class testGameObject extends GameObject {
+export class testGameObject extends GameObject {
 
     Start(){
         console.log("testGameObject Start");
         this.resource.image.src = "../../Resources/TransparentImageTest.png";
-        this.transform.position.x = 30;
-        this.transform.position.y = 40;
-        this.transform.scale.x = 0.1;
-        this.transform.scale.y = 0.1;
+        this.transform.position.x = 200;
+        this.transform.position.y = 200;
+        this.transform.scale.x = 0.4;
+        this.transform.scale.y = 0.4;
+        this.transform.rotation = 0;
     }
 
     Update(){
         console.log("testGameObject Update");
+        this.transform.rotation += 1;
     }
 
     LateUpdate() {
@@ -29,4 +31,3 @@ class testGameObject extends GameObject {
     }
 }
 
-let test = new testGameObject();

@@ -10,13 +10,9 @@ body {
     color: #fff; /* 흰색 기본 글자색 */
   }
   
-  .game-container {
-   
-  }
   
   .title-screen-container {
     height: 100vh; /* 화면 높이 전체 */
-    background-image: url("background.jpg"); /* 배경 이미지 */
     background-size: cover; /* 배경 이미지 꽉 채우기 */
     background-position: center; /* 배경 이미지 중앙 정렬 */
     position: relative; /* 배경 이미지 위에 콘텐츠를 겹치기 위해 */
