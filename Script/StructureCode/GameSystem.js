@@ -64,6 +64,13 @@ class Transform {
     }
 }
 
+class Physics{
+    constructor() {
+        this.velocity = { x: 0, y: 0 };
+        this.acceleration = { x: 0, y: 0 };
+    }
+}
+
 class GameResource {
     constructor(gameObject) {
         this.image = new Image();
@@ -106,6 +113,11 @@ class GameResource {
             this.gameObject.transform.position.x - size.x * this.gameObject.transform.anchor.x,
             this.gameObject.transform.position.y - size.y * this.gameObject.transform.anchor.y,
             size.x, size.y);
+        console.log(size.x, size.y, 
+            this.gameObject.transform.position.x - size.x * this.gameObject.transform.anchor.x,
+            this.gameObject.transform.position.y - size.y * this.gameObject.transform.anchor.y,
+            size.x * this.gameObject.transform.anchor.x,
+            size.y * this.gameObject.transform.anchor.y);
 
     
 
