@@ -77,6 +77,12 @@ document.addEventListener("DOMContentLoaded", function () {
     function upgradeFeature(type) {
         if (user.upgrade(type)) { // 여기서 user 객체를 사용합니다.
             console.log(`${type} 업그레이드 성공!`);
+
+            // 함선 업그레이드 5레벨이면 간단한 텍스트 엔딩
+            if (type == 'defense' && user.getUpgradeLevel("defense") >= 5) {
+                showModal("성공적으로 끝까지 업그레이드 했습니다! 클리어!");
+            }
+
         } else {
             showModal("크레딧이 부족합니다");
             console.log(`${type} 업그레이드 실패 (크레딧 부족)!`);
@@ -103,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("modal-close-btn").addEventListener("click", function () {
         closeModal();
     });
-    
+
     // 업그레이드 버튼 클릭 이벤트 리스너 추가
     document.getElementById("drone-speed-btn").addEventListener("click", () => {
         upgradeFeature("speed");
@@ -117,6 +123,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // document.getElementById("base-storage-btn").addEventListener("click", () => {
     //     upgradeFeature("storage");
     // });
+
+    // 돈 치트 버튼
+    document.getElementById("moneyCheat").onclick = function () {
+        user.credits += 100;
+        console.log("돈 치트 버튼 클릭: 현재 보유 크레딧 = " + user.credits);
+    }
 
     // 초기 UI 설정
     updateUI();

@@ -66,9 +66,12 @@
         <button id="modal-close-btn">닫기</button>
     </div>
 
-
     <button id="rateUp">생산량 증가</button><button id="rateDown">생산량 감소</button>
     <button id="speedUp">속도 증가</button><button id="speedDown">속도 감소</button>
+
+
+    <button id="moneyCheat">돈 100원 추가</button>
+
     <script src="Script/Upgrade.js"></script>
 
     <canvas id="canvas" style="display: none;"></canvas>
@@ -142,15 +145,14 @@
             trashFactory.setSpeed(trashFactory.speed - 0.1);
         }
 
-
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
-
-
 
         // 우주정거장 생성 현석
         let spacestation = new spaceStation();
         let drone = new Drone();
+
+    
 
     </script>
 </body>
