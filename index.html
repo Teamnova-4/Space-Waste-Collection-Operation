@@ -130,23 +130,21 @@
 
         // 우주 쓰레기 팩토리 테스트
         document.getElementById("rateUp").onclick = function () {
-            trashFactory.setSpawnRate(trashFactory.spawnRate + 0.1);
+            trashFactory.setSpawnRate(trashFactory.spawnRate + 1);
         }
         document.getElementById("rateDown").onclick = function () {
-            trashFactory.setSpawnRate(trashFactory.spawnRate - 0.1);
+            trashFactory.setSpawnRate(trashFactory.spawnRate - 1);
         }
         document.getElementById("speedUp").onclick = function () {
-            trashFactory.setSpeed(trashFactory.speed + 0.1);
+            trashFactory.setSpeed(trashFactory.speed + 1);
         }
         document.getElementById("speedDown").onclick = function () {
-            trashFactory.setSpeed(trashFactory.speed - 0.1);
+            trashFactory.setSpeed(trashFactory.speed - 1);
         }
 
 
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
-
-
 
         // 우주정거장 생성 현석
         let spacestation = new spaceStation();
