@@ -28,6 +28,10 @@ export class GameEvent{
     OnLoad(image){
 
     }
+
+    OnClick(){
+
+    }
 }
 
 export class GameObject extends GameEvent{
@@ -35,9 +39,9 @@ export class GameObject extends GameEvent{
     constructor(){
         super();
 
-        this.transform = new Transform();
+        this.transform = new Transform(this);
         this.resource = new GameResource(this);
-        this.physics = new Physics();
+        this.physics = new Physics(this);
         GameLoop.AddObject(this);
     }
 
@@ -69,7 +73,33 @@ export class GameObject extends GameEvent{
 
         this.physics.velocity.x += this.physics.acceleration.x * GameLoop.deltaTime;
         this.physics.velocity.y += this.physics.acceleration.y * GameLoop.deltaTime;
-        console.log(this.physics.velocity);
+
+        if (this.transform.rotation > 360) {
+            this.transform.rotation -= 360;
+        } else if (this.transform.rotation < 0) {
+            this.transform.rotation += 360;
+        }
+        this.physics.updateCollider();
+    }
+
+    /**
+     * 겹치는 부분이 있는지 확인 
+     * @param {*} point 
+     * @returns 
+     */
+    isOverlapPoint(point){
+        const [p1, p2, p3, p4] = this.physics.corners;
+
+        const d1 = (point.x - p2.x) * (p1.y - p2.y) - (point.y - p2.y) * (p1.x - p2.x);
+        const d2 = (point.x - p3.x) * (p2.y - p3.y) - (point.y - p3.y) * (p2.x - p3.x);
+        const d3 = (point.x - p4.x) * (p3.y - p4.y) - (point.y - p4.y) * (p3.x - p4.x);
+        const d4 = (point.x - p1.x) * (p4.y - p1.y) - (point.y - p1.y) * (p4.x - p1.x);
+
+            // Point is inside if all signs are the same (all positive or all negative)
+        const hasNeg = (d1 < 0) || (d2 < 0) || (d3 < 0) || (d4 < 0);
+        const hasPos = (d1 > 0) || (d2 > 0) || (d3 > 0) || (d4 > 0);
+
+        return !(hasNeg && hasPos);
     }
 }
 
@@ -77,7 +107,8 @@ export class GameObject extends GameEvent{
  * 오브젝트의 위치, 회전, 크기를 관리하는 클래스
  */
 class Transform {
-    constructor() {
+    constructor(gameObject) {
+        this.gameObject = gameObject;
         this.anchor = {x: 0.5, y: 0.5} // 회전 고정점
         this.position = { x: 0, y: 0 }; // 위치
         this.rotation = 0; // 회전 각도 (도 단위)
@@ -89,11 +120,41 @@ class Transform {
  * 오브젝트의 물리적 속성을 관리하는 클래스
  */
 class Physics{
-    constructor() {
+    constructor(gameObject) {
+        this.gameObject = gameObject;
         // 오브젝트의 이동속도
         this.velocity = { x: 0, y: 0 };
         // 오브젝트의 가속도
         this.acceleration = { x: 0, y: 0 };
+
+        // 오브젝트 충돌체
+        this.collider = {offset: {x: 0, y: 0}, size: {x: 1, y: 1}};
+        this.corners = []; // 충돌체의 네 모서리 좌표
+    }
+
+    // 오브젝트의 충돌체를 업데이트하는 메서드
+    updateCollider() {
+
+        const size =  this.gameObject.resource.size;
+        const pivot = this.gameObject.transform.position;
+        const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
+
+        const corners = [
+            {x: this.collider.offset.x, y: this.collider.offset.y},
+            {x: this.collider.offset.x + size.x * this.collider.size.x, y: this.collider.offset.y},
+            {x: this.collider.offset.x + size.x * this.collider.size.x, y: this.collider.offset.y + size.y * this.collider.size.y} ,
+            {x: this.collider.offset.x, y: this.collider.offset.y + size.y * this.collider.size.y},
+        ] 
+
+        //corners회전 계산
+        this.corners = corners.map(corner => { 
+            const dx = corner.x - (size.x * this.gameObject.transform.anchor.x);
+            const dy = corner.y - (size.y * this.gameObject.transform.anchor.y);
+            const rotatedX = pivot.x + dx * Math.cos(radians) - dy * Math.sin(radians);
+            const rotatedY = pivot.y + dx * Math.sin(radians) + dy * Math.cos(radians);
+            return {x: rotatedX, y: rotatedY};
+        });
+
     }
 }
 
@@ -105,9 +166,6 @@ class GameResource {
         this.image = new Image();
         this.image.src = "";
         this.gameObject = gameObject;
-
-        this.width = 0;
-        this.height = 0;
 
         this.image.onload = () => {
             console.log(`[이미지 로드 완료] ${this.image.src}`);
@@ -124,31 +182,38 @@ class GameResource {
     draw(ctx) {
         const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
     
-        const size = { 
+        this.size = { 
             x: this.gameObject.transform.scale.x * this.image.width,
-            y:this.gameObject.transform.scale.y * this.image.height 
+            y: this.gameObject.transform.scale.y * this.image.height 
+        }
+
+        const pivot = {
+            x: this.gameObject.transform.position.x,
+            y: this.gameObject.transform.position.y,
         }
 
         // 캔버스 상태 저장
         ctx.save();
 
         // 회전의 중심을 이미지의 중심으로 설정
-        ctx.translate(this.gameObject.transform.position.x + size.x * (this.gameObject.transform.anchor.x - 1) , this.gameObject.transform.position.y + size.y * (this.gameObject.transform.anchor.y - 1));
+        ctx.translate( pivot.x, pivot.y);
         ctx.rotate(radians);
-        ctx.translate(-this.gameObject.transform.position.x, -this.gameObject.transform.position.y);
+        ctx.translate(
+            -this.size.x * this.gameObject.transform.anchor.x,
+            -this.size.y * this.gameObject.transform.anchor.y
+        );
     
         ctx.drawImage(this.image, 
-            0, 0, this.image.width, this.image.height,
-            this.gameObject.transform.position.x - size.x * this.gameObject.transform.anchor.x,
-            this.gameObject.transform.position.y - size.y * this.gameObject.transform.anchor.y,
-            size.x, size.y);
-        console.log(size.x, size.y, 
-            this.gameObject.transform.position.x - size.x * this.gameObject.transform.anchor.x,
-            this.gameObject.transform.position.y - size.y * this.gameObject.transform.anchor.y,
-            size.x * this.gameObject.transform.anchor.x,
-            size.y * this.gameObject.transform.anchor.y);
+            0, 0, this.image.width, this.image.height, 
+            0, 0, this.size.x, this.size.y); 
 
-    
+        /*
+        this.corners = corners.map(corner => { 
+            const rotatedX = pivot.x + (corner.x - pivot.x) * Math.cos(radians) - (corner.y - pivot.y) * Math.sin(radians); 
+            const rotatedY = pivot.y + (corner.x - pivot.x) * Math.sin(radians) + (corner.y - pivot.y) * Math.cos(radians); 
+            return {x: rotatedX, y: rotatedY};
+        });
+        */
 
         // 캔버스 상태 복원
         ctx.restore();
@@ -177,8 +242,6 @@ export class GameLoop {
 
     static AddObject(object) {
         if (object instanceof GameObject){
-            console.log(object)
-            console.log(GameLoop.instance)
             GameLoop.instance.objects.push(object);
 
             object.Start();
@@ -239,11 +302,21 @@ export class GameLoop {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
+    /**
+     * 
+     * canvas 클릭이벤트 처리
+     * @param {event} event 
+     */
     onClickCanvas(event){
         const mouseX = event.offsetX;
         const mouseY = event.offsetY;
 
-        console.log(`Mouse clicked at (${mouseX}, ${mouseY})`);
+        // 클릭한 위치 확인
+        GameLoop.instance.objects.forEach(object => {
+            if(object.isOverlapPoint({x: mouseX, y: mouseY})){
+                object.OnClick();
+            }
+        });
 
     }
 }
