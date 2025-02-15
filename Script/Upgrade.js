@@ -57,6 +57,7 @@ class User {
                 return Infinity; // 알 수 없는 업그레이드 타입은 무한대 비용 (구매 불가)
         }
     }
+
 }
 
 // DOM이 로드된 후 실행하도록 처리
@@ -76,8 +77,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (user.upgrade(type)) {
             console.log(`${type} 업그레이드 성공!`);
         } else {
+            showModal("크레딧이 부족합니다");  // 오타 수정
             console.log(`${type} 업그레이드 실패 (크레딧 부족)!`);
         }
+
         updateUI();
     }
 
@@ -88,6 +91,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("capacity-btn").addEventListener("click", function () {
         upgradeFeature("capacity");
+    });
+
+    // 알림창 띄우는 함수
+    function showModal(message) {
+        const modal = document.getElementById("modal");
+        const modalMessage = document.getElementById("modal-message");
+        modalMessage.textContent = message;
+        modal.style.display = "flex"; // 모달을 화면에 표시
+    }
+
+    // 모달 닫기 함수
+    function closeModal() {
+        const modal = document.getElementById("modal");
+        modal.style.display = "none"; // 모달을 숨김
+    }
+
+    // 모달 닫기 버튼 클릭 이벤트 리스너 추가
+    document.getElementById("modal-close-btn").addEventListener("click", function() {
+        closeModal();
     });
 
     // 초기 UI 설정
