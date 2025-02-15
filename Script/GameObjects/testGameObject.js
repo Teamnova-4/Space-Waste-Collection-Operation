@@ -12,6 +12,8 @@ export class testGameObject extends GameObject {
         this.transform.anchor.x = 0.5;
         this.transform.anchor.y = 0.5;
         this.transform.rotation = 0;
+
+        this.physics.velocity.x = 0.05;
     }
 
     Update(){

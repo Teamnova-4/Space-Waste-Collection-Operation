@@ -69,6 +69,7 @@ export class GameObject extends GameEvent{
 
         this.physics.velocity.x += this.physics.acceleration.x * GameLoop.deltaTime;
         this.physics.velocity.y += this.physics.acceleration.y * GameLoop.deltaTime;
+        console.log(this.physics.velocity);
     }
 }
 
@@ -228,6 +229,7 @@ export class GameLoop {
         })
         this.destroyedObjects.length = 0; // 배열 초기화
 
+        this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
         // requestAnimationFrame을 사용해 다음 프레임을 요청
         requestAnimationFrame(() => this.loop());
     }
