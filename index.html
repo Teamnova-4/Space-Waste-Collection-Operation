@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,15 +11,17 @@
             padding: 0;
             overflow: hidden;
         }
+
         canvas {
             display: block;
             width: 100vw;
             height: 100vh;
         }
     </style>
-        <link rel="stylesheet" href="css/main.css">
-
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/Upgrade.css">
 </head>
+
 <body>
     <script type="module" src="./Script/StructureCode/GameSystem.js"></script>
 
@@ -29,11 +32,50 @@
             <button class="game-button options-button">옵션</button>
         </div>
     </div>
+
+    <!-- 크레딧 표시 (드론 업그레이드 바로 왼쪽) 현석-->
+    <div id="credit-display" style="display: none;" class="credit-left">
+        <p>현재 크레딧: <span id="credits">100</span></p>
+    </div>
+
+    <!-- 드론 업그레이드 (오른쪽) 현석 -->
+    <div id="upgrade-system" style="display: none;">
+        <h1>드론 업그레이드</h1>
+        <div id="drone-upgrade">
+            <p>속도 레벨: <span id="drone-speed-level">1</span></p>
+            <p>적재 용량 레벨: <span id="drone-capacity-level">0</span></p>
+            <button id="drone-speed-btn">속도 업그레이드</button>
+            <button id="drone-capacity-btn">적재 용량 업그레이드</button>
+        </div>
+    </div>
+
+    <!-- 기지 업그레이드 (오른쪽 하단) 현석 -->
+    <div id="base-upgrade-container" style="display: none;" class="base-right">
+        <h1>기지 업그레이드</h1>
+        <div id="base-upgrade">
+            <p>방어 레벨: <span id="base-defense-level">1</span></p>
+            <p>저장 공간 레벨: <span id="base-storage-level">0</span></p>
+            <button id="base-defense-btn">방어력 업그레이드</button>
+            <button id="base-storage-btn">저장 공간 업그레이드</button>
+        </div>
+    </div>
+
+    <!-- 알림 모달 현석 -->
+    <div id="modal" style="display: none;">
+        <div id="modal-message"></div>
+        <button id="modal-close-btn">닫기</button>
+    </div>
+
+
+    <script src="Script/Upgrade.js"></script>
+
     <canvas id="canvas" style="display: none;"></canvas>
 
     <script type="module">
         import { GameLoop } from "./Script/StructureCode/GameSystem.js";
-        import { testGameObject } from "./Script/GameObjects/testGameObject.js";
+        // 우주 정거장 추가 - 현석
+        import { spaceStation } from "./Script/GameObjects/spaceStation.js";
+
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d")
@@ -56,18 +98,86 @@
         // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
         ctx.scale(ratio, ratio);
 
-        document.querySelector('.game-start-button').addEventListener('click', ()=>{
+        document.querySelector('.game-start-button').addEventListener('click', () => {
             console.log("StartGame");
+
+            // 타이틀 화면 제거 현석
             const titleScreen = document.querySelector('.title-screen-container');
             if (titleScreen) {
-                titleScreen.remove();  // div 제거
-                canvas.style.display = 'block'; // 캔버스 표시
+                titleScreen.remove();
             }
-            // 게임 루프 인스턴스 생성
-            const gameLoop = new GameLoop(canvas, ctx);
 
-            let test = new testGameObject();
+            // 캔버스 및 UI 표시 현석
+            document.getElementById("canvas").style.display = 'block';
+            document.getElementById("upgrade-system").style.display = 'block';
+            document.getElementById("credit-display").style.display = 'block';
+
+            // 기지 업그레이드 UI 표시 현석
+            document.getElementById("base-upgrade-container").style.display = 'block';
         });
+
+        // 업그레이드 로직 현석
+        let credits = 100;
+        let droneSpeedLevel = 1;
+        let droneCapacityLevel = 0;
+        let baseDefenseLevel = 1;
+        let baseStorageLevel = 0;
+
+        // 드론 속도 업그레이드 현석
+        document.getElementById("drone-speed-btn").addEventListener("click", () => {
+            if (credits >= 10) {
+                credits -= 10;
+                droneSpeedLevel++;
+                document.getElementById("credits").innerText = credits;
+                document.getElementById("drone-speed-level").innerText = droneSpeedLevel;
+            } else {
+                alert("크레딧이 부족합니다!");
+            }
+        });
+
+        // 드론 적재 용량 업그레이드 현석
+        document.getElementById("drone-capacity-btn").addEventListener("click", () => {
+            if (credits >= 15) {
+                credits -= 15;
+                droneCapacityLevel++;
+                document.getElementById("credits").innerText = credits;
+                document.getElementById("drone-capacity-level").innerText = droneCapacityLevel;
+            } else {
+                alert("크레딧이 부족합니다!");
+            }
+        });
+
+        // 기지 방어력 업그레이드 현석
+        document.getElementById("base-defense-btn").addEventListener("click", () => {
+            if (credits >= 20) {
+                credits -= 20;
+                baseDefenseLevel++;
+                document.getElementById("credits").innerText = credits;
+                document.getElementById("base-defense-level").innerText = baseDefenseLevel;
+            } else {
+                alert("크레딧이 부족합니다!");
+            }
+        });
+
+        // 기지 저장 공간 업그레이드 현석
+        document.getElementById("base-storage-btn").addEventListener("click", () => {
+            if (credits >= 25) {
+                credits -= 25;
+                baseStorageLevel++;
+                document.getElementById("credits").innerText = credits;
+                document.getElementById("base-storage-level").innerText = baseStorageLevel;
+            } else {
+                alert("크레딧이 부족합니다!");
+            }
+        });
+
+        // 게임 루프 인스턴스 생성
+        const gameLoop = new GameLoop(canvas, ctx);
+        // 우주정거장 생성 현석석
+        let test = new spaceStation();
+
+
     </script>
 </body>
+
 </html>

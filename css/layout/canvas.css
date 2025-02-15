@@ -1,0 +1,9 @@
+/* 게임 캔버스 레이아웃 css */
+
+#canvas {
+    display: none; /* 초기 숨김 상태 유지 */
+    position: fixed; /* 캔버스를 뷰포트에 고정 */
+    top: 0;
+    left: 0;
+    z-index: -1; /* 다른 요소 뒤에 배치 (필요에 따라 조절) */
+}
