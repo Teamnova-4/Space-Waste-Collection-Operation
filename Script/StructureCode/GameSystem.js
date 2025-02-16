@@ -168,7 +168,6 @@ class Transform {
         const dx = targetPosition.x - this.position.x;
         const dy = targetPosition.y - this.position.y;
         this.rotation = Math.atan2(dy, dx) * Transform.rad2deg;
-        console.log(this.rotation)
     }
 
     Distance(targetPosition) {

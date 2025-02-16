@@ -31,9 +31,8 @@ export class SpaceStation extends GameObject {
      * 싱클톤 초기화 함수
      */
     Initialize() {
-        this.trashTargetList = [];
+        this.targetTrashList = [];
         this.droneList = [];
-        this.stoppedWorkingDroneList = [];
     }
     
     // 게임 오브젝트가 시작될 때 호출되는 메서드
@@ -72,9 +71,14 @@ export class SpaceStation extends GameObject {
 
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
         // this.transform.rotation += 0;
-        this.trashTargetList.forEach(element => {
-            
-        });
+        if (this.targetTrashList.length > 0){
+            this.droneList.filter(drone => !drone.isWorking).forEach(element => { 
+                const trash = this.targetTrashList.shift()
+                if (trash !== null && trash !== undefined) {
+                    element.StartWork(trash);
+                }
+            });
+        }
     }
 
     // 게임 오브젝트가 매 프레임의 마지막에 업데이트될 때 호출되는 메서드
@@ -97,9 +101,13 @@ export class SpaceStation extends GameObject {
         // 이미지가 로드되었을 때 호출되어 해당 이미지를 확인하거나 초기화 작업을 할 수 있습니다.
     }
 
-    // 드론 시작 명령
-    static StartWorkDrone(drone){
-
+    /** 
+     * 드론 시작 명령
+     * 
+     * @param {Trash} trash
+     *  */ 
+    static StartWorkDrone(trash){
+        const drone = SpaceStation.Instance().stoppedWorkingDroneList.pop();
     }
 
     //드론 작동 멈춤 알림
@@ -112,6 +120,6 @@ export class SpaceStation extends GameObject {
         let drone = new Drone();
         drone.transform.position.x = SpaceStation.Instance().transform.position.x;
         drone.transform.position.y = SpaceStation.Instance().transform.position.y;
-        SpaceStation.Instance().droneList.push("test");
+        SpaceStation.Instance().droneList.push(drone);
     }
 }
