@@ -77,6 +77,7 @@
     <canvas id="canvas" style="display: none;"></canvas>
 
 
+    <script src="Script/credit.js"></script>   
     <script type="module">
         import { GameLoop } from "./Script/StructureCode/GameSystem.js";
         // 우주 정거장 추가 - 현석
@@ -149,6 +150,7 @@
 
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
+        setCredits(0);
 
         // 우주정거장 생성 현석
         let spaceStation = new SpaceStation();
