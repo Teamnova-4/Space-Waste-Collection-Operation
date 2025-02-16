@@ -2,7 +2,7 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
 import { Drone } from "./drone.js";
 
-// testGameObject 클래스는 GameObject 클래스를 상속받아, 게임 오브젝트의 특정 동작을 정의합니다.
+// SpaceStation 클래스는 GameObject 클래스를 상속받아, 게임 오브젝트의 특정 동작을 정의합니다.
 export class SpaceStation extends GameObject {
 
     constructor() {
