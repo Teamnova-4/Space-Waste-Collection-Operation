@@ -13,6 +13,13 @@ export class SpaceStation extends GameObject {
 
         SpaceStation.instance = this;
     }
+
+    static Instance(){
+        if (!SpaceStation.instance) {
+            SpaceStation.instance = new SpaceStation();
+        }
+        return SpaceStation.instance;
+    }
     
     // 게임 오브젝트가 시작될 때 호출되는 메서드
     Start() {
@@ -38,10 +45,11 @@ export class SpaceStation extends GameObject {
         // 게임 오브젝트의 초기 회전값을 0으로 설정합니다.
         this.transform.rotation = 0;
 
-         // 물리 엔진에서의 속도 설정 (고정된 우주선이므로 속도는 0으로 설정)
-         this.physics.velocity.x = 0;
-         this.physics.velocity.y = 0;
+        // 물리 엔진에서의 속도 설정 (고정된 우주선이므로 속도는 0으로 설정)
+        this.physics.velocity.x = 0;
+        this.physics.velocity.y = 0;
 
+        this.trashTargetList = [];
     }
 
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드

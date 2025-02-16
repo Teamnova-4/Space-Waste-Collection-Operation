@@ -344,6 +344,13 @@ export class GameLoop {
 
     }
 
+    static Instance(){
+        if (!GameLoop.instance) {
+            GameLoop.instance = new GameLoop();
+        }
+        return GameLoop.instance;
+    }
+
     static AddObject(object) {
         if (object instanceof GameObject) {
             GameLoop.instance.newObjects.push(object);

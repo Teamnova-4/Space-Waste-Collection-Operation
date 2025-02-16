@@ -1,4 +1,5 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
+import { SpaceStation } from "./spaceStation.js";
 
 // 우주 쓰레기 오브젝트
 // 화면 왼쪽 끝에서 생성되고 오른쪽 끝으로 이동한다음 사라진다.
@@ -49,6 +50,6 @@ export class trash extends GameObject {
   }
 
   OnClick(){
-
+    SpaceStation.Instance().trashTargetList.push(this);
   }
 }
