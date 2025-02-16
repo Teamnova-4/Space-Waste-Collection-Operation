@@ -7,8 +7,8 @@ export class testGameObject extends GameObject {
         this.resource.image.src = "Resources/arrowTest.png";
         this.transform.position.x = 600;
         this.transform.position.y = 600;
-        this.transform.scale.x = 0.4;
-        this.transform.scale.y = 0.4;
+        this.transform.scale.x = 0.2;
+        this.transform.scale.y = 0.2;
         this.transform.anchor.x = 0.5;
         this.transform.anchor.y = 0.5;
         this.transform.rotation = 45

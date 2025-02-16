@@ -43,20 +43,25 @@
     background-color: #0056b3;
 }
 
-/* 크레딧 UI (드론 업그레이드 왼쪽) */
-.credit-left {
+/* UI 컨테이너 */
+#ui-container {
     position: absolute;
-    top: 20px;
-    left: 1500px; /* 드론 업그레이드 왼쪽에 배치 */
-    color: white;
-    font-size: 20px;
+    top: 20px; /* 원하는 위치에 따라 top, bottom, left, right 등을 설정 */
+    right: 20px; /* 예시: 왼쪽 상단 20px 위치 */
+    display: flex; /* 가로 배치 */
 }
 
-/* 드론 업그레이드 (오른쪽) */
+/* 크레딧 UI */
+#credit-display {
+    position: relative;
+    color: white;
+    font-size: 20px;
+    margin-right: 20px; /* 드론 업그레이드 박스와의 간격 조절 */
+}
+
+/* 드론 업그레이드 */
 #upgrade-system {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    position: relative;
     color: white;
     font-size: 18px;
 }
