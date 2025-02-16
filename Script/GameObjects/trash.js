@@ -49,6 +49,6 @@ export class trash extends GameObject {
   }
 
   OnClick(){
-    this.Destroy();
+
   }
 }

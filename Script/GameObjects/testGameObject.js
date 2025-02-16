@@ -19,8 +19,9 @@ export class testGameObject extends GameObject {
 
         this.clickPos = {x: 0, y: 0}
         canvas.addEventListener("click", (evenet) => {
-            this.transform.LookAt({x: evenet.offsetX, y: evenet.offsetY});
-            this.physics.setVelocityInDirection({x: 0.5, y: 0.5});
+            this.clickPos = {x: evenet.offsetX, y: evenet.offsetY}
+            this.transform.LookAt(this.clickPos);
+            this.physics.setVelocityInDirection({x: 0.33, y: 0.33});
         });
     }
 

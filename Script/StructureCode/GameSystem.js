@@ -63,24 +63,6 @@ export class GameObject extends GameEvent {
         this.resource.draw(ctx);
     }
 
-    /**
-     * 물리계산 함수
-     * Update와 LateUpdate사이에서 호출됨
-     */
-    OnCalculatePhysics() {
-        this.transform.position.x += this.physics.velocity.x * GameLoop.deltaTime;
-        this.transform.position.y += this.physics.velocity.y * GameLoop.deltaTime;
-
-        this.physics.velocity.x += this.physics.acceleration.x * GameLoop.deltaTime;
-        this.physics.velocity.y += this.physics.acceleration.y * GameLoop.deltaTime;
-
-        if (this.transform.rotation > 360) {
-            this.transform.rotation -= 360;
-        } else if (this.transform.rotation < 0) {
-            this.transform.rotation += 360;
-        }
-        this.physics.updateCollider();
-    }
 
     /**
      * 겹치는 부분이 있는지 확인 
@@ -101,6 +83,11 @@ export class GameObject extends GameEvent {
 
         return !(hasNeg && hasPos);
     }
+
+    InternalLogicUpdate() {
+        this.physics.Update();
+        this.transform.Update();
+    }
 }
 
 /**
@@ -119,6 +106,17 @@ class Transform {
 
     }
 
+    Update() {
+        this.calculateRotation();
+    }
+
+    calculateRotation(){
+        if (this.rotation > 360) {
+            this.rotation -= 360;
+        } else if (this.rotation < 0) {
+            this.rotation += 360;
+        }
+    }
     // 선형 보간 (Lerp) 함수
     lerp(start, end, t) {
         return start + (end - start) * t;
@@ -187,7 +185,25 @@ class Physics {
 
         // 오브젝트 충돌체
         this.collider = { offset: { x: 0, y: 0 }, size: { x: 1, y: 1 } };
-        this.corners = []; // 충돌체의 네 모서리 좌표
+         // [외부접근 하면 안됨] 충돌체의 네 모서리 좌표
+        this.corners = [];
+    }
+
+    Update() {
+        this.OnCalculatePhysics();
+        this.updateCollider();
+    }
+
+    /**
+     * 물리계산 함수
+     * Update와 LateUpdate사이에서 호출됨
+     */
+    OnCalculatePhysics() {
+        this.gameObject.transform.position.x += this.velocity.x * GameLoop.deltaTime;
+        this.gameObject.transform.position.y += this.velocity.y * GameLoop.deltaTime;
+
+        this.velocity.x += this.acceleration.x * GameLoop.deltaTime;
+        this.velocity.y += this.acceleration.y * GameLoop.deltaTime;
     }
 
     // 오브젝트의 충돌체를 업데이트하는 메서드
@@ -367,7 +383,7 @@ export class GameLoop {
         this.objects.forEach(object => {
             object.Update();
             object.OnDraw(this.ctx);
-            object.OnCalculatePhysics();
+            object.InternalLogicUpdate();
             object.LateUpdate();
         });
 
