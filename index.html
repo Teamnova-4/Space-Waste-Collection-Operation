@@ -123,7 +123,7 @@
 
             // 캔버스 및 UI 표시
             document.getElementById("canvas").style.display = 'block';
-            // 업그레이드시스템, 크레딧 표시시
+            // 업그레이드시스템, 크레딧 표시
             document.getElementById("upgrade-system").style.display = 'block';
             document.getElementById("credit-display").style.display = 'block';
             document.getElementById("base-upgrade-container").style.display = 'block';
@@ -131,7 +131,11 @@
             // 우주 쓰레기 생성
             trashFactory = new TrashFactory();
             trashFactory.startTrashSpawn();
+
+
+
         });
+
 
         // 우주 쓰레기 팩토리 테스트
         document.getElementById("rateUp").onclick = function () {
@@ -154,8 +158,8 @@
         let spaceStation = new SpaceStation();
 
         SpaceStation.AddDrone();
-    
-        let testObject = new  testGameObject();
+
+        let testObject = new testGameObject();
 
     </script>
 </body>

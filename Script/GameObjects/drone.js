@@ -22,7 +22,6 @@ export class Drone extends GameObject {
         this.resource.image.src = "./Resources/drone.png";  // 드론 이미지 로드
         this.transform.position.x = 400;  // 초기 X 위치
         this.transform.position.y = 400;  // 초기 Y 위치
-
         this.transform.scale.x = 0.5;  // 크기 설정
         this.transform.scale.y = 0.5;  // 크기 설정
         this.transform.anchor.x = 0.5;  // 앵커 설정
@@ -151,9 +150,6 @@ export class Drone extends GameObject {
         // 부드럽게 이동 (속도만큼 이동)
         this.transform.position.x += deltaX * 0.00001;  // X축으로 목표 지점에 다가감
         this.transform.position.y += deltaY * 0.00001;  // Y축으로 목표 지점에 다가감
-
-        // console.log("this.transform.position.x: "+this.transform.position.x);
-        // console.log("this.transform.position.y: "+this.transform.position.y);
 
         // 이동 애니메이션을 계속해서 호출 (프레임마다 계속 호출)
         this.moveAnimation = requestAnimationFrame(this.moveToTarget.bind(this));
