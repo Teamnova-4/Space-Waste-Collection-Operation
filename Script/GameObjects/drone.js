@@ -38,7 +38,7 @@ export class Drone extends GameObject {
                 this.targetTrash.catch(this);
             } else if (this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
                 this.targetTrash.Destroy();
-                addCredits(200);
+                User.AddCredits(200);
                 this.StopWork();
             }
         }
