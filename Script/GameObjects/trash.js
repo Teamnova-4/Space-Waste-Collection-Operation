@@ -30,15 +30,19 @@ export class Trash extends GameObject {
     this.transform.rotation = 0;
 
     this.isTargeted = false;
+    this.isCaught = false;
+    this.caughtBy = null;
   }
 
   Update() {
     // 매 프레임마다 오른쪽으로 1px씩 이동
-    this.transform.position.x += this.speed;
+    if (!this.isCaught){
+      this.transform.position.x += this.speed;
 
-    // TODO:: 100 변수 전환 필요
-    if (this.transform.position.x > canvas.width + 100) {
-      this.Destroy();
+      // TODO:: 100 변수 전환 필요
+      if (this.transform.position.x > canvas.width + 100) {
+        this.Destroy();
+      }
     }
   }
 
@@ -56,5 +60,14 @@ export class Trash extends GameObject {
       SpaceStation.Instance().targetTrashList.push(this);
       this.isTargeted = true;
     }
+  }
+  /**
+   * drone으로 해당 쓰레기를 잡았을 때 호출되는 함수
+   * @param {**Drone*} drone 
+   */
+  catch(drone) {
+    this.caughtBy = drone;
+    this.isCaught = true;
+    this.transform.position = drone.transform.position;
   }
 }

@@ -36,7 +36,7 @@ export class Drone extends GameObject {
             if (!this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
                 this.isReturning = true;
                 this.targetPosition = SpaceStation.Instance().transform.position; 
-                console.log(this.targetPosition);
+                this.targetTrash.catch(this);
             } else if (this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
                 this.targetTrash.Destroy();
                 this.StopWork();
