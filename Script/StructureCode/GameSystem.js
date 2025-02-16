@@ -445,7 +445,7 @@ export class GameLoop {
 
     }
 }
-
+// 게임시스템 우주 배경 반영
 export class Background  {
     constructor() {
     if (Background.instance) {
