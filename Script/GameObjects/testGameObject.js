@@ -4,7 +4,7 @@ export class testGameObject extends GameObject {
 
     Start(){
         console.log("testGameObject Start");
-        this.resource.image.src = "Resources/TransparentImageTest.png";
+        this.resource.image.src = "Resources/arrowTest.png";
         this.transform.position.x = 600;
         this.transform.position.y = 600;
         this.transform.scale.x = 0.4;
@@ -15,10 +15,16 @@ export class testGameObject extends GameObject {
 
         this.physics.collider.size = {x: 1.5, y: 1.5}
 
+        this.progress = 0.0;
+
+        this.clickPos = {x: 0, y: 0}
+        canvas.addEventListener("click", (evenet) => {
+            this.transform.LookAt({x: evenet.offsetX, y: evenet.offsetY});
+            this.physics.setVelocityInDirection({x: 0.5, y: 0.5});
+        });
     }
 
     Update(){
-        this.transform.rotation += 1;
     }
 
     LateUpdate() {

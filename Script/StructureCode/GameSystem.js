@@ -108,11 +108,15 @@ export class GameObject extends GameEvent {
  */
 class Transform {
     constructor(gameObject) {
+        Transform.rad2deg = 180 / Math.PI; // 라디안을 도(degree)로 변환
+        Transform.deg2rad = Math.PI / 180; // 도(degree)를 라디안으로 변환
+
         this.gameObject = gameObject;
         this.anchor = { x: 0.5, y: 0.5 } // 회전 고정점
         this.position = { x: 0, y: 0 }; // 위치
         this.rotation = 0; // 회전 각도 (도 단위)
         this.scale = { x: 1, y: 1 }; // 크기
+
     }
 
     // 선형 보간 (Lerp) 함수
@@ -124,7 +128,10 @@ class Transform {
         return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; 
     }
 
-    //이동 회전 동시에 부드럽게 보간
+    /**
+     * 이동 회전 동시에 부드럽게 보간
+     * 
+     * */
     moveWithRotationEase(targetPosition, speed, progress) {
         const startPosition = { x: this.position.x, y: this.position.y };
         const startRotation = this.rotation;
@@ -150,6 +157,20 @@ class Transform {
             this.position = targetPosition;
             this.rotation = targetRotation; 
         }
+    }
+
+
+    /**
+     * 
+     * x, y 좌표를 받아 해당 좌표를 바라보도록 회전 각도를 설정한다.
+     * 
+     * @param {{x,y}} targetPosition {x, y} 좌표 
+     */
+    LookAt(targetPosition) {
+        const dx = targetPosition.x - this.position.x;
+        const dy = targetPosition.y - this.position.y;
+        this.rotation = Math.atan2(dy, dx) * Transform.rad2deg;
+        console.log(this.rotation)
     }
 }
 
@@ -192,6 +213,26 @@ class Physics {
             return { x: rotatedX, y: rotatedY };
         });
 
+    }
+
+    /**
+     * transform 의 방향을 기반으로 속도를 정하는 메서드
+     * @param {{x, y}} velocity {x, y} 로 이루언진 velocity
+     */
+    setVelocityInDirection(velocity) {
+        const radians = this.gameObject.transform.rotation * Transform.deg2rad;
+        this.velocity.x = Math.cos(radians) * velocity.x;
+        this.velocity.y = Math.sin(radians) * velocity.y;
+    }
+
+    /**
+     * transform의 방향을 기반으로 가속도를 정하는 메서드
+     * @param {{x, y}} acceleration {x, y} 로 이루언진 acceleration
+     */
+    setAccelerationInDirection(acceleration) {
+        const radians = this.gameObject.transform.rotation * Transform.deg2rad;
+        this.acceleration.x = Math.cos(radians) * acceleration.x;
+        this.acceleration.y = Math.sin(radians) * acceleration.y;
     }
 }
 
