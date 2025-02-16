@@ -424,6 +424,7 @@ export class GameLoop {
     backgroundRender() {
         // 게임 화면 렌더링 (예: 그리기 작업)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        Background.Instance().animateBackground();
     }
 
     /**
@@ -442,5 +443,70 @@ export class GameLoop {
             }
         });
 
+    }
+}
+
+export class Background  {
+    constructor() {
+    if (Background.instance) {
+            return Background.instance;
+        }
+
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.image = new Image();
+        this.image.src = "Resources/BackGround.png";
+        this.speed = 0.01;
+        this.x = 0; // 배경의 초기 위치
+        this.isRunning = false;
+
+
+        this.Initialize();
+        Background.instance = this;
+    }
+
+    /**
+     * 싱클톤 인스턴스 반환 함수 
+     */
+    static Instance(){
+        if (!Background.instance) {
+            Background.instance = new Background();
+            Background.instance.Initialize();
+        }
+        return Background.instance;
+    }
+
+    /**
+     * 싱클톤 초기화 함수
+     */
+    Initialize() {
+    }
+    
+
+    start() {
+        if (this.isRunning) return;
+        this.isRunning = true;
+        this.animateBackground();
+    }
+
+    stop() {
+        this.isRunning = false;
+        cancelAnimationFrame(this.animationId);
+    }
+
+    animateBackground() {
+        // GameSystem.backgroundRender();
+        if (!this.isRunning) return;
+
+        // // 배경 위치 업데이트 (왼쪽에서 오른쪽으로 이동)
+        this.x += this.speed;
+        if (this.x >= this.canvas.width) {
+            this.x = 0; // 화면 끝에 도달하면 처음으로 되돌리기
+        }
+
+        // // 캔버스 클리어 후 새로운 배경 그리기
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.image, -this.x, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.image, this.canvas.width - this.x, 0, this.canvas.width, this.canvas.height);
     }
 }

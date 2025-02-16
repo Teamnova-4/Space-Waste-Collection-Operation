@@ -78,15 +78,13 @@
 
 
     <script type="module">
-        import { GameLoop } from "./Script/StructureCode/GameSystem.js";
+        import { GameLoop, Background } from "./Script/StructureCode/GameSystem.js";
         // 우주 정거장 추가 - 현석
         import { SpaceStation } from "./Script/GameObjects/spaceStation.js";
         // 드론 추가 - 현석
         import { Drone } from "./Script/GameObjects/drone.js";
         // 우주 쓰레기 추가
         import { TrashFactory } from "./Script/TrashFactory.js";
-
-        import { testGameObject } from "./Script/GameObjects/testGameObject.js";
 
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
@@ -111,10 +109,12 @@
         ctx.scale(ratio, ratio);
 
         let trashFactory = null; // 우주 쓰레기 생성 공장
+        // 배경 인스턴스 생성
+     
 
         document.querySelector('.game-start-button').addEventListener('click', () => {
-            console.log("StartGame");
 
+            console.log("StartGame");
             // 타이틀 화면 제거 현석
             const titleScreen = document.querySelector('.title-screen-container');
             if (titleScreen) {
@@ -158,8 +158,10 @@
         let spaceStation = new SpaceStation();
 
         SpaceStation.AddDrone();
-
-        let testObject = new testGameObject();
+        
+        const background =  new Background();
+        // 배경 애니메이션 시작
+        background.start();
 
     </script>
 </body>
