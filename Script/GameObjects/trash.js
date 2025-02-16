@@ -28,6 +28,8 @@ export class trash extends GameObject {
     this.transform.anchor.x = 1;
     this.transform.anchor.y = 1;
     this.transform.rotation = 0;
+
+    this.isTargeted = false;
   }
 
   Update() {
@@ -50,6 +52,9 @@ export class trash extends GameObject {
   }
 
   OnClick(){
-    SpaceStation.Instance().trashTargetList.push(this);
+    if(this.isTargeted == false){
+      SpaceStation.Instance().trashTargetList.push(this);
+      this.isTargeted = true;
+    }
   }
 }

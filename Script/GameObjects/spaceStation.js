@@ -1,5 +1,6 @@
 // "GameObject" 클래스를 임포트합니다. 이 클래스는 기본적인 게임 오브젝트의 기능을 제공합니다.
 import { GameObject } from "../StructureCode/GameSystem.js";
+import { Drone } from "./drone.js";
 
 // testGameObject 클래스는 GameObject 클래스를 상속받아, 게임 오브젝트의 특정 동작을 정의합니다.
 export class SpaceStation extends GameObject {
@@ -11,14 +12,28 @@ export class SpaceStation extends GameObject {
             return SpaceStation.instance;
         }
 
+        this.Initialize();
         SpaceStation.instance = this;
     }
 
+    /**
+     * 싱클톤 인스턴스 반환 함수 
+     */
     static Instance(){
         if (!SpaceStation.instance) {
             SpaceStation.instance = new SpaceStation();
+            SpaceStation.innerHeight.Initialize();
         }
         return SpaceStation.instance;
+    }
+
+    /**
+     * 싱클톤 초기화 함수
+     */
+    Initialize() {
+        this.trashTargetList = [];
+        this.droneList = [];
+        this.stoppedWorkingDroneList = [];
     }
     
     // 게임 오브젝트가 시작될 때 호출되는 메서드
@@ -49,7 +64,6 @@ export class SpaceStation extends GameObject {
         this.physics.velocity.x = 0;
         this.physics.velocity.y = 0;
 
-        this.trashTargetList = [];
     }
 
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
@@ -58,6 +72,9 @@ export class SpaceStation extends GameObject {
 
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
         // this.transform.rotation += 0;
+        this.trashTargetList.forEach(element => {
+            
+        });
     }
 
     // 게임 오브젝트가 매 프레임의 마지막에 업데이트될 때 호출되는 메서드
@@ -78,5 +95,23 @@ export class SpaceStation extends GameObject {
     OnLoad(image) {
         console.log("spaceStation OnLoad" + image.src);
         // 이미지가 로드되었을 때 호출되어 해당 이미지를 확인하거나 초기화 작업을 할 수 있습니다.
+    }
+
+    // 드론 시작 명령
+    static StartWorkDrone(drone){
+
+    }
+
+    //드론 작동 멈춤 알림
+    static StoppedWorkingDrone(drone){
+
+    }
+
+
+    static AddDrone() {
+        let drone = new Drone();
+        drone.transform.position.x = SpaceStation.Instance().transform.position.x;
+        drone.transform.position.y = SpaceStation.Instance().transform.position.y;
+        SpaceStation.Instance().droneList.push("test");
     }
 }

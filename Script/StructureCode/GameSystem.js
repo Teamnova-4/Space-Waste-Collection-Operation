@@ -344,11 +344,21 @@ export class GameLoop {
 
     }
 
+    /**
+     * 싱클톤 인스턴스 반환 함수 
+     */
     static Instance(){
         if (!GameLoop.instance) {
             GameLoop.instance = new GameLoop();
+            GameLoop.instance.Initialize();
         }
         return GameLoop.instance;
+    }
+
+    /**
+     * 싱클톤 초기화 함수
+     */
+    Initialize() {
     }
 
     static AddObject(object) {
