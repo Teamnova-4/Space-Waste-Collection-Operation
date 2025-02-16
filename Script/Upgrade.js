@@ -17,14 +17,38 @@
 
 class User {
     constructor(initialCredits, initialUpgrades) {
+        if (User.instance) {
+            return User.instance;
+        }
+
         this.credits = initialCredits || 0;
         this.upgrades = initialUpgrades || {};
+
+        this.Initialize();
+        User.instance = this;
+    }
+
+    /**
+     * 싱클톤 인스턴스 반환 함수 
+     */
+    static Instance(){
+        if (!User.instance) {
+            User.instance = new User();
+            User.instance.Initialize();
+        }
+        return User.instance;
+    }
+
+    /**
+     * 싱클톤 초기화 함수
+     */
+    Initialize() {
     }
 
     upgrade(upgradeType) {
         if (this.canAfford(upgradeType)) {
             const cost = this._getUpgradeCost(upgradeType);
-            this.credits -= cost;
+            this.setCredits(this.credits - cost);
             this.upgrades[upgradeType] = (this.upgrades[upgradeType] || 0) + 1; // 레벨 증가
             console.log(`${upgradeType} 업그레이드 완료! (레벨: ${this.upgrades[upgradeType]})`);
             return true; //성공여부 반환
@@ -36,6 +60,14 @@ class User {
 
     getUpgradeLevel(upgradeType) {
         return this.upgrades[upgradeType] || 0; // 업그레이드 레벨이 없으면 0 반환
+    }
+
+    setCredits(value){
+        this.credits = value;
+        document.getElementById('credits').textContent = this.credits;
+    }
+    static AddCredits(amount) {
+        User.Instance().setCredits(User.Instance().credits + amount);
     }
 
     canAfford(upgradeType) {

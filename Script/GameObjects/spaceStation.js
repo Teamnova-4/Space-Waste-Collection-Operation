@@ -22,7 +22,7 @@ export class SpaceStation extends GameObject {
     static Instance(){
         if (!SpaceStation.instance) {
             SpaceStation.instance = new SpaceStation();
-            SpaceStation.innerHeight.Initialize();
+            SpaceStation.instance.Initialize();
         }
         return SpaceStation.instance;
     }
@@ -49,8 +49,8 @@ export class SpaceStation extends GameObject {
 
         // 게임 오브젝트의 크기를 설정합니다.
         // X와 Y 방향으로 각각 0.4배 크기로 설정합니다.
-        this.transform.scale.x = 0.3;
-        this.transform.scale.y = 0.3;
+        this.transform.scale.x = 0.5;
+        this.transform.scale.y = 0.5;
 
         // 앵커를 설정하여 오브젝트가 화면의 중심을 기준으로 회전할 수 있도록 합니다.
         this.transform.anchor.x = 0.5;
@@ -118,8 +118,10 @@ export class SpaceStation extends GameObject {
 
     static AddDrone() {
         let drone = new Drone();
-        drone.transform.position.x = SpaceStation.Instance().transform.position.x;
+        drone.transform.position.x= SpaceStation.Instance().transform.position.x;
         drone.transform.position.y = SpaceStation.Instance().transform.position.y;
         SpaceStation.Instance().droneList.push(drone);
+        console.log(drone.transform.position);
+        console.log(SpaceStation.Instance().transform.position);
     }
 }
