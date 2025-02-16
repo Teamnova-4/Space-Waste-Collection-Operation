@@ -80,7 +80,7 @@
     <script type="module">
         import { GameLoop } from "./Script/StructureCode/GameSystem.js";
         // 우주 정거장 추가 - 현석
-        import { spaceStation } from "./Script/GameObjects/spaceStation.js";
+        import { SpaceStation } from "./Script/GameObjects/spaceStation.js";
         // 드론 추가 - 현석
         import { Drone } from "./Script/GameObjects/drone.js";
         // 우주 쓰레기 추가
@@ -151,7 +151,7 @@
         const gameLoop = new GameLoop(canvas, ctx);
 
         // 우주정거장 생성 현석
-        let spacestation = new spaceStation();
+        let spacestation = new SpaceStation();
         let drone = new Drone();
 
     

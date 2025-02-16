@@ -17,15 +17,16 @@ export class testGameObject extends GameObject {
 
         this.progress = 0.0;
 
-        this.clickPos = {x: 0, y: 0}
+        this.targetPos = {x: 0, y: 0}
         canvas.addEventListener("click", (evenet) => {
-            this.clickPos = {x: evenet.offsetX, y: evenet.offsetY}
-            this.transform.LookAt(this.clickPos);
-            this.physics.setVelocityInDirection({x: 0.33, y: 0.33});
+            this.moveTo({x: evenet.offsetX, y: evenet.offsetY});
         });
     }
 
     Update(){
+        if (this.transform.Distance(this.targetPos) < 10) {
+            this.physics.velocity = {x: 0, y: 0};
+        }
     }
 
     LateUpdate() {
@@ -39,6 +40,12 @@ export class testGameObject extends GameObject {
     }
     OnClick(){
         console.log("testGameObject OnClick");
+    }
+
+    moveTo(targetPos) {
+        this.targetPos = targetPos;
+        this.transform.LookAt(this.targetPos);
+        this.physics.setVelocityInDirection({x: 0.33, y: 0.33});
     }
 }
 

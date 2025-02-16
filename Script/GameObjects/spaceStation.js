@@ -2,7 +2,17 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
 
 // testGameObject 클래스는 GameObject 클래스를 상속받아, 게임 오브젝트의 특정 동작을 정의합니다.
-export class spaceStation extends GameObject {
+export class SpaceStation extends GameObject {
+
+    constructor() {
+        super();
+
+        if (SpaceStation.instance) {
+            return SpaceStation.instance;
+        }
+
+        SpaceStation.instance = this;
+    }
     
     // 게임 오브젝트가 시작될 때 호출되는 메서드
     Start() {
@@ -31,6 +41,7 @@ export class spaceStation extends GameObject {
          // 물리 엔진에서의 속도 설정 (고정된 우주선이므로 속도는 0으로 설정)
          this.physics.velocity.x = 0;
          this.physics.velocity.y = 0;
+
     }
 
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
