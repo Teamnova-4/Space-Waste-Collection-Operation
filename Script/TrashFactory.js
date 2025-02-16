@@ -1,4 +1,4 @@
-import { trash } from "./GameObjects/trash.js";
+import { Trash } from "./GameObjects/trash.js";
 
 // 우주 쓰레기 생성 클래스
 export class TrashFactory {
@@ -16,7 +16,7 @@ export class TrashFactory {
         this.isRunning = true;
         this.trashInterval = setInterval(() => {
             console.log("setInterval 실행 - 생성률:", this.spawnRate);
-            const newTrash = new trash(this.speed);
+            const newTrash = new Trash(this.speed);
         }, 1000 / this.spawnRate);
     }
 

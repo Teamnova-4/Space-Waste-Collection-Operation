@@ -3,7 +3,7 @@ import { SpaceStation } from "./spaceStation.js";
 
 // 우주 쓰레기 오브젝트
 // 화면 왼쪽 끝에서 생성되고 오른쪽 끝으로 이동한다음 사라진다.
-export class trash extends GameObject {
+export class Trash extends GameObject {
   constructor(speed) {
     super();
 
@@ -25,8 +25,8 @@ export class trash extends GameObject {
 
     this.transform.scale.x = 1;
     this.transform.scale.y = 1;
-    this.transform.anchor.x = 1;
-    this.transform.anchor.y = 1;
+    this.transform.anchor.x = 0.5;
+    this.transform.anchor.y = 0.5;
     this.transform.rotation = 0;
 
     this.isTargeted = false;
@@ -53,7 +53,7 @@ export class trash extends GameObject {
 
   OnClick(){
     if(this.isTargeted == false){
-      SpaceStation.Instance().trashTargetList.push(this);
+      SpaceStation.Instance().targetTrashList.push(this);
       this.isTargeted = true;
     }
   }
