@@ -9,21 +9,11 @@ export class Trash extends GameObject {
 
     // 우주쓰레기 이동속도
     this.speed = speed || 1;
-
-    // 우주쓰레기 다양한 이미지 경로
-    this.imagePaths = [
-      "../../Resources/trash_1.png",
-      "../../Resources/trash_2.png"
-    ];
-
-    // 랜덤으로 이미지 선택
-    const randomIndex = Math.floor(Math.random() * this.imagePaths.length);
-    this.imageSrc = this.imagePaths[randomIndex]; // 선택된 이미지 경로
   }
 
   Start() {
     console.log("우주 쓰레기 초기화");
-    this.resource.image.src = this.imageSrc;
+    this.resource.image.src = "../../Resources/trash_1.png";
     this.transform.position.x = 0;
 
     // 위 아래 패딩값 50 부여한 범위에서 랜덤한 y 좌표 생성
@@ -46,7 +36,7 @@ export class Trash extends GameObject {
 
   Update() {
     // 매 프레임마다 오른쪽으로 1px씩 이동
-    if (!this.isCaught) {
+    if (!this.isCaught){
       this.transform.position.x += this.speed;
 
       // TODO:: 100 변수 전환 필요
@@ -56,7 +46,7 @@ export class Trash extends GameObject {
     }
   }
 
-  LateUpdate() { }
+  LateUpdate() {}
 
   OnDestroy() {
   }
@@ -65,8 +55,8 @@ export class Trash extends GameObject {
     console.log("Trash OnLoad" + image.src);
   }
 
-  OnClick() {
-    if (this.isTargeted == false) {
+  OnClick(){
+    if(this.isTargeted == false){
       SpaceStation.Instance().targetTrashList.push(this);
       this.isTargeted = true;
     }
