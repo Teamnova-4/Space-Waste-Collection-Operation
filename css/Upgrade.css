@@ -74,3 +74,27 @@
     color: white;
     font-size: 18px;
 }
+
+/* 디버그 버튼 스타일 */
+.debug-panel {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+}
+.debug-button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid white;
+    padding: 5px;
+    cursor: pointer;
+}
+.debug-button:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+

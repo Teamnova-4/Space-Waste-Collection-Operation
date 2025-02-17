@@ -46,28 +46,20 @@ export class Drone extends GameObject {
     this.transform.rotation = 0; // 초기 회전 값
   }
 
-  Update() {
-    // 드론의 상태 업데이트
-    if (this.isWorking) {
-      this.transform.LookAt(this.targetPosition);
-      this.physics.setVelocityInDirection({ x: this.speed, y: this.speed });
-      if (
-        !this.isReturning &&
-        this.transform.Distance(this.targetPosition) < 5
-      ) {
-        this.isReturning = true;
-        this.targetPosition = SpaceStation.Instance().transform.position;
-        this.targetTrash.catch(this);
-      } else if (
-        this.isReturning &&
-        this.transform.Distance(this.targetPosition) < 5
-      ) {
-        this.targetTrash.Destroy();
-        User.AddCredits(200);
-        this.StopWork();
-      }
+    Update() {
+        // 드론의 상태 업데이트
+        if (this.isWorking) {
+            this.transform.LookAt(this.targetPosition);
+            this.physics.setVelocityInDirection({x: this.speed, y: this.speed});
+            if (!this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
+                this.targetTrash.catch(this);
+                this.Returning();
+            } else if (this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
+                this.DestructionTrash();
+                this.StopWork();
+            }
+        }
     }
-  }
 
   LateUpdate() {
     // 추가적인 업데이트가 필요하면 여기에 작성
@@ -95,32 +87,49 @@ export class Drone extends GameObject {
     console.log(`Drone Capacity Upgraded: ${this.capacity}`);
   }
 
-  /**
-   *
-   * 드론의 작업 시작
-   * @param {*Trash} trash 처리할 쓰레기
-   */
-  StartWork(trash) {
-    if (!this.isWorking) {
-      this.isWorking = true;
-      this.isReturning = false;
-      this.targetTrash = trash;
-      this.targetPosition = trash.transform.position;
-      console.log(this.targetPosition);
+    /**
+     * 
+     * 드론의 작업 시작
+     * @param {*Trash} trash 처리할 쓰레기 
+     */
+    StartWork(trash) {
+        this.isWorking = true;
+        this.isReturning = false;
+        this.targetTrash = trash;
+        this.targetPosition = trash.transform.position; 
     }
-  }
 
-  /**
-   * 드론의 작업 종료
-   */
-  StopWork() {
-    if (this.isWorking) {
-      this.isWorking = false;
-      this.isReturning = false;
-      this.targetTrash = null;
-      this.targetPosition = null;
-      this.physics.velocity = { x: 0, y: 0 };
-      this.physics.acceleration = { x: 0, y: 0 };
+    /**
+     * 
+     * 드론의 되돌아가기
+     * 
+     */
+    Returning() {
+        if (this.isWorking){
+            this.isReturning = true;
+            this.targetPosition = SpaceStation.Instance().transform.position; 
+        }
     }
-  }
+
+
+
+    /**
+     * 드론의 작업 종료
+     */
+    StopWork() {
+        if (this.isWorking) {
+            this.isWorking = false;
+            this.isReturning = false;
+            this.targetTrash = null;
+            this.targetPosition = null;
+            this.physics.velocity = {x:0,y:0};
+            this.physics.acceleration = {x:0,y:0};
+        }
+    }
+
+
+    DestructionTrash(){
+        this.targetTrash.Destroy();
+        User.AddCredits(200);
+    }
 }
