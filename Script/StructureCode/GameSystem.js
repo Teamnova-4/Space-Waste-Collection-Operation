@@ -520,4 +520,38 @@ export class Background {
         this.ctx.drawImage(this.image, -this.x, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.image, this.canvas.width - this.x, 0, this.canvas.width, this.canvas.height);
     }
+
+}
+// 게임 오브젝트를 상속받아 폭발 애니메이션 만들기기
+export class Explosion extends GameObject {
+    constructor(x, y) {
+        super();
+        this.transform.position = { x, y };
+        this.resource.loadImage("../Resources/explosion.png"); // 폭발 이미지 로드
+        this.frame = 0;
+        this.maxFrames = 5; // 애니메이션 프레임 수
+        this.frameDelay = 100; // 프레임당 지속 시간(ms)
+        this.lastFrameTime = Date.now();
+    }
+
+    Update() {
+        let now = Date.now();
+        if (now - this.lastFrameTime > this.frameDelay) {
+            this.frame++;
+            this.lastFrameTime = now;
+        }
+        if (this.frame >= this.maxFrames) {
+            this.Destroy();
+        }
+    }
+
+    OnDraw(ctx) {
+        ctx.drawImage(
+            this.resource.image,
+            this.frame * 64, 0, 64, 64, // 스프라이트 시트 기준
+            this.transform.position.x - 32,
+            this.transform.position.y - 32,
+            64, 64
+        );
+    }
 }

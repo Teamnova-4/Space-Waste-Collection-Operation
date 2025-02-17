@@ -9,6 +9,8 @@ export class TrashFactory {
         this.spawnRate = 0.5; // 초당 생성 개수
         this.isRunning = false; // 쓰레기 생성이 실행 중인지 여부
         this.trashInterval = null; // setInterval 참조를 저장할 변수
+
+        this.explosionChance = 1; // 폭발 확률 주기 - 현석
     }
 
     // 우주 쓰레기 생성 시작
