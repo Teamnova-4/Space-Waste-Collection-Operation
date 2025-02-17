@@ -1,32 +1,19 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
 import { SpaceStation } from "./spaceStation.js";
 
-// 우주 쓰레기 오브젝트
-// 화면 왼쪽 끝에서 생성되고 오른쪽 끝으로 이동한다음 사라진다.
+// 기본 Trash 클래스
 export class Trash extends GameObject {
-  constructor(speed) {
+  constructor(speed, imageSrc) {
     super();
 
-    // 우주쓰레기 이동속도
     this.speed = speed || 1;
-
-    // 우주쓰레기 다양한 이미지 경로
-    this.imagePaths = [
-      "../../Resources/trash_1.png",
-      "../../Resources/trash_2.png"
-    ];
-
-    // 랜덤으로 이미지 선택
-    const randomIndex = Math.floor(Math.random() * this.imagePaths.length);
-    this.imageSrc = this.imagePaths[randomIndex]; // 선택된 이미지 경로
+    this.imageSrc = imageSrc || "Resources/trash_1.png"; // 기본 이미지
   }
 
   Start() {
-    console.log("우주 쓰레기 초기화");
     this.resource.image.src = this.imageSrc;
     this.transform.position.x = 0;
 
-    // 위 아래 패딩값 50 부여한 범위에서 랜덤한 y 좌표 생성
     const padding = 50;
     const min = padding;
     const max = window.innerHeight - padding;
@@ -41,43 +28,105 @@ export class Trash extends GameObject {
 
     this.isTargeted = false;
     this.isCaught = false;
-    this.caughtBy = null;
+    this.targetedBy = null; 
   }
 
   Update() {
-    // 매 프레임마다 오른쪽으로 1px씩 이동
     if (!this.isCaught) {
       this.transform.position.x += this.speed;
 
-      // TODO:: 100 변수 전환 필요
       if (this.transform.position.x > canvas.width + 100) {
         this.Destroy();
       }
     }
   }
 
-  LateUpdate() { }
+  LateUpdate() {}
 
   OnDestroy() {
+    if(this.isTargeted){
+      this.targetedBy.StopWork();
+    }
+    SpaceStation.RemoveTrash(this);
   }
 
   OnLoad(image) {
-    console.log("Trash OnLoad" + image.src);
+    //console.log("Trash OnLoad" + image.src);
   }
 
-  OnClick() {
-    if (this.isTargeted == false) {
-      SpaceStation.Instance().targetTrashList.push(this);
-      this.isTargeted = true;
-    }
-  }
-  /**
-   * drone으로 해당 쓰레기를 잡았을 때 호출되는 함수
-   * @param {**Drone*} drone 
-   */
   catch(drone) {
-    this.caughtBy = drone;
     this.isCaught = true;
     this.transform.position = drone.transform.position;
+    console.log(this.imageSrc);
+  }
+
+  target(drone) {
+    this.isTargeted = true;
+    this.targetedBy = drone;
+  }
+}
+
+// 고유 속성을 가진 쓰레기 클래스 (상속 받은 클래스들)
+
+export class Wreck extends Trash {
+  constructor(speed) {
+    super(speed, "Resources/trash_1.png"); // 난파선 이미지
+      // 사진의 크기 정하기
+    this.width = 100;
+    this.height = 100;
+  }
+  Start() {
+    // 시작 상속받아서 
+    super.Start();
+    // 사진의 새로운 크기를 입력합니다.
+    this.transform.scale.x = this.width / this.resource.image.width;
+    this.transform.scale.y = this.height / this.resource.image.height;
+  }
+}
+
+export class cementStone extends Trash {
+  constructor(speed) {
+    super(speed, "Resources/trash_2.png"); // 시멘트 돌덩이 이미지
+      // 사진의 크기 정하기
+    this.width = 150;
+    this.height = 150;
+  }
+  Start() {
+    // 시작 상속받아서 
+    super.Start();
+    // 사진의 새로운 크기를 입력합니다.
+    this.transform.scale.x = this.width / this.resource.image.width;
+    this.transform.scale.y = this.height / this.resource.image.height;
+  }
+}
+
+export class WreckPart extends Trash {
+  constructor(speed) {
+    super(speed, "Resources/trash_3.png"); // 난파선 부품 이미지
+      // 사진의 크기 정하기
+    this.width = 150;
+    this.height = 150;
+  }
+  Start() {
+    // 시작 상속받아서 
+    super.Start();
+    // 사진의 새로운 크기를 입력합니다.
+    this.transform.scale.x = this.width / this.resource.image.width;
+    this.transform.scale.y = this.height / this.resource.image.height;
+  }
+}
+export class WreckCircle extends Trash {
+  constructor(speed) {
+    super(speed, "Resources/trash_3.png"); // 난파선 부품 동그라미 이미지
+    // 사진의 크기 정하기
+    this.width = 150;
+    this.height = 150;
+  }
+  Start() {
+    // 시작 상속받아서 
+    super.Start();
+    // 사진의 새로운 크기를 입력합니다.
+    this.transform.scale.x = this.width / this.resource.image.width;
+    this.transform.scale.y = this.height / this.resource.image.height;
   }
 }
