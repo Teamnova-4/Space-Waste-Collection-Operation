@@ -1,5 +1,5 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
-import { SpaceStation } from "./spaceStation.js";
+import { SpaceStation } from "./SpaceStation.js";
 
 // 우주 쓰레기 오브젝트
 // 화면 왼쪽 끝에서 생성되고 오른쪽 끝으로 이동한다음 사라진다.
@@ -12,7 +12,7 @@ export class Trash extends GameObject {
   }
 
   Start() {
-    console.log("우주 쓰레기 초기화");
+    // console.log("우주 쓰레기 초기화");
     this.resource.image.src = "../../Resources/trash_1.png";
     this.transform.position.x = 0;
 
@@ -36,7 +36,7 @@ export class Trash extends GameObject {
 
   Update() {
     // 매 프레임마다 오른쪽으로 1px씩 이동
-    if (!this.isCaught){
+    if (!this.isCaught) {
       this.transform.position.x += this.speed;
 
       // TODO:: 100 변수 전환 필요
@@ -48,22 +48,21 @@ export class Trash extends GameObject {
 
   LateUpdate() {}
 
-  OnDestroy() {
-  }
+  OnDestroy() {}
 
   OnLoad(image) {
-    console.log("Trash OnLoad" + image.src);
+    // console.log("Trash OnLoad" + image.src);
   }
 
-  OnClick(){
-    if(this.isTargeted == false){
+  OnClick() {
+    if (this.isTargeted == false) {
       SpaceStation.Instance().targetTrashList.push(this);
       this.isTargeted = true;
     }
   }
   /**
    * drone으로 해당 쓰레기를 잡았을 때 호출되는 함수
-   * @param {**Drone*} drone 
+   * @param {**Drone*} drone
    */
   catch(drone) {
     this.caughtBy = drone;

@@ -15,7 +15,7 @@ export class TrashFactory {
         if (this.isRunning) return; // 이미 실행 중이면 중복 실행 방지
         this.isRunning = true;
         this.trashInterval = setInterval(() => {
-            console.log("setInterval 실행 - 생성률:", this.spawnRate);
+            // console.log("setInterval 실행 - 초당 쓰레기 생성개수:", this.spawnRate);
             const newTrash = new Trash(this.speed);
         }, 1000 / this.spawnRate);
     }
