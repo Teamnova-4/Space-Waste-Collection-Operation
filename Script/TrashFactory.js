@@ -1,4 +1,4 @@
-import { Trash, Wreck, cementStone, WreckPart, WreckCircle } from "./GameObjects/trash.js";
+import { Wreck, cementStone, WreckPart, WreckCircle } from "./GameObjects/trash.js";
 
 
 // 우주 쓰레기 생성 클래스
@@ -21,6 +21,7 @@ export class TrashFactory {
             // 랜덤으로 쓰레기 타입 생성 
             const randomType = Math.floor(Math.random() * 4); // 4가지 쓰레기 중 랜덤 선택
 
+            // 쓰레기 변수수
             let newTrash;
 
             switch (randomType) {
@@ -34,11 +35,10 @@ export class TrashFactory {
                     newTrash = new WreckPart(this.speed); // 난파선 부품 쓰레기
                     break;
                 case 3:
-                    newTrash = new WreckCircle(this.speed); //난파선 부품 쓰레기(동그라미미)
+                    newTrash = new WreckCircle(this.speed); //난파선 부품 쓰레기(동그라미)
                     break;
 
             }
-
 
             // 쓰레기 생성 후 초기화
             newTrash.Start();
