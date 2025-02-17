@@ -18,8 +18,8 @@ export class TrashFactory {
         this.trashInterval = setInterval(() => {
             console.log("setInterval 실행 - 생성률:", this.spawnRate);
 
-            // 랜덤으로 쓰레기 타입 생성
-            const randomType = Math.floor(Math.random() * 3); // 4가지 쓰레기 중 랜덤 선택
+            // 랜덤으로 쓰레기 타입 생성 
+            const randomType = Math.floor(Math.random() * 4); // 4가지 쓰레기 중 랜덤 선택
 
             let newTrash;
 
