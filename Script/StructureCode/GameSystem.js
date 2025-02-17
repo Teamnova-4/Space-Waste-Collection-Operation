@@ -111,7 +111,7 @@ class Transform {
         this.calculateRotation();
     }
 
-    calculateRotation(){
+    calculateRotation() {
         if (this.rotation > 360) {
             this.rotation -= 360;
         } else if (this.rotation < 0) {
@@ -123,8 +123,8 @@ class Transform {
         return start + (end - start) * t;
     }
     // Ease-in Ease-out 함수 
-    easeInOut(t) { 
-        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; 
+    easeInOut(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
     }
 
     /**
@@ -134,7 +134,7 @@ class Transform {
     moveWithRotationEase(targetPosition, speed, progress) {
         const startPosition = { x: this.position.x, y: this.position.y };
         const startRotation = this.rotation;
-        
+
         // 목표 위치와 회전 각도 계산
         const dx = targetPosition.x - startPosition.x;
         const dy = targetPosition.y - startPosition.y;
@@ -154,7 +154,7 @@ class Transform {
         } else {
             // 목표 위치에 정확히 도달
             this.position = targetPosition;
-            this.rotation = targetRotation; 
+            this.rotation = targetRotation;
         }
     }
 
@@ -188,10 +188,9 @@ class Physics {
         this.velocity = { x: 0, y: 0 };
         // 오브젝트의 가속도
         this.acceleration = { x: 0, y: 0 };
-
         // 오브젝트 충돌체
         this.collider = { offset: { x: 0, y: 0 }, size: { x: 1, y: 1 } };
-         // [외부접근 하면 안됨] 충돌체의 네 모서리 좌표
+        // [외부접근 하면 안됨] 충돌체의 네 모서리 좌표
         this.corners = [];
     }
 
@@ -215,16 +214,28 @@ class Physics {
     // 오브젝트의 충돌체를 업데이트하는 메서드
     updateCollider() {
 
+        // this.collider와 this.gameObject가 존재하는지 확인
+        if (!this.collider || !this.gameObject || !this.gameObject.transform || !this.gameObject.transform.position) {
+            console.error("Collider or GameObject is not properly initialized!");
+            return; // 초기화되지 않은 경우 함수 종료
+        }
         const size = this.gameObject.resource.size;
         const pivot = this.gameObject.transform.position;
         const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
+
+
+        // this.collider.offset이 존재하는지 확인
+        if (!this.collider.offset) {
+            console.error("Collider offset is not defined!");
+            return; // offset이 정의되지 않았으면 함수 종료
+        }
 
         const corners = [
             { x: this.collider.offset.x, y: this.collider.offset.y },
             { x: this.collider.offset.x + size.x * this.collider.size.x, y: this.collider.offset.y },
             { x: this.collider.offset.x + size.x * this.collider.size.x, y: this.collider.offset.y + size.y * this.collider.size.y },
             { x: this.collider.offset.x, y: this.collider.offset.y + size.y * this.collider.size.y },
-        ]
+        ];
 
         //corners회전 계산
         this.corners = corners.map(corner => {
@@ -344,7 +355,7 @@ export class GameLoop {
     /**
      * 싱클톤 인스턴스 반환 함수 
      */
-    static Instance(){
+    static Instance() {
         if (!GameLoop.instance) {
             GameLoop.instance = new GameLoop();
             GameLoop.instance.Initialize();
@@ -444,9 +455,9 @@ export class GameLoop {
     }
 }
 // 게임시스템 우주 배경 반영
-export class Background  {
+export class Background {
     constructor() {
-    if (Background.instance) {
+        if (Background.instance) {
             return Background.instance;
         }
 
@@ -466,7 +477,7 @@ export class Background  {
     /**
      * 싱클톤 인스턴스 반환 함수 
      */
-    static Instance(){
+    static Instance() {
         if (!Background.instance) {
             Background.instance = new Background();
             Background.instance.Initialize();
@@ -478,8 +489,8 @@ export class Background  {
      * 싱클톤 초기화 함수
      */
     Initialize() {
+
     }
-    
 
     start() {
         if (this.isRunning) return;
