@@ -1,13 +1,39 @@
+import { SpaceStation } from "./GameObjects/spaceStation.js";
 import { Trash } from "./GameObjects/trash.js";
 
 // 우주 쓰레기 생성 클래스
 export class TrashFactory {
     constructor() {
-        console.log("TrashFactory 생성");
+        if (TrashFactory.instance) {
+            return TrashFactory.instance;
+        }
+
+        
+        this.Initialize();
+        TrashFactory.instance = this;
+    }
+
+    /**
+     * 싱클톤 인스턴스 반환 함수 
+     */
+    static Instance(){
+        if (!TrashFactory.instance) {
+            TrashFactory.instance = new TrashFactory();
+            TrashFactory.instance.Initialize();
+        }
+        return TrashFactory.instance;
+    }
+
+    /**
+     * 싱클톤 초기화 함수
+     */
+    Initialize() {
         this.speed = 0.5; // 쓰레기 이동속도
         this.spawnRate = 0.5; // 초당 생성 개수
         this.isRunning = false; // 쓰레기 생성이 실행 중인지 여부
         this.trashInterval = null; // setInterval 참조를 저장할 변수
+
+        this.trashList = [];
     }
 
     // 우주 쓰레기 생성 시작
@@ -15,8 +41,9 @@ export class TrashFactory {
         if (this.isRunning) return; // 이미 실행 중이면 중복 실행 방지
         this.isRunning = true;
         this.trashInterval = setInterval(() => {
-            console.log("setInterval 실행 - 생성률:", this.spawnRate);
-            const newTrash = new Trash(this.speed);
+            //console.log("setInterval 실행 - 생성률:", this.spawnRate);
+            const newTrash = new Trash(this.speed); 
+            this.trashList.push(newTrash);
         }, 1000 / this.spawnRate);
     }
 

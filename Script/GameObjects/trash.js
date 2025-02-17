@@ -12,7 +12,6 @@ export class Trash extends GameObject {
   }
 
   Start() {
-    console.log("우주 쓰레기 초기화");
     this.resource.image.src = "../../Resources/trash_1.png";
     this.transform.position.x = 0;
 
@@ -31,7 +30,7 @@ export class Trash extends GameObject {
 
     this.isTargeted = false;
     this.isCaught = false;
-    this.caughtBy = null;
+    this.targetedBy = null; 
   }
 
   Update() {
@@ -49,17 +48,23 @@ export class Trash extends GameObject {
   LateUpdate() {}
 
   OnDestroy() {
+    if(this.isTargeted){
+      this.targetedBy.StopWork();
+    }
+    SpaceStation.RemoveTrash(this);
   }
 
   OnLoad(image) {
-    console.log("Trash OnLoad" + image.src);
+    //console.log("Trash OnLoad" + image.src);
   }
 
   OnClick(){
+    /**
     if(this.isTargeted == false){
       SpaceStation.Instance().targetTrashList.push(this);
       this.isTargeted = true;
     }
+     */
   }
   /**
    * drone으로 해당 쓰레기를 잡았을 때 호출되는 함수
@@ -69,5 +74,10 @@ export class Trash extends GameObject {
     this.caughtBy = drone;
     this.isCaught = true;
     this.transform.position = drone.transform.position;
+  }
+
+  target(drone) {
+    this.targetedBy = drone;
+    this.isTargeted = true;
   }
 }

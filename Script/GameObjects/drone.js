@@ -33,12 +33,10 @@ export class Drone extends GameObject {
             this.transform.LookAt(this.targetPosition);
             this.physics.setVelocityInDirection({x: this.speed, y: this.speed});
             if (!this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
-                this.isReturning = true;
-                this.targetPosition = SpaceStation.Instance().transform.position; 
                 this.targetTrash.catch(this);
+                this.Returning();
             } else if (this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
-                this.targetTrash.Destroy();
-                User.AddCredits(200);
+                this.DestructionTrash();
                 this.StopWork();
             }
         }
@@ -77,14 +75,25 @@ export class Drone extends GameObject {
      * @param {*Trash} trash 처리할 쓰레기 
      */
     StartWork(trash) {
-        if (!this.isWorking) {
-            this.isWorking = true;
-            this.isReturning = false;
-            this.targetTrash = trash;
-            this.targetPosition = trash.transform.position; 
-            console.log(this.targetPosition);
+        this.isWorking = true;
+        this.isReturning = false;
+        this.targetTrash = trash;
+        this.targetPosition = trash.transform.position; 
+    }
+
+    /**
+     * 
+     * 드론의 되돌아가기
+     * 
+     */
+    Returning() {
+        if (this.isWorking){
+            this.isReturning = true;
+            this.targetPosition = SpaceStation.Instance().transform.position; 
         }
     }
+
+
 
     /**
      * 드론의 작업 종료
@@ -98,5 +107,11 @@ export class Drone extends GameObject {
             this.physics.velocity = {x:0,y:0};
             this.physics.acceleration = {x:0,y:0};
         }
+    }
+
+
+    DestructionTrash(){
+        this.targetTrash.Destroy();
+        User.AddCredits(200);
     }
 }

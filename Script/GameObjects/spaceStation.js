@@ -1,5 +1,6 @@
 // "GameObject" 클래스를 임포트합니다. 이 클래스는 기본적인 게임 오브젝트의 기능을 제공합니다.
 import { GameObject } from "../StructureCode/GameSystem.js";
+import { TrashFactory } from "../TrashFactory.js";
 import { Drone } from "./drone.js";
 
 // SpaceStation 클래스는 GameObject 클래스를 상속받아, 게임 오브젝트의 특정 동작을 정의합니다.
@@ -31,7 +32,6 @@ export class SpaceStation extends GameObject {
      * 싱클톤 초기화 함수
      */
     Initialize() {
-        this.targetTrashList = [];
         this.droneList = [];
     }
     
@@ -44,7 +44,7 @@ export class SpaceStation extends GameObject {
         this.resource.image.src = "Resources/spaceStation.png";
 
         // 게임 오브젝트의 초기 위치를 설정
-        this.transform.position.x = window.innerWidth / 2;  // 화면 중앙 X
+        this.transform.position.x = window.innerWidth;  // 화면 좌측 X
         this.transform.position.y = window.innerHeight / 2; // 화면 중앙 Y
 
         // 게임 오브젝트의 크기를 설정합니다.
@@ -71,11 +71,12 @@ export class SpaceStation extends GameObject {
 
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
         // this.transform.rotation += 0;
-        if (this.targetTrashList.length > 0){
+        if (TrashFactory.Instance().trashList.length > 0){
             this.droneList.filter(drone => !drone.isWorking).forEach(element => { 
-                const trash = this.targetTrashList.shift()
+                const trash = TrashFactory.Instance().trashList.shift()
                 if (trash !== null && trash !== undefined) {
                     element.StartWork(trash);
+                    trash.target(element);
                 }
             });
         }
@@ -101,21 +102,6 @@ export class SpaceStation extends GameObject {
         // 이미지가 로드되었을 때 호출되어 해당 이미지를 확인하거나 초기화 작업을 할 수 있습니다.
     }
 
-    /** 
-     * 드론 시작 명령
-     * 
-     * @param {Trash} trash
-     *  */ 
-    static StartWorkDrone(trash){
-        const drone = SpaceStation.Instance().stoppedWorkingDroneList.pop();
-    }
-
-    //드론 작동 멈춤 알림
-    static StoppedWorkingDrone(drone){
-
-    }
-
-
     static AddDrone() {
         let drone = new Drone();
         drone.transform.position.x= SpaceStation.Instance().transform.position.x;
@@ -123,5 +109,13 @@ export class SpaceStation extends GameObject {
         SpaceStation.Instance().droneList.push(drone);
         console.log(drone.transform.position);
         console.log(SpaceStation.Instance().transform.position);
+    }
+
+    static RemoveTrash(trash){ 
+        const idx = TrashFactory.Instance().trashList.indexOf(trash);
+        if(idx !== -1) { 
+            TrashFactory.Instance().trashList.splice(idx, 1);
+            console.log("RemoveTrash");
+        }
     }
 }

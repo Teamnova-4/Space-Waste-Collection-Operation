@@ -29,6 +29,7 @@ export class GameEvent {
 
     }
 
+    //true를 리턴하면 다음 오브젝트로 이벤트를 발신하지 않음
     OnClick() {
         return false;
     }
@@ -263,11 +264,8 @@ class Physics {
 class GameResource {
     constructor(gameObject) {
         this.image = new Image();
-        console.log("img "+ this.image);
         this.image.src = "";
         this.gameObject = gameObject;
-        console.log("this.gameObject "+ this.gameObject.Image);
-        console.log("this.image.src "+this.image.src);
 
         this.image.onload = () => {
             console.log(`[이미지 로드 완료] ${this.image.src}`);
