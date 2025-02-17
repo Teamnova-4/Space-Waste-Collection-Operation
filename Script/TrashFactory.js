@@ -4,13 +4,40 @@ import { Wreck, cementStone, WreckPart, WreckCircle } from "./GameObjects/trash.
 // 우주 쓰레기 생성 클래스
 export class TrashFactory {
     constructor() {
-        console.log("TrashFactory 생성");
+        if (TrashFactory.instance) {
+            return TrashFactory.instance;
+        }
+
+        
+        this.Initialize();
+        TrashFactory.instance = this;
+    }
+
+    /**
+     * 싱클톤 인스턴스 반환 함수 
+     */
+    static Instance(){
+        if (!TrashFactory.instance) {
+            TrashFactory.instance = new TrashFactory();
+            TrashFactory.instance.Initialize();
+        }
+        return TrashFactory.instance;
+    }
+
+    /**
+     * 싱클톤 초기화 함수
+     */
+    Initialize() {
         this.speed = 0.5; // 쓰레기 이동속도
         this.spawnRate = 0.5; // 초당 생성 개수
         this.isRunning = false; // 쓰레기 생성이 실행 중인지 여부
         this.trashInterval = null; // setInterval 참조를 저장할 변수
 
+<<<<<<< HEAD
         this.explosionChance = 1; // 폭발 확률 주기 - 현석
+=======
+        this.trashList = [];
+>>>>>>> 1235e6699114fcddd6b1cad023d6c9763fc61b5c
     }
 
     // 우주 쓰레기 생성 시작
@@ -18,7 +45,7 @@ export class TrashFactory {
         if (this.isRunning) return; // 이미 실행 중이면 중복 실행 방지
         this.isRunning = true;
         this.trashInterval = setInterval(() => {
-            console.log("setInterval 실행 - 생성률:", this.spawnRate);
+            //console.log("setInterval 실행 - 생성률:", this.spawnRate);
 
             // 랜덤으로 쓰레기 타입 생성 
             const randomType = Math.floor(Math.random() * 4); // 4가지 쓰레기 중 랜덤 선택
@@ -39,11 +66,10 @@ export class TrashFactory {
                 case 3:
                     newTrash = new WreckCircle(this.speed); //난파선 부품 쓰레기(동그라미)
                     break;
-
             }
+            TrashFactory.Instance().trashList.push(newTrash);
 
             // 쓰레기 생성 후 초기화
-            newTrash.Start();
         }, 1000 / this.spawnRate);
     }
 

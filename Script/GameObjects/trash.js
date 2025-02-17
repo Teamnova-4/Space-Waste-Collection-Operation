@@ -25,7 +25,6 @@ export class Trash extends GameObject {
   }
 
   Start() {
-    console.log("우주 쓰레기 초기화");
     this.resource.image.src = this.imageSrc;
     this.transform.position.x = 0;
 
@@ -43,7 +42,7 @@ export class Trash extends GameObject {
 
     this.isTargeted = false;
     this.isCaught = false;
-    this.caughtBy = null;
+    this.targetedBy = null; 
   }
 
   Update() {
@@ -56,9 +55,14 @@ export class Trash extends GameObject {
     }
   }
 
-  LateUpdate() { }
+  LateUpdate() {}
 
-  OnDestroy() { }
+  OnDestroy() {
+    if(this.isTargeted){
+      this.targetedBy.StopWork();
+    }
+    SpaceStation.RemoveTrash(this);
+  }
 
   OnLoad(image) {
     console.log("Trash OnLoad" + image.src);
