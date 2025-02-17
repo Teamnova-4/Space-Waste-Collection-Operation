@@ -66,8 +66,8 @@
         <button id="speedUp" class="debug-button">속도 증가</button>
         <button id="speedDown" class="debug-button">속도 감소</button>
         <button id="moneyCheat" class="debug-button">돈 100원 추가</button>
-        <p id="rateCount" style="color: white;">현재 생산량 : </p>
-        <p id="speedCount" style="color: white;">현재 속도 : </p>
+        <p id="rateCount" style="color: white;">현재 생산량 0.5</p>
+        <p id="speedCount" style="color: white;">현재 속도 0.5</p>
     </div>
     
 
@@ -117,15 +117,19 @@
         // 우주 쓰레기 팩토리 테스트
         document.getElementById("rateUp").onclick = function () {
             trashFactory.setSpawnRate(trashFactory.spawnRate + 1);
+            document.getElementById("rateCount").innerText = "현재 생산량 "+trashFactory.spawnRate;
         }
         document.getElementById("rateDown").onclick = function () {
             trashFactory.setSpawnRate(trashFactory.spawnRate - 1);
+            document.getElementById("rateCount").innerText = "현재 생산량 "+trashFactory.spawnRate;
         }
         document.getElementById("speedUp").onclick = function () {
             trashFactory.setSpeed(trashFactory.speed + 1);
+            document.getElementById("speedCount").innerText = "현재 속도 "+trashFactory.speed;
         }
         document.getElementById("speedDown").onclick = function () {
             trashFactory.setSpeed(trashFactory.speed - 1);
+            document.getElementById("speedCount").innerText = "현재 속도 "+trashFactory.speed;
         }
 
         // 게임 루프 인스턴스 생성
