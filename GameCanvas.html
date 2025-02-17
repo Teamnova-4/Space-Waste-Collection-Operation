@@ -17,6 +17,7 @@
             width: 100vw;
             height: 100vh;
         }
+
     </style>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/Upgrade.css">
@@ -58,11 +59,15 @@
         <button id="modal-close-btn">닫기</button>
     </div>
 
-    <button id="rateUp">생산량 증가</button><button id="rateDown">생산량 감소</button>
-    <button id="speedUp">속도 증가</button><button id="speedDown">속도 감소</button>
-
-
-    <button id="moneyCheat">돈 100원 추가</button>
+    <div class="debug-panel">
+        <p>디버그 패널</p>
+        <button id="rateUp" class="debug-button">생산량 증가</button>
+        <button id="rateDown" class="debug-button">생산량 감소</button>
+        <button id="speedUp" class="debug-button">속도 증가</button>
+        <button id="speedDown" class="debug-button">속도 감소</button>
+        <button id="moneyCheat" class="debug-button">돈 100원 추가</button>
+    </div>
+    
 
     <script src="Script/Upgrade.js"></script>
 
