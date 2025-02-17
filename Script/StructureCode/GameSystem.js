@@ -187,7 +187,6 @@ class Physics {
         this.velocity = { x: 0, y: 0 };
         // 오브젝트의 가속도
         this.acceleration = { x: 0, y: 0 };
-
         // 오브젝트 충돌체
         this.collider = { offset: { x: 0, y: 0 }, size: { x: 1, y: 1 } };
          // [외부접근 하면 안됨] 충돌체의 네 모서리 좌표
@@ -480,9 +479,9 @@ export class Background  {
      * 싱클톤 초기화 함수
      */
     Initialize() {
+
     }
     
-
     start() {
         if (this.isRunning) return;
         this.isRunning = true;
