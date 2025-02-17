@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+    </style>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/Upgrade.css">
+</head>
+
+<body>
+    <script type="module" src="./Script/StructureCode/GameSystem.js"></script>
+
+    <div id="ui-container">
+        <div id="credit-display" class="credit-left">
+            <p>현재 크레딧: <span id="credits">100</span></p>
+        </div>
+
+        <div id="upgrade-system">
+            <h1>드론 업그레이드</h1>
+            <div id="drone-upgrade">
+                <p>속도 레벨: <span id="drone-speed-level">1</span></p>
+                <p>적재 용량 레벨: <span id="drone-capacity-level">0</span></p>
+                <button id="drone-speed-btn">속도 업그레이드</button>
+                <button id="drone-capacity-btn">적재 용량 업그레이드</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 기지 업그레이드 (오른쪽 하단) 현석 -->
+    <div id="base-upgrade-container" class="base-right">
+        <h1>함선 업그레이드</h1>
+        <div id="base-upgrade">
+            <p>방어 레벨: <span id="base-defense-level">1</span></p>
+            <p>저장 공간 레벨: <span id="base-storage-level">0</span></p>
+            <button id="base-defense-btn">함선 업그레이드</button>
+            <!-- <button id="base-storage-btn">저장 공간 업그레이드</button> -->
+        </div>
+    </div>
+
+    <!-- 알림 모달 현석 -->
+    <div id="modal">
+        <div id="modal-message"></div>
+        <button id="modal-close-btn">닫기</button>
+    </div>
+
+    <div class="debug-panel">
+        <p>디버그 패널</p>
+        <button id="rateUp" class="debug-button">생산량 증가</button>
+        <button id="rateDown" class="debug-button">생산량 감소</button>
+        <button id="speedUp" class="debug-button">속도 증가</button>
+        <button id="speedDown" class="debug-button">속도 감소</button>
+        <button id="moneyCheat" class="debug-button">돈 100원 추가</button>
+    </div>
+    
+
+    <script src="Script/Upgrade.js"></script>
+
+    <canvas id="canvas"></canvas>
+
+    <script type="module">
+        import { GameLoop, Background } from "./Script/StructureCode/GameSystem.js";
+        // 우주 정거장 추가 - 현석
+        import { SpaceStation } from "./Script/GameObjects/spaceStation.js";
+        // 드론 추가 - 현석
+        import { Drone } from "./Script/GameObjects/drone.js";
+        // 우주 쓰레기 추가
+        import { TrashFactory } from "./Script/TrashFactory.js";
+
+        // 캔버스 및 WebGL 컨텍스트 가져오기
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d")
+
+        // 디바이스 픽셀 비율 가져오기
+        const ratio = window.devicePixelRatio || 1;
+
+        // 브라우저 창의 너비와 높이 가져오기
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // 캔버스 크기를 브라우저 창 크기에 맞게 조정
+        canvas.width = width * ratio;   // 실제 캔버스 크기
+        canvas.height = height * ratio; // 실제 캔버스 크기
+
+        // 화면에 표시되는 캔버스 크기는 그대로 유지 (CSS로 설정)
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+
+        // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
+        ctx.scale(ratio, ratio);
+
+        let trashFactory = null; // 우주 쓰레기 생성 공장
+        // 배경 인스턴스 생성
+
+
+        // 우주 쓰레기 생성
+        trashFactory = new TrashFactory();
+        trashFactory.startTrashSpawn();
+
+        // 우주 쓰레기 팩토리 테스트
+        document.getElementById("rateUp").onclick = function () {
+            trashFactory.setSpawnRate(trashFactory.spawnRate + 1);
+        }
+        document.getElementById("rateDown").onclick = function () {
+            trashFactory.setSpawnRate(trashFactory.spawnRate - 1);
+        }
+        document.getElementById("speedUp").onclick = function () {
+            trashFactory.setSpeed(trashFactory.speed + 1);
+        }
+        document.getElementById("speedDown").onclick = function () {
+            trashFactory.setSpeed(trashFactory.speed - 1);
+        }
+
+        // 게임 루프 인스턴스 생성
+        const gameLoop = new GameLoop(canvas, ctx);
+
+        // 우주정거장 생성 현석
+        let spaceStation = new SpaceStation();
+
+        SpaceStation.AddDrone();
+
+        const background = new Background();
+        // 배경 애니메이션 시작
+        background.start();
+
+    </script>
+</body>
+
+</html>

@@ -30,7 +30,7 @@ export class GameEvent {
     }
 
     OnClick() {
-
+        return false;
     }
 }
 
@@ -436,9 +436,9 @@ export class GameLoop {
         const mouseY = event.offsetY;
 
         // 클릭한 위치 확인
-        GameLoop.instance.objects.forEach(object => {
+        GameLoop.instance.objects.some(object => {
             if (object.isOverlapPoint({ x: mouseX, y: mouseY })) {
-                object.OnClick();
+                return object.OnClick() === true;
             }
         });
 
