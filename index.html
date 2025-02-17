@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGL 풀스크린 예제</title>
+    <title>우주 폐기물 수거 작전</title>
     <style>
         * {
             margin: 0;
@@ -12,9 +12,26 @@
             overflow: hidden;
         }
 
-        iframe {
-            width: 100vw;
+        body {
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 177.78vh; /* 16:9 비율 유지 */
             height: 100vh;
+            max-height: 56.25vw; /* 16:9 비율 유지 */
+            position: relative;
+            background-color: black;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
             border: none;
             position: absolute;
             top: 0;
@@ -26,7 +43,9 @@
 </head>
 
 <body>
-    <iframe id="gameFrame" src="Title.html"></iframe>
+    <div id="game-container">
+        <iframe id="gameFrame" src="Title.html"></iframe>
+    </div>
 </body>
 
 </html>
