@@ -113,6 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
             // 함선 업그레이드 5레벨이면 간단한 텍스트 엔딩
             if (type == 'defense' && user.getUpgradeLevel("defense") >= 5) {
                 showModal("성공적으로 끝까지 업그레이드 했습니다! 클리어!");
+                // // 부모 창(index.html)의 iframe 변경
+                // window.parent.document.getElementById("gameFrame").src = "Title.html";
             }
 
         } else {
@@ -135,6 +137,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function closeModal() {
         const modal = document.getElementById("modal");
         modal.style.display = "none";
+        // 함선 업그레이드 5레벨이면 타이틀로 전환
+        if (user.getUpgradeLevel("defense") >= 5) {
+            // 부모 창(index.html)의 iframe 변경
+            window.parent.document.getElementById("gameFrame").src = "Title.html";
+        }
     }
 
     // 모달 닫기 버튼 클릭 이벤트 리스너 추가
