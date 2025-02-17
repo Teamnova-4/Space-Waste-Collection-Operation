@@ -33,11 +33,9 @@ export class TrashFactory {
         this.isRunning = false; // 쓰레기 생성이 실행 중인지 여부
         this.trashInterval = null; // setInterval 참조를 저장할 변수
 
-<<<<<<< HEAD
         this.explosionChance = 1; // 폭발 확률 주기 - 현석
-=======
+
         this.trashList = [];
->>>>>>> 1235e6699114fcddd6b1cad023d6c9763fc61b5c
     }
 
     // 우주 쓰레기 생성 시작
