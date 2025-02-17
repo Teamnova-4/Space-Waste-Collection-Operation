@@ -20,7 +20,7 @@ export class SpaceStation extends GameObject {
     /**
      * 싱클톤 인스턴스 반환 함수 
      */
-    static Instance(){
+    static Instance() {
         if (!SpaceStation.instance) {
             SpaceStation.instance = new SpaceStation();
             SpaceStation.instance.Initialize();
@@ -34,7 +34,7 @@ export class SpaceStation extends GameObject {
     Initialize() {
         this.droneList = [];
     }
-    
+
     // 게임 오브젝트가 시작될 때 호출되는 메서드
     Start() {
         console.log("spaceStation Start");
@@ -71,11 +71,15 @@ export class SpaceStation extends GameObject {
 
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
         // this.transform.rotation += 0;
-        if (TrashFactory.Instance().trashList.length > 0){
-            this.droneList.filter(drone => !drone.isWorking).forEach(element => { 
+        if (TrashFactory.Instance().trashList.length > 0) {
+            this.droneList.filter(drone => !drone.isWorking).forEach(element => {
                 const trash = TrashFactory.Instance().trashList.shift()
                 if (trash !== null && trash !== undefined) {
                     element.StartWork(trash);
+
+                    console.log(trash);
+                    console.log(typeof trash.target);
+
                     trash.target(element);
                 }
             });
@@ -104,16 +108,16 @@ export class SpaceStation extends GameObject {
 
     static AddDrone() {
         let drone = new Drone();
-        drone.transform.position.x= SpaceStation.Instance().transform.position.x;
+        drone.transform.position.x = SpaceStation.Instance().transform.position.x;
         drone.transform.position.y = SpaceStation.Instance().transform.position.y;
         SpaceStation.Instance().droneList.push(drone);
         console.log(drone.transform.position);
         console.log(SpaceStation.Instance().transform.position);
     }
 
-    static RemoveTrash(trash){ 
+    static RemoveTrash(trash) {
         const idx = TrashFactory.Instance().trashList.indexOf(trash);
-        if(idx !== -1) { 
+        if (idx !== -1) {
             TrashFactory.Instance().trashList.splice(idx, 1);
             console.log("RemoveTrash");
         }

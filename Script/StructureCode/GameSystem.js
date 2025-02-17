@@ -278,13 +278,15 @@ class GameResource {
         this.image.src = "";
         this.gameObject = gameObject;
 
+        console.log(this.gameObject);  // 메서드 존재 여부 확인
+
         this.image.onload = () => {
-            console.log(`[이미지 로드 완료] ${this.image.src}`);
+            console.log(`gameSystem: [이미지 로드 완료] ${this.image.src}`);
             this.gameObject.OnLoad(this.image);
         };
         this.image.onerror = () => {
             if (this.image.src !== "") {
-                console.error(`[이미지 로드 실패] ${this.image.src}`);
+                console.error(`gameSystem: [이미지 로드 실패] ${this.image.src}`);
             }
         };
     }

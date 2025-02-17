@@ -8,7 +8,7 @@ export class TrashFactory {
             return TrashFactory.instance;
         }
 
-        
+
         this.Initialize();
         TrashFactory.instance = this;
     }
@@ -16,7 +16,7 @@ export class TrashFactory {
     /**
      * 싱클톤 인스턴스 반환 함수 
      */
-    static Instance(){
+    static Instance() {
         if (!TrashFactory.instance) {
             TrashFactory.instance = new TrashFactory();
             TrashFactory.instance.Initialize();
@@ -47,8 +47,8 @@ export class TrashFactory {
 
             // 랜덤으로 쓰레기 타입 생성 
             const randomType = Math.floor(Math.random() * 4); // 4가지 쓰레기 중 랜덤 선택
-
-            // 쓰레기 변수수
+            console.log('randomType: ' + randomType);
+            // 쓰레기 변수
             let newTrash;
 
             switch (randomType) {
