@@ -54,10 +54,14 @@ export class Trash extends GameObject {
     //console.log("Trash OnLoad" + image.src);
   }
 
+  OnError(image){
+    console.log("Trash OnError" + image.src);
+  }
+
   catch(drone) {
     this.isCaught = true;
     this.transform.position = drone.transform.position;
-    console.log(this.imageSrc);
+    console.log(this.resource.image.src);
   }
 
   target(drone) {
@@ -117,7 +121,7 @@ export class WreckPart extends Trash {
 }
 export class WreckCircle extends Trash {
   constructor(speed) {
-    super(speed, "Resources/trash_3.png"); // 난파선 부품 동그라미 이미지
+    super(speed, "Resources/trash_4.png"); // 난파선 부품 동그라미 이미지
     // 사진의 크기 정하기
     this.width = 150;
     this.height = 150;

@@ -28,6 +28,9 @@ export class GameEvent {
     OnLoad(image) {
 
     }
+    OnError(image) {
+
+    }
 
     //true를 리턴하면 다음 오브젝트로 이벤트를 발신하지 않음
     OnClick() {
@@ -275,7 +278,6 @@ class Physics {
 class GameResource {
     constructor(gameObject) {
         this.image = new Image();
-        this.image.src = "";
         this.gameObject = gameObject;
 
         this.image.onload = () => {
@@ -283,9 +285,8 @@ class GameResource {
             this.gameObject.OnLoad(this.image);
         };
         this.image.onerror = () => {
-            if (this.image.src !== "") {
-                console.error(`[이미지 로드 실패] ${this.image.src}`);
-            }
+            console.trace(`[이미지 로드 실패] ${this.image.src}`);
+            this.gameObject.OnError(this.image);
         };
     }
 
