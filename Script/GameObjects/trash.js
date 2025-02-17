@@ -52,7 +52,7 @@ export class Trash extends GameObject {
   }
 
   OnLoad(image) {
-    console.log("testGameObject OnLoad" + image.src);
+    console.log("Trash OnLoad" + image.src);
   }
 
   OnClick(){

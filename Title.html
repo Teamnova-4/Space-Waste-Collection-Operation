@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/Upgrade.css">
+</head>
+<body>
+    <div class="title-screen-container">
+        <h1 class="game-logo">우주 폐기물 수거 작전</h1>
+        <div class="button-container">
+            <button id="game-start-button" class="game-button game-start-button">게임 시작</button>
+            <button class="game-button options-button">옵션</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("game-start-button").addEventListener("click", function () {
+            // 부모 창(index.html)의 iframe 변경
+            window.parent.document.getElementById("gameFrame").src = "GameCanvas.html";
+        });
+    </script>
+</body>
+</html>
