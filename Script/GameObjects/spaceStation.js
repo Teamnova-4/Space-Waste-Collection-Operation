@@ -109,9 +109,9 @@ export class SpaceStation extends GameObject {
     //     console.log(SpaceStation.Instance().transform.position);
     // }
 
-    static RemoveTrash(trash){ 
+    static RemoveTrash(trash) {
         const idx = TrashFactory.Instance().trashList.indexOf(trash);
-        if(idx !== -1) { 
+        if (idx !== -1) {
             TrashFactory.Instance().trashList.splice(idx, 1);
             console.log("RemoveTrash");
         }
