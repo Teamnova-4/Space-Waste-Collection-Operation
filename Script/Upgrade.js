@@ -98,8 +98,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // UI 업데이트 함수
     function updateUI() {
         document.getElementById("credits").textContent = user.credits;
-        document.getElementById("drone-speed-level").textContent = user.getUpgradeLevel("speed");
-        document.getElementById("drone-capacity-level").textContent = user.getUpgradeLevel("capacity");
         document.getElementById("base-defense-level").textContent = user.getUpgradeLevel("defense");
         document.getElementById("base-storage-level").textContent = user.getUpgradeLevel("storage");
     }
@@ -149,12 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // 업그레이드 버튼 클릭 이벤트 리스너 추가
-    document.getElementById("drone-speed-btn").addEventListener("click", () => {
-        upgradeFeature("speed");
-    });
-    document.getElementById("drone-capacity-btn").addEventListener("click", () => {
-        upgradeFeature("capacity");
-    });
+    
     document.getElementById("base-defense-btn").addEventListener("click", () => {
         upgradeFeature("defense");
     });
