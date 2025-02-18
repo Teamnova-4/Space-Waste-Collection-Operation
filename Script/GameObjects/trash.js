@@ -22,21 +22,9 @@ export class Trash extends GameObject {
     }
 
     Start() {
-        // resource가 없으면 새 객체로 초기화
-
-        if (!this.resource) {
-        console.log('trash에서 resource가 없으므로 새 객체로 초기화!')
-        this.resource = {};
-        }
-        // 이미지 객체 초기화
-        if (!this.resource.image) {
-        console.log('trash에서 this.resource.image 없으므로 새 객체로 초기화!')
-        this.resource.image = new Image();
-        }
 
         // 이미지 경로 매개변수 받은것 적용
         this.resource.image.src = this.imageSrc;
-        console.log('Trash Start: ' + this.imageSrc); // 콘솔 로그 추가
         this.transform.position.x = 0;
 
         const padding = 50;
@@ -59,12 +47,11 @@ export class Trash extends GameObject {
     Update() {
         // 매 프레임마다 오른쪽으로 1px씩 이동
         if (!this.isCaught) {
-            if (!this.isCaught) {
-                this.transform.position.x += this.speed;
+            this.transform.position.x += this.speed;
 
-                if (this.transform.position.x > canvas.width + 100) {
+            if (this.transform.position.x > canvas.width + 100) { 
+                console.log(this.transform.position.x, canvas.width);
                 this.Destroy();
-                }
             }
         }
     }
@@ -73,7 +60,6 @@ export class Trash extends GameObject {
 
     OnDestroy() {
         if (this.isTargeted) {
-            console.log("OnDestroy")
             this.targetedBy.StopWork();
         }
         SpaceStation.RemoveTrash(this);
@@ -105,7 +91,6 @@ export class Trash extends GameObject {
     // 폭발 여부 체크 메서드-현석
     checkExplosion(drone) {
         const randomChance = Math.random(); // 0과 1 사이의 랜덤 값 생성
-        console.log("randomChance: " + randomChance);
         if (randomChance < this.explosionChance) {
             console.log("this.explosionChance가 더 크므로 폭팔합니다.");
             // this.explode(drone);

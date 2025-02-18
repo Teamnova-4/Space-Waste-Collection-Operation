@@ -28,6 +28,7 @@ export class Drone extends GameObject {
         this.isReturning = false;
         this.targetPosition = {};
         this.targetTrash = null;
+        this.catchDistance = 25;
     }
 
     Start() {
@@ -53,10 +54,10 @@ export class Drone extends GameObject {
             this.physics.setVelocityInDirection({x: this.speed, y: this.speed});
 
             const distance = this.transform.Distance(this.targetPosition); 
-            if (!this.isReturning && distance < 5) {
+            if (!this.isReturning && distance < this.catchDistance) {
                 this.targetTrash.catch(this);
                 this.Returning();
-            } else if (this.isReturning && distance < 5) {
+            } else if (this.isReturning && distance < this.catchDistance) {
                 this.DestructionTrash();
             }
         }

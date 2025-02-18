@@ -283,8 +283,6 @@ class GameResource {
   // 이미지를 캔버스에 그리는 메서드
   draw(ctx) {
     
-    console.log(`이미지 그리기: ${this.image.src}`); // 콘솔 로그 추가
-    console.log(`이미지 크기: ${this.image.width}x${this.image.height}`); // 이미지 크기 로그 추가
     const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
     this.size = {
@@ -312,13 +310,6 @@ class GameResource {
       0, 0, this.image.width, this.image.height,
       0, 0, this.size.x, this.size.y);
 
-    /*
-    this.corners = corners.map(corner => { 
-        const rotatedX = pivot.x + (corner.x - pivot.x) * Math.cos(radians) - (corner.y - pivot.y) * Math.sin(radians); 
-        const rotatedY = pivot.y + (corner.x - pivot.x) * Math.sin(radians) + (corner.y - pivot.y) * Math.cos(radians); 
-        return {x: rotatedX, y: rotatedY};
-    });
-    */
 
     // 캔버스 상태 복원
     ctx.restore();
