@@ -11,17 +11,17 @@ export class GameEvent {
   }
 
   // 이벤트가 시작될 때 호출될 메서드 (예: 초기화)
-  Start() {}
+  Start() { }
 
   // 매 프레임 업데이트되는 메서드
-  Update() {}
+  Update() { }
 
   // 매 프레임 업데이트되는 메서드
-  LateUpdate() {}
+  LateUpdate() { }
 
-  OnDestroy() {}
+  OnDestroy() { }
 
-  OnLoad(image) {}
+  OnLoad(image) { }
 
   OnClick() {
     return false
@@ -53,6 +53,7 @@ export class GameObject extends GameEvent {
    * Update와 LateUpdate사이에서 호출됨
    */
   OnDraw(ctx) {
+    
     this.resource.draw(ctx);
   }
 
@@ -265,56 +266,59 @@ class Physics {
  * 오브젝트에 할당되는 이미지 리소스를 관리하는 클래스
  */
 class GameResource {
-    constructor(gameObject) {
-        this.image = new Image();
-        this.gameObject = gameObject;
+  constructor(gameObject) {
+    this.image = new Image();
+    this.gameObject = gameObject;
 
-        this.image.onload = () => {
-            console.log(`[이미지 로드 완료] ${this.image.src}`);
-            this.gameObject.OnLoad(this.image);
-        };
-        this.image.onerror = () => {
-            console.trace(`[이미지 로드 실패] ${this.image.src}`);
-            this.gameObject.OnError(this.image);
-        };
+    this.image.onload = () => {
+      console.log(`[이미지 로드 완료] ${this.image.src}`);
+      this.gameObject.OnLoad(this.image);
+    };
+    this.image.onerror = () => {
+      console.trace(`[이미지 로드 실패] ${this.image.src}`);
+      this.gameObject.OnError(this.image);
+    };
+  }
+
+  // 이미지를 캔버스에 그리는 메서드
+  draw(ctx) {
+    
+    console.log(`이미지 그리기: ${this.image.src}`); // 콘솔 로그 추가
+    console.log(`이미지 크기: ${this.image.width}x${this.image.height}`); // 이미지 크기 로그 추가
+    const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
+
+    this.size = {
+      x: this.gameObject.transform.scale.x * this.image.width,
+      y: this.gameObject.transform.scale.y * this.image.height
     }
 
-    // 이미지를 캔버스에 그리는 메서드
-    draw(ctx) {
-        const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
+    const pivot = {
+      x: this.gameObject.transform.position.x,
+      y: this.gameObject.transform.position.y,
+    }
 
-        this.size = {
-            x: this.gameObject.transform.scale.x * this.image.width,
-            y: this.gameObject.transform.scale.y * this.image.height
-        }
+    // 캔버스 상태 저장
+    ctx.save();
 
-        const pivot = {
-            x: this.gameObject.transform.position.x,
-            y: this.gameObject.transform.position.y,
-        }
+    // 회전의 중심을 이미지의 중심으로 설정
+    ctx.translate(pivot.x, pivot.y);
+    ctx.rotate(radians);
+    ctx.translate(
+      -this.size.x * this.gameObject.transform.anchor.x,
+      -this.size.y * this.gameObject.transform.anchor.y
+    );
 
-        // 캔버스 상태 저장
-        ctx.save();
+    ctx.drawImage(this.image,
+      0, 0, this.image.width, this.image.height,
+      0, 0, this.size.x, this.size.y);
 
-        // 회전의 중심을 이미지의 중심으로 설정
-        ctx.translate(pivot.x, pivot.y);
-        ctx.rotate(radians);
-        ctx.translate(
-            -this.size.x * this.gameObject.transform.anchor.x,
-            -this.size.y * this.gameObject.transform.anchor.y
-        );
-
-        ctx.drawImage(this.image,
-            0, 0, this.image.width, this.image.height,
-            0, 0, this.size.x, this.size.y);
-
-        /*
-        this.corners = corners.map(corner => { 
-            const rotatedX = pivot.x + (corner.x - pivot.x) * Math.cos(radians) - (corner.y - pivot.y) * Math.sin(radians); 
-            const rotatedY = pivot.y + (corner.x - pivot.x) * Math.sin(radians) + (corner.y - pivot.y) * Math.cos(radians); 
-            return {x: rotatedX, y: rotatedY};
-        });
-        */
+    /*
+    this.corners = corners.map(corner => { 
+        const rotatedX = pivot.x + (corner.x - pivot.x) * Math.cos(radians) - (corner.y - pivot.y) * Math.sin(radians); 
+        const rotatedY = pivot.y + (corner.x - pivot.x) * Math.sin(radians) + (corner.y - pivot.y) * Math.cos(radians); 
+        return {x: rotatedX, y: rotatedY};
+    });
+    */
 
     // 캔버스 상태 복원
     ctx.restore();
@@ -355,7 +359,7 @@ export class GameLoop {
   /**
    * 싱클톤 초기화 함수
    */
-  Initialize() {}
+  Initialize() { }
 
   static AddObject(object) {
     if (object instanceof GameObject) {
@@ -477,7 +481,7 @@ export class Background {
   /**
    * 싱클톤 초기화 함수
    */
-  Initialize() {}
+  Initialize() { }
 
   start() {
     if (this.isRunning) return;

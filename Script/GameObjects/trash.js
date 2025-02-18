@@ -23,6 +23,7 @@ export class Trash extends GameObject {
 
     Start() {
         // resource가 없으면 새 객체로 초기화
+
         if (!this.resource) {
         console.log('trash에서 resource가 없으므로 새 객체로 초기화!')
         this.resource = {};
@@ -35,7 +36,7 @@ export class Trash extends GameObject {
 
         // 이미지 경로 매개변수 받은것 적용
         this.resource.image.src = this.imageSrc;
-        console.log('this.resource.image.src: ' + this.resource.image.src);
+        console.log('Trash Start: ' + this.imageSrc); // 콘솔 로그 추가
         this.transform.position.x = 0;
 
         const padding = 50;
