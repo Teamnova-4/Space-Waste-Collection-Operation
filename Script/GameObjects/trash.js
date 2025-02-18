@@ -1,12 +1,10 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
-import { SpaceStation } from "./spaceStation.js";
+import { SpaceStation } from "./SpaceStation.js";
 
 // 기본 Trash 클래스
 export class Trash extends GameObject {
-
   // 매개변수로 폭발 확률 추가(explosionChance) -현석
   constructor(speed, imageSrc, explosionChance) {
-
     super();
 
     this.speed = speed || 1;
@@ -58,17 +56,21 @@ export class Trash extends GameObject {
   }
 
   Update() {
+    // 매 프레임마다 오른쪽으로 1px씩 이동
     if (!this.isCaught) {
-      this.transform.position.x += this.speed;
+      if (!this.isCaught) {
+        this.transform.position.x += this.speed;
 
-      if (this.transform.position.x > canvas.width + 100) {
-        this.Destroy();
+        if (this.transform.position.x > canvas.width + 100) {
+          this.Destroy();
+        }
       }
     }
   }
+  
+  LateUpdate() {}
 
-  LateUpdate() { }
-
+  OnDestroy() {}
   OnDestroy() {
     if (this.isTargeted) {
       this.targetedBy.StopWork();
@@ -77,7 +79,7 @@ export class Trash extends GameObject {
   }
 
   OnLoad(image) {
-    console.log("[쓰레기 이미지 경로]: " + image.src);
+    // console.log("Trash OnLoad" + image.src);
   }
 
   OnClick() {
@@ -86,10 +88,13 @@ export class Trash extends GameObject {
       this.isTargeted = true;
     }
   }
+  /**
+   * drone으로 해당 쓰레기를 잡았을 때 호출되는 함수
+   * @param {**Drone*} drone
+   */
 
   // 드론이 쓰레기를 잡을때
   catch(drone) {
-    console.log('드론이 쓰레기를 잡았습니다!');
     this.caughtBy = drone;
     this.isCaught = true;
     this.transform.position = drone.transform.position;
@@ -100,7 +105,7 @@ export class Trash extends GameObject {
 
   // 폭발 여부 체크 메서드-현석
   checkExplosion(drone) {
-    const randomChance = Math.random();  // 0과 1 사이의 랜덤 값 생성
+    const randomChance = Math.random(); // 0과 1 사이의 랜덤 값 생성
     console.log("randomChance: " + randomChance);
     if (randomChance < this.explosionChance) {
       console.log("this.explosionChance가 더 크므로 폭팔합니다.");
@@ -111,16 +116,9 @@ export class Trash extends GameObject {
   // 폭발 처리 -현석
   explode(drone) {
     console.log("폭발 발생!");
-    this.Destroy();  // 쓰레기 파괴
-    drone.Destroy();  // 드론 파괴
+    this.Destroy(); // 쓰레기 파괴
+    drone.Destroy(); // 드론 파괴
   }
-
-  // 타겟을 지정합니다.
-  target(targetObject) {
-    this.targetedBy = targetObject;
-    console.log(`Target set by:`, targetObject);
-  }
-
 }
 
 // 고유 속성을 가진 쓰레기 클래스 (상속 받은 클래스들) - 현석
@@ -133,7 +131,7 @@ export class Wreck extends Trash {
     this.height = 100;
   }
   Start() {
-    // 시작 상속받아서 
+    // 시작 상속받아서
     super.Start();
     // 사진의 새로운 크기를 입력합니다.
     this.transform.scale.x = this.width / this.resource.image.width;
@@ -149,7 +147,7 @@ export class cementStone extends Trash {
     this.height = 150;
   }
   Start() {
-    // 시작 상속받아서 
+    // 시작 상속받아서
     super.Start();
     // 사진의 새로운 크기를 입력합니다.
     this.transform.scale.x = this.width / this.resource.image.width;
@@ -165,7 +163,7 @@ export class WreckPart extends Trash {
     this.height = 150;
   }
   Start() {
-    // 시작 상속받아서 
+    // 시작 상속받아서
     super.Start();
     // 사진의 새로운 크기를 입력합니다.
     this.transform.scale.x = this.width / this.resource.image.width;
@@ -182,7 +180,7 @@ export class WreckCircle extends Trash {
 
   }
   Start() {
-    // 시작 상속받아서 
+    // 시작 상속받아서
     super.Start();
     // 사진의 새로운 크기를 입력합니다.
     this.transform.scale.x = this.width / this.resource.image.width;
