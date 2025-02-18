@@ -283,14 +283,6 @@ class GameResource {
   // 이미지를 캔버스에 그리는 메서드
   draw(ctx) {
 
-    // if (this.gameObject instanceof GameObject) {
-    //   console.log(`이미지 그리기: ${this.image.src}`); // 콘솔 로그 추가
-    //   console.log(`이미지 크기: ${this.image.width}x${this.image.height}`); // 이미지 크기 로그 추가
-    //   console.log(`이미지 위치: ${this.gameObject.transform.position.x}, ${this.gameObject.transform.position.y}`); // 이미지 위치 로그 추가
-    // } else {
-    //   console.error("Object must be an instance of GameObject");
-    // }
-
     const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
     this.size = {

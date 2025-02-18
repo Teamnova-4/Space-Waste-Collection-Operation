@@ -113,7 +113,7 @@ export class Trash extends GameObject {
 
 export class Wreck extends Trash {
     constructor(speed) {
-        const randomRum = Math.random() * 0.5; // 0과 0.5 사이의 랜덤 회전 값 생성
+        const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
         super(speed, "../../Resources/trash_1.png", 0, randomRum); // 난파선 이미지 20%폭발
         // 사진의 크기 정하기
         this.width = 100;
@@ -131,7 +131,7 @@ export class Wreck extends Trash {
 
 export class cementStone extends Trash {
     constructor(speed) {
-        const randomRum = Math.random() * 0.5; // 0과 0.5 사이의 랜덤 회전 값 생성
+        const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
         super(speed, "../../Resources/trash_2.png", 0, randomRum); // 시멘트 돌덩이 이미지 10%폭발
         // 사진의 크기 정하기
         this.width = 150;
@@ -150,7 +150,7 @@ export class cementStone extends Trash {
 
 export class WreckPart extends Trash {
     constructor(speed) {
-        const randomRum = Math.random() * 0.5; // 0과 0.5 사이의 랜덤 회전 값 생성
+        const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
         super(speed, "../../Resources/trash_3.png", 0, randomRum); // 난파선 부품 이미지, 30%폭발
         // 사진의 크기 정하기
         this.width = 150;
@@ -168,7 +168,7 @@ export class WreckPart extends Trash {
 }
 export class WreckCircle extends Trash {
     constructor(speed) {
-        const randomRum = Math.random() * 0.5; // 0과 0.5 사이의 랜덤 회전 값 생성
+        const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
         super(speed, "../../Resources/trash_4.png", 0, randomRum); // 난파선 부품 동그라미 이미지, 25%
         // 사진의 크기 정하기
         this.width = 150;
