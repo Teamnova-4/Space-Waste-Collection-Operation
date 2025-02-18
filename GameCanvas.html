@@ -5,22 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
 
-        canvas {
-            display: block;
-            width: 100vw;
-            height: 100vh;
-        }
-
-    </style>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/layout/canvas.css">
     <link rel="stylesheet" href="css/Upgrade.css">
+    <link rel="stylesheet" href="css/layout/station-pannel.css">
 </head>
 
 <body>
@@ -70,19 +59,65 @@
         <p id="speedCount" style="color: white;">현재 속도 0.5</p>
     </div>
     
+    <button id="rateUp">생산량 증가</button><button id="rateDown">생산량 감소</button>
+    <button id="speedUp">속도 증가</button><button id="speedDown">속도 감소</button>
+    <button id="moneyCheat">돈 100원 추가</button>
 
-    <script src="Script/Upgrade.js"></script>
 
     <canvas id="canvas"></canvas>
+
+    <!-- 하단 드론 관리 패널 -->
+    <div id="station-pannel">
+        <div class="panel-header">
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="drone-slots">드론 관리</button>
+                <button class="tab-btn" data-tab="drone-shop">드론 상점</button>
+            </div>
+            <h2 class="panel-title">드론 관리</h2>
+            <div class="spacer"></div>
+        </div>
+
+        <!-- 드론 슬롯 관리 탭 -->
+        <div class="tab-content active" id="drone-slots">
+            <div class="slot-list-container">
+                <div class="drone-slot-container">
+                    <!-- 드론 슬롯들이 여기에 동적으로 추가됨 -->
+                </div>
+                <button id="add-slot-btn" class="add-slot-btn">
+                    <span>+</span>
+                    <span>슬롯 추가</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 드론 상점 탭 -->
+        <div class="tab-content" id="drone-shop">
+            <div class="shop-container">
+                <!-- DroneShop의 droneTypes 기반으로 동적 생성 -->
+                <div class="drone-item" data-type="basic">
+                    <img src="Resources/drone.png" alt="기본 드론">
+                    <h3>기본 드론</h3>
+                    <p>가격: 500 크레딧</p>
+                    <button class="buy-drone-btn" data-type="basic">구매</button>
+                </div>
+                <!--  TODO : 다른 드론 아이템들 추가 -->
+            </div>
+        </div>
+    </div>
+
 
     <script type="module">
         import { GameLoop, Background } from "./Script/StructureCode/GameSystem.js";
         // 우주 정거장 추가 - 현석
-        import { SpaceStation } from "./Script/GameObjects/spaceStation.js";
+        import { SpaceStation } from "./Script/GameObjects/SpaceStation.js";
         // 드론 추가 - 현석
         import { Drone } from "./Script/GameObjects/drone.js";
+        // 업그레이드 - 현석
+        import { User } from "./Script/Upgrade.js";
         // 우주 쓰레기 추가
         import { TrashFactory } from "./Script/TrashFactory.js";
+        // 하단 드론 패널
+        import { DroneManager } from "./Script/DronePannel/DroneManager.js";
 
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
@@ -93,7 +128,7 @@
 
         // 브라우저 창의 너비와 높이 가져오기
         const width = window.innerWidth;
-        const height = window.innerHeight;
+        const height = window.innerHeight - parseInt(getComputedStyle(document.documentElement).getPropertyValue('--panel-height')); // 적용된 css값 참조
 
         // 캔버스 크기를 브라우저 창 크기에 맞게 조정
         canvas.width = width * ratio;   // 실제 캔버스 크기
@@ -109,10 +144,24 @@
         let trashFactory = null; // 우주 쓰레기 생성 공장
         // 배경 인스턴스 생성
 
+        // 유저 객체 생성
+        const user = User.Instance();
 
         // 우주 쓰레기 생성
         trashFactory = new TrashFactory();
         trashFactory.startTrashSpawn();
+        // 게임 루프 인스턴스 생성
+        const gameLoop = new GameLoop(canvas, ctx);
+
+        // 우주정거장 생성 현석
+        let spaceStation = new SpaceStation();
+
+        // 드론 매니저 (화면하단 드론 패널이 실제도 동작하도록 만드는 코드)
+        const droneManager = new DroneManager();
+
+        const background = new Background();
+        // 배경 애니메이션 시작
+        background.start();
 
         // 우주 쓰레기 팩토리 테스트
         document.getElementById("rateUp").onclick = function () {
@@ -132,16 +181,8 @@
             document.getElementById("speedCount").innerText = "현재 속도 "+trashFactory.speed;
         }
 
-        // 게임 루프 인스턴스 생성
-        const gameLoop = new GameLoop(canvas, ctx);
-
-        // 우주정거장 생성 현석
-        let spaceStation = new SpaceStation();
-
-        SpaceStation.AddDrone();
         SpaceStation.AddDrone();
 
-        const background = new Background();
         // 배경 애니메이션 시작
         background.start();
 
