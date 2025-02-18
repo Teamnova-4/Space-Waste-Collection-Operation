@@ -53,14 +53,9 @@ export class GameObject extends GameEvent {
    * Update와 LateUpdate사이에서 호출됨
    */
   OnDraw(ctx) {
-    // this.resource.draw(ctx); - 기존 코드
 
-    // 이미지지 크기가 정의되지 않았을 경우 에러 출력 - 현석
-    if (this.resource.image.complete) {
-      this.resource.draw(ctx);
-    } else {
-      console.log("이미지가 아직 로드되지 않았습니다.");
-    }
+    this.resource.draw(ctx);
+
   }
 
   /**
@@ -216,10 +211,6 @@ class Physics {
   updateCollider() {
 
     // 리소스 크기가 정의되지 않았을 경우 에러 출력 - 현석
-    if (!this.gameObject.resource.size) {
-      console.log("Collider 업데이트 중: 리소스 크기가 정의되지 않았습니다.");
-      return;
-    }
 
     const size = this.gameObject.resource.size;
     const pivot = this.gameObject.transform.position;
@@ -294,13 +285,8 @@ class GameResource {
 
   // 이미지를 캔버스에 그리는 메서드
   draw(ctx) {
-    
-    // 이미지가 로드되지 않았을 경우 에러 출력 - 현석
-    if (!this.image.complete) {
-      console.log("이미지가 아직 로드되지 않았습니다.");
-      return;
-    }
 
+    // 이미지가 로드되지 않았을 경우 에러 출력 - 현석
     const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
     this.size = {
