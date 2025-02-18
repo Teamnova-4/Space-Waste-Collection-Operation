@@ -80,7 +80,6 @@ export class Trash extends GameObject {
    * drone으로 해당 쓰레기를 잡았을 때 호출되는 함수
    * @param {**Drone*} drone
    */
-
   // 드론이 쓰레기를 잡을때
   catch(drone) {
     this.caughtBy = drone;
@@ -89,6 +88,11 @@ export class Trash extends GameObject {
 
     // 쓰레기를 잡을 때, 폭발 확률을 체크 - 현석
     this.checkExplosion(drone);
+  }
+
+  target(drone){
+    this.isTargeted = true;
+    this.targetedBy = drone;
   }
 
   // 폭발 여부 체크 메서드-현석

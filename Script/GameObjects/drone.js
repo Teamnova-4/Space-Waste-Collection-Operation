@@ -1,5 +1,6 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
-import { SpaceStation } from "./SpaceStation.js";
+import { SpaceStation } from "./spaceStation.js";
+import { User } from "../Upgrade.js";
 
 export class Drone extends GameObject {
   static lastId = 0; // 마지막으로 부여된 id, 새 드론은 마지막 id + 1 이 부여된다.

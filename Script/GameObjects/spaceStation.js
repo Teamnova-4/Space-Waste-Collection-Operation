@@ -1,4 +1,5 @@
 // "GameObject" 클래스를 임포트합니다. 이 클래스는 기본적인 게임 오브젝트의 기능을 제공합니다.
+import { DroneManager } from "../DronePannel/DroneManager.js";
 import { GameObject } from "../StructureCode/GameSystem.js";
 import { TrashFactory } from "../TrashFactory.js";
 import { Drone } from "./drone.js";
@@ -31,7 +32,6 @@ export class SpaceStation extends GameObject {
      * 싱클톤 초기화 함수
      */
     Initialize() {
-        this.droneList = [];
     }
     
     // 게임 오브젝트가 시작될 때 호출되는 메서드
@@ -70,11 +70,11 @@ export class SpaceStation extends GameObject {
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
         // this.transform.rotation += 0;
         if (TrashFactory.Instance().trashList.length > 0){
-            this.droneList.filter(drone => !drone.isWorking).forEach(element => { 
+            DroneManager.Instance().slots.filter(slot => !slot.drone.isWorking).forEach(slots => { 
                 const trash = TrashFactory.Instance().trashList.shift()
                 if (trash !== null && trash !== undefined) {
-                    element.StartWork(trash);
-                    trash.target(element);
+                    slots.drone.StartWork(trash);
+                    trash.target(slots.drone);
                 }
             });
         }

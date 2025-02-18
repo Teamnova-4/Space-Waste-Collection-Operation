@@ -18,6 +18,29 @@ export class DroneManager {
    * - 기본 드론 1개 추가
    */
   constructor() {
+    if (DroneManager.instance) {
+      return DroneManager.instance;
+    }
+
+    this.Initialize();
+    DroneManager.instance = this;
+  }
+
+  /**
+   * 싱클톤 인스턴스 반환 함수
+   */
+  static Instance() {
+    if (!DroneManager.instance) {
+      DroneManager.instance = new DroneManager();
+      DroneManager.instance.Initialize();
+    }
+    return DroneManager.instance;
+  }
+
+  /**
+   * 싱클톤 초기화 함수
+   */
+  Initialize() {
     // 드론을 보관할 수 있는 슬롯 배열 (기본 1개)
     this.slots = [new DroneSlot(0)];
     // 최대 보유 가능한 슬롯 개수
@@ -38,6 +61,7 @@ export class DroneManager {
     this.initializeEventListeners();
     this.addDefaultDrone();
   }
+
 
   /**
    * 필요한 모든 이벤트 리스너 등록
