@@ -17,7 +17,6 @@
             width: 100vw;
             height: 100vh;
         }
-
     </style>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/Upgrade.css">
@@ -25,6 +24,16 @@
 
 <body>
     <script type="module" src="./Script/StructureCode/GameSystem.js"></script>
+
+    <!-- 빚 정보 UI 추가 -->
+    <div id="debt-info">
+        <div class="debt-display">
+            <p>남은 시간: <span id="remaining-time">10:00</span></p>
+            <p>남은 빚: <span id="remaining-debt">10000</span></p>
+            <p>다음 징수액: <span id="next-debt">500</span></p>
+        </div>
+        <button id="repay-debt-btn">빚 갚기</button>
+    </div>
 
     <div id="ui-container">
         <div id="credit-display" class="credit-left">
@@ -69,7 +78,7 @@
         <p id="rateCount" style="color: white;">현재 생산량 0.5</p>
         <p id="speedCount" style="color: white;">현재 속도 0.5</p>
     </div>
-    
+
 
     <script src="Script/Upgrade.js"></script>
 
@@ -83,6 +92,8 @@
         import { Drone } from "./Script/GameObjects/drone.js";
         // 우주 쓰레기 추가
         import { TrashFactory } from "./Script/TrashFactory.js";
+        // 빚 갚기 시스템 추가
+        import { DebtSystem } from "./Script/DebtSystem.js";
 
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
@@ -114,22 +125,25 @@
         trashFactory = new TrashFactory();
         trashFactory.startTrashSpawn();
 
+        // 빚 시스템 초기화
+        const debtSystem = new DebtSystem();
+
         // 우주 쓰레기 팩토리 테스트
         document.getElementById("rateUp").onclick = function () {
             trashFactory.setSpawnRate(trashFactory.spawnRate + 1);
-            document.getElementById("rateCount").innerText = "현재 생산량 "+trashFactory.spawnRate;
+            document.getElementById("rateCount").innerText = "현재 생산량 " + trashFactory.spawnRate;
         }
         document.getElementById("rateDown").onclick = function () {
             trashFactory.setSpawnRate(trashFactory.spawnRate - 1);
-            document.getElementById("rateCount").innerText = "현재 생산량 "+trashFactory.spawnRate;
+            document.getElementById("rateCount").innerText = "현재 생산량 " + trashFactory.spawnRate;
         }
         document.getElementById("speedUp").onclick = function () {
             trashFactory.setSpeed(trashFactory.speed + 1);
-            document.getElementById("speedCount").innerText = "현재 속도 "+trashFactory.speed;
+            document.getElementById("speedCount").innerText = "현재 속도 " + trashFactory.speed;
         }
         document.getElementById("speedDown").onclick = function () {
             trashFactory.setSpeed(trashFactory.speed - 1);
-            document.getElementById("speedCount").innerText = "현재 속도 "+trashFactory.speed;
+            document.getElementById("speedCount").innerText = "현재 속도 " + trashFactory.speed;
         }
 
         // 게임 루프 인스턴스 생성
