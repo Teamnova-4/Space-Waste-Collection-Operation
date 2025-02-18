@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 돈 치트 버튼
     document.getElementById("moneyCheat").onclick = function () {
         user.credits += 100;
+        document.getElementById("credits").innerText = user.credits;
         console.log("돈 치트 버튼 클릭: 현재 보유 크레딧 = " + user.credits);
     }
 
