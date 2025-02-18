@@ -23,7 +23,9 @@ export class GameEvent {
 
   OnLoad(image) {}
 
-  OnClick() {}
+  OnClick() {
+    return false
+  }
 }
 
 export class GameObject extends GameEvent {
@@ -265,60 +267,48 @@ class Physics {
 class GameResource {
     constructor(gameObject) {
         this.image = new Image();
-        this.image.src = "";
         this.gameObject = gameObject;
 
-        console.log(this.gameObject);  // 메서드 존재 여부 확인
-
         this.image.onload = () => {
-            console.log(`gameSystem: [이미지 로드 완료] ${this.image.src}`);
+            console.log(`[이미지 로드 완료] ${this.image.src}`);
             this.gameObject.OnLoad(this.image);
         };
         this.image.onerror = () => {
-            if (this.image.src !== "") {
-                console.error(`gameSystem: [이미지 로드 실패] ${this.image.src}`);
-            }
+            console.trace(`[이미지 로드 실패] ${this.image.src}`);
+            this.gameObject.OnError(this.image);
         };
     }
 
-  // 이미지를 캔버스에 그리는 메서드
-  draw(ctx) {
-    const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
+    // 이미지를 캔버스에 그리는 메서드
+    draw(ctx) {
+        const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
-    this.size = {
-      x: this.gameObject.transform.scale.x * this.image.width,
-      y: this.gameObject.transform.scale.y * this.image.height,
-    };
+        this.size = {
+            x: this.gameObject.transform.scale.x * this.image.width,
+            y: this.gameObject.transform.scale.y * this.image.height
+        }
 
-    const pivot = {
-      x: this.gameObject.transform.position.x,
-      y: this.gameObject.transform.position.y,
-    };
+        const pivot = {
+            x: this.gameObject.transform.position.x,
+            y: this.gameObject.transform.position.y,
+        }
 
-    // 캔버스 상태 저장
-    ctx.save();
+        // 캔버스 상태 저장
+        ctx.save();
 
-    // 회전의 중심을 이미지의 중심으로 설정
-    ctx.translate(pivot.x, pivot.y);
-    ctx.rotate(radians);
-    ctx.translate(
-      -this.size.x * this.gameObject.transform.anchor.x,
-      -this.size.y * this.gameObject.transform.anchor.y
-    );
+        // 회전의 중심을 이미지의 중심으로 설정
+        ctx.translate(pivot.x, pivot.y);
+        ctx.rotate(radians);
+        ctx.translate(
+            -this.size.x * this.gameObject.transform.anchor.x,
+            -this.size.y * this.gameObject.transform.anchor.y
+        );
 
-    ctx.drawImage(
-      this.image,
-      0,
-      0,
-      this.image.width,
-      this.image.height,
-      0,
-      0,
-      this.size.x,
-      this.size.y
-    );
+        ctx.drawImage(this.image,
+            0, 0, this.image.width, this.image.height,
+            0, 0, this.size.x, this.size.y);
 
-    /*
+        /*
         this.corners = corners.map(corner => { 
             const rotatedX = pivot.x + (corner.x - pivot.x) * Math.cos(radians) - (corner.y - pivot.y) * Math.sin(radians); 
             const rotatedY = pivot.y + (corner.x - pivot.x) * Math.sin(radians) + (corner.y - pivot.y) * Math.cos(radians); 
