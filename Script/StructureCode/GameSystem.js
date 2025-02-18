@@ -53,8 +53,14 @@ export class GameObject extends GameEvent {
    * Update와 LateUpdate사이에서 호출됨
    */
   OnDraw(ctx) {
+    // this.resource.draw(ctx); - 기존 코드
 
-    this.resource.draw(ctx);
+    // 이미지지 크기가 정의되지 않았을 경우 에러 출력 - 현석
+    if (this.resource.image.complete) {
+      this.resource.draw(ctx);
+    } else {
+      console.log("이미지가 아직 로드되지 않았습니다.");
+    }
   }
 
   /**
@@ -181,7 +187,6 @@ class Physics {
     this.velocity = { x: 0, y: 0 };
     // 오브젝트의 가속도
     this.acceleration = { x: 0, y: 0 };
-
     // 오브젝트 충돌체
     this.collider = { offset: { x: 0, y: 0 }, size: { x: 1, y: 1 } };
     // [외부접근 하면 안됨] 충돌체의 네 모서리 좌표
@@ -209,6 +214,13 @@ class Physics {
 
   // 오브젝트의 충돌체를 업데이트하는 메서드
   updateCollider() {
+
+    // 리소스 크기가 정의되지 않았을 경우 에러 출력 - 현석
+    if (!this.gameObject.resource.size) {
+      console.log("Collider 업데이트 중: 리소스 크기가 정의되지 않았습니다.");
+      return;
+    }
+
     const size = this.gameObject.resource.size;
     const pivot = this.gameObject.transform.position;
     const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
@@ -282,6 +294,12 @@ class GameResource {
 
   // 이미지를 캔버스에 그리는 메서드
   draw(ctx) {
+    
+    // 이미지가 로드되지 않았을 경우 에러 출력 - 현석
+    if (!this.image.complete) {
+      console.log("이미지가 아직 로드되지 않았습니다.");
+      return;
+    }
 
     const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
@@ -309,14 +327,6 @@ class GameResource {
     ctx.drawImage(this.image,
       0, 0, this.image.width, this.image.height,
       0, 0, this.size.x, this.size.y);
-
-    /*
-    this.corners = corners.map(corner => { 
-        const rotatedX = pivot.x + (corner.x - pivot.x) * Math.cos(radians) - (corner.y - pivot.y) * Math.sin(radians); 
-        const rotatedY = pivot.y + (corner.x - pivot.x) * Math.sin(radians) + (corner.y - pivot.y) * Math.cos(radians); 
-        return {x: rotatedX, y: rotatedY};
-    });
-    */
 
     // 캔버스 상태 복원
     ctx.restore();

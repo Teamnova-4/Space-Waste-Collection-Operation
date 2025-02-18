@@ -22,7 +22,6 @@ export class Trash extends GameObject {
     }
 
     Start() {
-
         // 이미지 경로 매개변수 받은것 적용
         this.resource.image.src = this.imageSrc;
         console.log('Trash Start: ' + this.imageSrc); // 콘솔 로그 추가
