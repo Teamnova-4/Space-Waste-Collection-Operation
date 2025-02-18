@@ -23,7 +23,9 @@ export class GameEvent {
 
   OnLoad(image) {}
 
-  OnClick() {}
+  OnClick() {
+    return false
+  }
 }
 
 export class GameObject extends GameEvent {
