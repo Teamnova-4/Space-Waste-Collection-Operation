@@ -70,11 +70,11 @@ export class SpaceStation extends GameObject {
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
         // this.transform.rotation += 0;
         if (TrashFactory.Instance().trashList.length > 0){
-            DroneManager.Instance().slots.filter(slot => !slot.drone.isWorking).forEach(slots => { 
+            DroneManager.Instance().getDrones().filter(drone => !drone.isWorking).forEach(drone => { 
                 const trash = TrashFactory.Instance().trashList.shift()
                 if (trash !== null && trash !== undefined) {
-                    slots.drone.StartWork(trash);
-                    trash.target(slots.drone);
+                    drone.StartWork(trash);
+                    trash.target(drone);
                 }
             });
         }
