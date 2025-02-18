@@ -14,8 +14,7 @@
 // canAfford(upgradeType): 해당 업그레이드를 구매할 크레딧이 충분한지 확인합니다 (true/false 반환).
 // _getUpgradeCost(upgradeType): 주어진 업그레이드 타입의 현재 레벨에 따른 비용을 반환합니다. (private 메서드)
 
-
-class User {
+export class User {
     constructor(initialCredits, initialUpgrades) {
         if (User.instance) {
             return User.instance;

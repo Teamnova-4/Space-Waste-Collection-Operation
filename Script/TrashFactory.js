@@ -1,14 +1,19 @@
-import { Wreck, cementStone, WreckPart, WreckCircle } from "./GameObjects/trash.js";
-
+import {
+    cementStone,
+    Wreck,
+    WreckCircle,
+    WreckPart,
+} from "./GameObjects/trash.js";
 
 // 우주 쓰레기 생성 클래스
 export class TrashFactory {
+
     constructor() {
         if (TrashFactory.instance) {
             return TrashFactory.instance;
         }
 
-        
+
         this.Initialize();
         TrashFactory.instance = this;
     }
@@ -16,12 +21,13 @@ export class TrashFactory {
     /**
      * 싱클톤 인스턴스 반환 함수 
      */
-    static Instance(){
+    static Instance() {
         if (!TrashFactory.instance) {
             TrashFactory.instance = new TrashFactory();
             TrashFactory.instance.Initialize();
         }
         return TrashFactory.instance;
+
     }
 
     /**
@@ -33,6 +39,8 @@ export class TrashFactory {
         this.isRunning = false; // 쓰레기 생성이 실행 중인지 여부
         this.trashInterval = null; // setInterval 참조를 저장할 변수
 
+        this.explosionChance = 1; // 폭발 확률 주기 - 현석
+
         this.trashList = [];
     }
 
@@ -43,7 +51,7 @@ export class TrashFactory {
         this.trashInterval = setInterval(() => {
             //console.log("setInterval 실행 - 생성률:", this.spawnRate);
 
-            // 랜덤으로 쓰레기 타입 생성 
+            // 랜덤으로 쓰레기 타입 생성
             const randomType = Math.floor(Math.random() * 4); // 4가지 쓰레기 중 랜덤 선택
 
             // 쓰레기 변수수
@@ -93,5 +101,6 @@ export class TrashFactory {
             this.stopTrashSpawn(); // 기존 setInterval 중지
             this.startTrashSpawn(); // 새로운 setInterval 시작
         }
+
     }
 }

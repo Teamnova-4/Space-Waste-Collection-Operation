@@ -1,3 +1,5 @@
+import { User } from "./Upgrade.js";
+
 export class DebtSystem {
     constructor() {
         if (DebtSystem.instance) {

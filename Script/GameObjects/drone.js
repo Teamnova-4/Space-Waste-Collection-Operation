@@ -1,30 +1,49 @@
-import { GameLoop, GameObject } from "../StructureCode/GameSystem.js";
+import { GameObject } from "../StructureCode/GameSystem.js";
 import { SpaceStation } from "./spaceStation.js";
+import { User } from "../Upgrade.js";
 
 export class Drone extends GameObject {
-    constructor() {
-        super();  // 부모 클래스(GameObject)의 생성자 호출
-        this.speed = 0.33;  //드론의속도
-        this.isWorking = false;  // 드론의 작동 상태
-        this.isReturning = false;  // 드론의 귀환 상태
-        this.targetPosition = {};  // 목표 좌표
+    static lastId = 0; // 마지막으로 부여된 id, 새 드론은 마지막 id + 1 이 부여된다.
 
-        this.targetTrash = null;  // 목표 쓰레기
+    constructor(template = null) {
+        super();
+
+        this.id = ++Drone.lastId; // 드론의 id (식별 용)
+        this.name = `드론 ${this.id}호`; // 드론 이름
+
+        if (template) {
+            this.type = template.id;
+            this.price = template.price;
+            this.speed = template.speed;
+            this.capacity = template.capacity;
+            this.imageSrc = template.imageSrc;
+        } else {
+            this.type = "default";
+            this.price = null;
+            this.speed = 0.33;
+            this.capacity = 1;
+            this.imageSrc = "Resources/drone.png";
+        } 
+        this.isWorking = false;
+        this.isReturning = false;
+        this.targetPosition = {};
+        this.targetTrash = null;
     }
 
     Start() {
         // 드론 초기화
         console.log("Drone Start");
-        // 드론의 초기 상태 설정
-        this.resource.image.src = "./Resources/drone.png";  // 드론 이미지 로드
-        this.transform.position.x = 400;  // 초기 X 위치
-        this.transform.position.y = 400;  // 초기 Y 위치
-        this.transform.scale.x = 0.5;  // 크기 설정
-        this.transform.scale.y = 0.5;  // 크기 설정
-        this.transform.anchor.x = 0.5;  // 앵커 설정
-        this.transform.anchor.y = 0.5;  // 앵커 설정
-        this.transform.rotation = 0;  // 초기 회전 값
 
+        // TODO: this.type 값에 따라 각기 다른 값 넣어야함
+        // 드론의 초기 상태 설정
+        this.resource.image.src = this.imageSrc; // 드론 이미지 로드
+        this.transform.position.x = 400; // 초기 X 위치
+        this.transform.position.y = 400; // 초기 Y 위치
+        this.transform.scale.x = 0.5; // 크기 설정
+        this.transform.scale.y = 0.5; // 크기 설정
+        this.transform.anchor.x = 0.5; // 앵커 설정
+        this.transform.anchor.y = 0.5; // 앵커 설정
+        this.transform.rotation = 0; // 초기 회전 값
     }
 
     Update() {
@@ -32,12 +51,13 @@ export class Drone extends GameObject {
         if (this.isWorking) {
             this.transform.LookAt(this.targetPosition);
             this.physics.setVelocityInDirection({x: this.speed, y: this.speed});
-            if (!this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
+
+            const distance = this.transform.Distance(this.targetPosition); 
+            if (!this.isReturning && distance < 5) {
                 this.targetTrash.catch(this);
                 this.Returning();
-            } else if (this.isReturning && this.transform.Distance(this.targetPosition) < 5) {
+            } else if (this.isReturning && distance < 5) {
                 this.DestructionTrash();
-                this.StopWork();
             }
         }
     }
@@ -58,16 +78,15 @@ export class Drone extends GameObject {
 
     // 드론의 속도 업그레이드 메서드
     upgradeSpeed() {
-        this.speed += 0.01;  // 속도 증가
+        this.speed += 0.01; // 속도 증가
         console.log(`Drone Speed Upgraded: ${this.speed}`);
     }
 
     // 드론의 적재 용량 업그레이드 메서드
     upgradeCapacity() {
-        this.capacity += 1;  // 적재 용량 증가
+        this.capacity += 1; // 적재 용량 증가
         console.log(`Drone Capacity Upgraded: ${this.capacity}`);
     }
-
 
     /**
      * 
