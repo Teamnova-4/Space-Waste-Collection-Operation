@@ -22,8 +22,6 @@ export class EventBase {
 }
 
 export class EventSystem {
-    
-
     /**
      * 
      * 1 분마다 하나의 이벤트 총 9개 의 이벤트가 발생
