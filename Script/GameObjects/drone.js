@@ -23,7 +23,7 @@ export class Drone extends GameObject {
             this.speed = 0.33;
             this.capacity = 1;
             this.imageSrc = "Resources/drone.png";
-        } 
+        }
         this.isWorking = false;
         this.isReturning = false;
         this.targetPosition = {};
@@ -34,7 +34,6 @@ export class Drone extends GameObject {
     Start() {
         // 드론 초기화
         console.log("Drone Start");
-
         // TODO: this.type 값에 따라 각기 다른 값 넣어야함
         // 드론의 초기 상태 설정
         this.resource.image.src = this.imageSrc; // 드론 이미지 로드
@@ -52,10 +51,10 @@ export class Drone extends GameObject {
         if (this.isWorking) {
             // 드론 현재 위치값을 바탕으로 타겟 위치값을 바라보도록 회전
             this.transform.LookAt(this.targetPosition);
-           // transform 의 방향을 기반으로 속도를 정하는 메서드
-            this.physics.setVelocityInDirection({x: this.speed, y: this.speed});
-            
-            const distance = this.transform.Distance(this.targetPosition); 
+            // transform 의 방향을 기반으로 속도를 정하는 메서드
+            this.physics.setVelocityInDirection({ x: this.speed, y: this.speed });
+
+            const distance = this.transform.Distance(this.targetPosition);
 
             if (!this.isReturning && distance < this.catchDistance) {
                 this.targetTrash.catch(this);
@@ -93,7 +92,6 @@ export class Drone extends GameObject {
         this.capacity += 1; // 적재 용량 증가
         console.log(`Drone Capacity Upgraded: ${this.capacity}`);
     }
-
     /**
      * 
      * 드론의 작업 시작
@@ -103,7 +101,7 @@ export class Drone extends GameObject {
         this.isWorking = true;
         this.isReturning = false;
         this.targetTrash = trash;
-        this.targetPosition = trash.transform.position; 
+        this.targetPosition = trash.transform.position;
     }
 
     /**
@@ -112,9 +110,9 @@ export class Drone extends GameObject {
      * 
      */
     Returning() {
-        if (this.isWorking){
+        if (this.isWorking) {
             this.isReturning = true;
-            this.targetPosition = SpaceStation.Instance().transform.position; 
+            this.targetPosition = SpaceStation.Instance().transform.position;
         }
     }
 
@@ -129,13 +127,13 @@ export class Drone extends GameObject {
             this.isReturning = false;
             this.targetTrash = null;
             this.targetPosition = null;
-            this.physics.velocity = {x:0,y:0};
-            this.physics.acceleration = {x:0,y:0};
+            this.physics.velocity = { x: 0, y: 0 };
+            this.physics.acceleration = { x: 0, y: 0 };
         }
     }
 
 
-    DestructionTrash(){
+    DestructionTrash() {
         this.targetTrash.Destroy();
         User.AddCredits(200);
     }

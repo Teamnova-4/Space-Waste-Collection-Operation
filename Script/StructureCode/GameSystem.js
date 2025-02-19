@@ -359,8 +359,8 @@ export class GameLoop {
       event.preventDefault(); 
       console.log('텍스트 선택이 감지 되었습니다');
     });
-    
-    // 클릭 메서드드
+
+    // 클릭 메서드
     canvas.addEventListener("click", this.onClickCanvas);
   }
 
