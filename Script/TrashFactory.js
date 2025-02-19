@@ -13,7 +13,7 @@ export class TrashFactory {
             return TrashFactory.instance;
         }
 
-
+        // 싱글톤 쓰레기 인스턴스 생성
         this.Initialize();
         TrashFactory.instance = this;
     }
@@ -34,13 +34,11 @@ export class TrashFactory {
      * 싱클톤 초기화 함수
      */
     Initialize() {
-        this.speed = 0.5; // 쓰레기 이동속도
+        this.speed = 0.5; // 쓰레기 기본 이동속도
         this.spawnRate = 0.5; // 초당 생성 개수
         this.isRunning = false; // 쓰레기 생성이 실행 중인지 여부
         this.trashInterval = null; // setInterval 참조를 저장할 변수
-
         this.explosionChance = 1; // 폭발 확률 주기 - 현석
-
         this.trashList = [];
     }
 
@@ -54,21 +52,23 @@ export class TrashFactory {
             // 랜덤으로 쓰레기 타입 생성
             const randomType = Math.floor(Math.random() * 4); // 4가지 쓰레기 중 랜덤 선택
 
-            // 쓰레기 변수수
+            // 쓰레기 변수
             let newTrash;
-
+            // 랜덤 속도 (0.1 ~ 0.4) 차감형식: (기본쓰레기속도 0.5 - (0.1 ~ 0.4))
+            const randomSpeed = Math.random() * 0.4; // 0.1과 0.4 사이의 랜덤 값 생성
+            // 쓰레기 타입에 따라 쓰레기 생성
             switch (randomType) {
                 case 0:
-                    newTrash = new Wreck(this.speed); // 난파선 쓰레기
+                    newTrash = new Wreck(this.speed - randomSpeed); // 난파선 쓰레기기
                     break;
                 case 1:
-                    newTrash = new cementStone(this.speed); // 씨멘트+벽돌 쓰레기
+                    newTrash = new cementStone(this.speed - randomSpeed); // 씨멘트+벽돌 쓰레기
                     break;
                 case 2:
-                    newTrash = new WreckPart(this.speed); // 난파선 부품 쓰레기
+                    newTrash = new WreckPart(this.speed - randomSpeed); // 난파선 부품 쓰레기
                     break;
                 case 3:
-                    newTrash = new WreckCircle(this.speed); //난파선 부품 쓰레기(동그라미)
+                    newTrash = new WreckCircle(this.speed - randomSpeed); //난파선 부품 쓰레기(동그라미)
                     break;
             }
             TrashFactory.Instance().trashList.push(newTrash);

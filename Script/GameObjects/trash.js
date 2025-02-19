@@ -4,9 +4,8 @@ import { SpaceStation } from "../GameObjects/SpaceStation.js";
 // 기본 Trash 클래스
 export class Trash extends GameObject {
     // 매개변수로 폭발 확률 추가(explosionChance) -현석
-    constructor(speed, imageSrc, explosionChance) {
+    constructor(speed, imageSrc, explosionChance, rotationSpeed) {
         super();
-
         this.speed = speed || 1;
         this.imageSrc = imageSrc;
         // 폭발 확률 - 현석
@@ -14,15 +13,15 @@ export class Trash extends GameObject {
         // 폭발 상태 여부 - 현석석
         this.isExploding = false;
         // 폭발 프레임 - 현석
-        this.explosionFrame = 0;
+        this.rotationSpeed = rotationSpeed;
         // 폭발 이미지 객체 생성 - 현석석
         // this.explosionImage = new Image();
         // 폭발 스프라이트 이미지
         // this.explosionImage.src = "../../Resources/explosion.png";
+        console.log(`Trash 생성됨 - 속도: ${this.speed}, 회전 속도: ${this.rotationSpeed}`);
     }
 
     Start() {
-
         // 이미지 경로 매개변수 받은것 적용
         this.resource.image.src = this.imageSrc;
         this.transform.position.x = 0;
@@ -47,16 +46,17 @@ export class Trash extends GameObject {
     Update() {
         // 매 프레임마다 오른쪽으로 1px씩 이동
         if (!this.isCaught) {
-            this.transform.position.x += this.speed;
-
-            if (this.transform.position.x > canvas.width + 100) { 
-                console.log(this.transform.position.x, canvas.width);
-                this.Destroy();
+            if (!this.isCaught) {
+                this.transform.position.x += this.speed;
+                this.transform.rotation += this.rotationSpeed; // 회전 값 업데이트
+                if (this.transform.position.x > canvas.width + 100) {
+                    this.Destroy();
+                }
             }
         }
     }
-    
-    LateUpdate() {}
+
+    LateUpdate() { }
 
     OnDestroy() {
         if (this.isTargeted) {
@@ -66,7 +66,7 @@ export class Trash extends GameObject {
     }
 
     OnLoad(image) {
-        // console.log("Trash OnLoad" + image.src);
+        console.log("Trash OnLoad" + image.src);
     }
 
     /**
@@ -83,7 +83,7 @@ export class Trash extends GameObject {
         this.checkExplosion(drone);
     }
 
-    target(drone){
+    target(drone) {
         this.isTargeted = true;
         this.targetedBy = drone;
     }
@@ -108,27 +108,32 @@ export class Trash extends GameObject {
 // 고유 속성을 가진 쓰레기 클래스 (상속 받은 클래스들) - 현석
 
 export class Wreck extends Trash {
-  constructor(speed) {
-    super(speed, "../../Resources/trash_1.png", 0); // 난파선 이미지 20%폭발
-    // 사진의 크기 정하기
-    this.width = 100;
-    this.height = 100;
-  }
-  Start() {
-    // 시작 상속받아서
-    super.Start();
-    // 사진의 새로운 크기를 입력합니다.
-    this.transform.scale.x = this.width / this.resource.image.width;
-    this.transform.scale.y = this.height / this.resource.image.height;
-  }
+    constructor(speed) {
+        const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
+        super(speed, "../../Resources/trash_1.png", 0, randomRum); // 난파선 이미지 20%폭발
+        // 사진의 크기 정하기
+        this.width = 100;
+        this.height = 100;
+        console.log("Wreck speed: " + speed + "Wreck 회전: " + randomRum);
+    }
+    Start() {
+        // 시작 상속받아서
+        super.Start();
+        // 사진의 새로운 크기를 입력합니다.
+        this.transform.scale.x = this.width / this.resource.image.width;
+        this.transform.scale.y = this.height / this.resource.image.height;
+    }
 }
 
 export class cementStone extends Trash {
     constructor(speed) {
-        super(speed, "../../Resources/trash_2.png", 0); // 시멘트 돌덩이 이미지 10%폭발
+        const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
+        super(speed, "../../Resources/trash_2.png", 0, randomRum); // 시멘트 돌덩이 이미지 10%폭발
         // 사진의 크기 정하기
         this.width = 150;
         this.height = 150;
+
+        console.log("cementStone speed: " + speed + "cementStone 회전: " + randomRum);
     }
     Start() {
         // 시작 상속받아서
@@ -141,10 +146,12 @@ export class cementStone extends Trash {
 
 export class WreckPart extends Trash {
     constructor(speed) {
-        super(speed, "../../Resources/trash_3.png", 0); // 난파선 부품 이미지, 30%폭발
+        const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
+        super(speed, "../../Resources/trash_3.png", 0, randomRum); // 난파선 부품 이미지, 30%폭발
         // 사진의 크기 정하기
         this.width = 150;
         this.height = 150;
+        console.log("WreckPart speed: " + speed + "WreckPart 회전: " + randomRum);
     }
     Start() {
         // 시작 상속받아서
@@ -152,16 +159,17 @@ export class WreckPart extends Trash {
         // 사진의 새로운 크기를 입력합니다.
         this.transform.scale.x = this.width / this.resource.image.width;
         this.transform.scale.y = this.height / this.resource.image.height;
+
     }
 }
 export class WreckCircle extends Trash {
     constructor(speed) {
-        super(speed, "../../Resources/trash_4.png", 0); // 난파선 부품 동그라미 이미지, 25%
+        const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
+        super(speed, "../../Resources/trash_4.png", 0, randomRum); // 난파선 부품 동그라미 이미지, 25%
         // 사진의 크기 정하기
         this.width = 150;
         this.height = 150;
-
-
+        console.log("WreckCircle speed: " + speed + "WreckCircle 회전: " + randomRum);
     }
     Start() {
         // 시작 상속받아서

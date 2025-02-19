@@ -53,8 +53,9 @@ export class GameObject extends GameEvent {
    * Update와 LateUpdate사이에서 호출됨
    */
   OnDraw(ctx) {
-    
+
     this.resource.draw(ctx);
+
   }
 
   /**
@@ -181,7 +182,6 @@ class Physics {
     this.velocity = { x: 0, y: 0 };
     // 오브젝트의 가속도
     this.acceleration = { x: 0, y: 0 };
-
     // 오브젝트 충돌체
     this.collider = { offset: { x: 0, y: 0 }, size: { x: 1, y: 1 } };
     // [외부접근 하면 안됨] 충돌체의 네 모서리 좌표
@@ -209,6 +209,9 @@ class Physics {
 
   // 오브젝트의 충돌체를 업데이트하는 메서드
   updateCollider() {
+
+    // 리소스 크기가 정의되지 않았을 경우 에러 출력 - 현석
+
     const size = this.gameObject.resource.size;
     const pivot = this.gameObject.transform.position;
     const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
@@ -310,7 +313,6 @@ class GameResource {
       0, 0, this.image.width, this.image.height,
       0, 0, this.size.x, this.size.y);
 
-
     // 캔버스 상태 복원
     ctx.restore();
   }
@@ -376,6 +378,7 @@ export class GameLoop {
 
     this.isRunning = true;
     this.lastFrameTime = performance.now(); // 게임 시작 시간 설정
+    console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
     this.loop(); // 게임 루프 시작
   }
 
