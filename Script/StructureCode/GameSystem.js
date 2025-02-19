@@ -355,9 +355,12 @@ export class GameLoop {
     });
 
     // 드래그 방지 코드 추가
-    addEventListener('dragstart', (event) => {
+    addEventListener('selectstart', (event) => {
       event.preventDefault(); 
+      console.log('텍스트 선택이 감지 되었습니다');
     });
+    
+    // 클릭 메서드드
     canvas.addEventListener("click", this.onClickCanvas);
   }
 
