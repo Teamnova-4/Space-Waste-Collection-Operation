@@ -18,7 +18,6 @@ export class Trash extends GameObject {
         // this.explosionImage = new Image();
         // 폭발 스프라이트 이미지
         // this.explosionImage.src = "../../Resources/explosion.png";
-        console.log(`Trash 생성됨 - 속도: ${this.speed}, 회전 속도: ${this.rotationSpeed}`);
     }
 
     // 이미지 로드 후 처리를 위한 함수
@@ -94,7 +93,6 @@ export class Trash extends GameObject {
     }
 
     OnLoad(image) {
-        console.log("Trash OnLoad" + image.src);
     }
 
     /**
