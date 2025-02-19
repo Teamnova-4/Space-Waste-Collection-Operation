@@ -4,38 +4,38 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 export class GameEvent {
-    constructor() {
-        if (this.constructor === GameEvent) {
-            throw new Error("Cannot instantiate abstract class");
-        }
-
-        this.deltaTime = 0;
+  constructor() {
+    if (this.constructor === GameEvent) {
+      throw new Error("Cannot instantiate abstract class");
     }
 
-    // 이벤트가 시작될 때 호출될 메서드 (예: 초기화)
-    Start() { }
+    this.deltaTime = 0;
+  }
 
-    // 매 프레임 업데이트되는 메서드
-    Update() { }
+  // 이벤트가 시작될 때 호출될 메서드 (예: 초기화)
+  Start() { }
 
-    // 매 프레임 업데이트되는 메서드
-    LateUpdate() { }
+  // 매 프레임 업데이트되는 메서드
+  Update() { }
 
-    OnDestroy() { }
+  // 매 프레임 업데이트되는 메서드
+  LateUpdate() { }
 
-    OnLoad(image) { }
+  OnDestroy() { }
 
-    /**
-     * error 발생시 호출되는 함수
-     * error.title : 에러 제목
-     * error.message : 에러 메시지
-     * @param {*} error 
-     */
-    OnError(error) { }
+  OnLoad(image) { }
 
-    OnClick() {
-        return false
-    }
+  /**
+   * error 발생시 호출되는 함수
+   * error.title : 에러 제목
+   * error.message : 에러 메시지
+   * @param {*} error 
+   */
+  OnError(error) { }
+
+  OnClick() {
+    return false
+  }
 }
 
 export class GameObject extends GameEvent {
@@ -175,7 +175,7 @@ class Transform {
     const dy = targetPosition.y - this.position.y;
     // 드론의 앞부분(위쪽)이 타겟을 향하도록 하기 위해 0도로 설정
     this.rotation = Math.atan2(dy, dx) * Transform.rad2deg;
-}
+  }
 
   Distance(targetPosition) {
     const dx = targetPosition.x - this.position.x;
@@ -281,179 +281,186 @@ class Physics {
  * 오브젝트에 할당되는 이미지 리소스를 관리하는 클래스
  */
 class GameResource {
-    constructor(gameObject) {
-        this.image = new Image();
-        this.gameObject = gameObject;
+  constructor(gameObject) {
+    this.image = new Image();
+    this.gameObject = gameObject;
 
-        this.image.onload = () => {
-            console.log(`[이미지 로드 완료] ${this.image.src}`);
-            this.gameObject.OnLoad(this.image);
-        };
-        this.image.onerror = () => {
-            console.trace(`[이미지 로드 실패] ${this.image.src}`);
-            const error = Util.ErrorFormat("이미지 로드 실패", this.image.src, {image: this.image})
-            this.gameObject.OnError(error);
-        };
+    this.image.onload = () => {
+      console.log(`[이미지 로드 완료] ${this.image.src}`);
+      this.gameObject.OnLoad(this.image);
+    };
+    this.image.onerror = () => {
+      console.trace(`[이미지 로드 실패] ${this.image.src}`);
+      const error = Util.ErrorFormat("이미지 로드 실패", this.image.src, { image: this.image })
+      this.gameObject.OnError(error);
+    };
+  }
+
+  // 이미지를 캔버스에 그리는 메서드
+  draw(ctx) {
+
+    const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
+
+    this.size = {
+      x: this.gameObject.transform.scale.x * this.image.width,
+      y: this.gameObject.transform.scale.y * this.image.height
     }
 
-    // 이미지를 캔버스에 그리는 메서드
-    draw(ctx) {
-        
-        const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
-
-        this.size = {
-            x: this.gameObject.transform.scale.x * this.image.width,
-            y: this.gameObject.transform.scale.y * this.image.height
-        }
-
-        const pivot = {
-            x: this.gameObject.transform.position.x,
-            y: this.gameObject.transform.position.y,
-        }
-
-        // 캔버스 상태 저장
-        ctx.save();
-
-        // 회전의 중심을 이미지의 중심으로 설정
-        ctx.translate(pivot.x, pivot.y);
-        ctx.rotate(radians);
-        ctx.translate(
-        -this.size.x * this.gameObject.transform.anchor.x,
-        -this.size.y * this.gameObject.transform.anchor.y
-        );
-
-        ctx.drawImage(this.image,
-        0, 0, this.image.width, this.image.height,
-        0, 0, this.size.x, this.size.y);
-
-        // 캔버스 상태 복원
-        ctx.restore();
+    const pivot = {
+      x: this.gameObject.transform.position.x,
+      y: this.gameObject.transform.position.y,
     }
+
+    // 캔버스 상태 저장
+    ctx.save();
+
+    // 회전의 중심을 이미지의 중심으로 설정
+    ctx.translate(pivot.x, pivot.y);
+    ctx.rotate(radians);
+    ctx.translate(
+      -this.size.x * this.gameObject.transform.anchor.x,
+      -this.size.y * this.gameObject.transform.anchor.y
+    );
+
+    ctx.drawImage(this.image,
+      0, 0, this.image.width, this.image.height,
+      0, 0, this.size.x, this.size.y);
+
+    // 캔버스 상태 복원
+    ctx.restore();
+  }
 }
 
 export class GameLoop {
-    constructor(canvas, ctx) {
-        this.canvas = canvas;
-        this.ctx = ctx;
+  constructor(canvas, ctx) {
+    this.canvas = canvas;
+    this.ctx = ctx;
 
-        if (GameLoop.instance) {
-            return GameLoop.instance;
-        }
-
-        this.isRunning = false; // 게임 루프가 실행 중인지 여부
-        this.objects = [];
-        this.destroyedObjects = [];
-        this.newObjects = [];
-
-        GameLoop.instance = this;
-        GameLoop.instance.start();
-
-        canvas.addEventListener("click", this.onClickCanvas);
+    if (GameLoop.instance) {
+      return GameLoop.instance;
     }
 
-    /**
-     * 싱클톤 인스턴스 반환 함수
-     */
-    static Instance() {
-        if (!GameLoop.instance) {
-            GameLoop.instance = new GameLoop();
-            GameLoop.instance.Initialize();
-        }
-        return GameLoop.instance;
+    this.isRunning = false; // 게임 루프가 실행 중인지 여부
+    this.objects = [];
+    this.destroyedObjects = [];
+    this.newObjects = [];
+
+    GameLoop.instance = this;
+    GameLoop.instance.start();
+  
+    canvas.addEventListener("click", this.onClickCanvas);
+  }
+
+  /**
+   * 싱클톤 인스턴스 반환 함수
+   */
+  static Instance() {
+    if (!GameLoop.instance) {
+      GameLoop.instance = new GameLoop();
+      GameLoop.instance.Initialize();
     }
+    return GameLoop.instance;
+  }
 
-    /**
-     * 싱클톤 초기화 함수
-     */
-    Initialize() { }
+  /**
+   * 싱클톤 초기화 함수
+   */
+  Initialize() { }
 
-    static AddObject(object) {
-        if (object instanceof GameObject) {
-            GameLoop.instance.newObjects.push(object);
-        } else {
-            console.error("Object must be an instance of GameEvent");
-        }
+  static AddObject(object) {
+    if (object instanceof GameObject) {
+      GameLoop.instance.newObjects.push(object);
+    } else {
+      console.error("Object must be an instance of GameEvent");
     }
+  }
 
-    static AddDestroyObject(object) {
-        if ( object instanceof GameObject && GameLoop.instance.objects.includes(object)) {
-            GameLoop.instance.destroyedObjects.push(object);
-        } else {
-            console.error("Object must be an instance of GameEvent");
-        }
+  static AddDestroyObject(object) {
+    if (object instanceof GameObject && GameLoop.instance.objects.includes(object)) {
+      GameLoop.instance.destroyedObjects.push(object);
+    } else {
+      console.error("Object must be an instance of GameEvent");
     }
+  }
 
-    start() {
-        if (this.isRunning) return;
+  start() {
+    if (this.isRunning) return;
 
-        this.isRunning = true;
-        this.lastFrameTime = performance.now(); // 게임 시작 시간 설정
-        console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
+    this.isRunning = true;
+    this.lastFrameTime = performance.now(); // 게임 시작 시간 설정
+    console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
 
-        AlertSystem.AddAlert("GameStart", "게임 시작했습니다.");
+    AlertSystem.AddAlert("GameStart", "게임 시작했습니다.");
 
-        this.loop(); // 게임 루프 시작
-    }
+    this.loop(); // 게임 루프 시작
+  }
 
-    stop() {
-        this.isRunning = false;
-    }
+  stop() {
+    this.isRunning = false;
+  }
 
-    loop() {
-        if (!this.isRunning) return;
+  loop() {
+    if (!this.isRunning) return;
 
-        this.backgroundRender(); // 화면 렌더링
-        // 현재 시간 기록
-        const currentTime = performance.now();
-        GameLoop.deltaTime = currentTime - this.lastFrameTime;
+    this.backgroundRender(); // 화면 렌더링
+    // 현재 시간 기록
+    const currentTime = performance.now();
+    GameLoop.deltaTime = currentTime - this.lastFrameTime;
 
-        this.newObjects.forEach((object) => {
-            this.objects.push(object);
-            object.Start();
-        });
-        this.newObjects.length = 0; // 배열 초기화
+    this.newObjects.forEach((object) => {
+      this.objects.push(object);
+      object.Start();
+    });
+    this.newObjects.length = 0; // 배열 초기화
 
-        this.objects.forEach((object) => {
-            object.Update();
-            object.OnDraw(this.ctx);
-            object.InternalLogicUpdate();
-            object.LateUpdate();
-        });
+    this.objects.forEach((object) => {
+      object.Update();
+      object.OnDraw(this.ctx);
+      object.InternalLogicUpdate();
+      object.LateUpdate();
+    });
 
-        this.destroyedObjects.forEach((object) => {
-        let index = this.objects.indexOf(object); // image2의 인덱스를 찾음
-        this.objects.splice(index, 1); // 해당 인덱스의 요소를 제거
-        object.OnDestroy();
-        });
-        this.destroyedObjects.length = 0; // 배열 초기화
+    this.destroyedObjects.forEach((object) => {
+      let index = this.objects.indexOf(object); // image2의 인덱스를 찾음
+      this.objects.splice(index, 1); // 해당 인덱스의 요소를 제거
+      object.OnDestroy();
+    });
+    this.destroyedObjects.length = 0; // 배열 초기화
 
-        this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
-        // requestAnimationFrame을 사용해 다음 프레임을 요청
-        requestAnimationFrame(() => this.loop());
-    }
+    this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
+    // requestAnimationFrame을 사용해 다음 프레임을 요청
+    requestAnimationFrame(() => this.loop());
+  }
 
-    backgroundRender() {
-        // 게임 화면 렌더링 (예: 그리기 작업)
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        Background.Instance().animateBackground();
-    }
+  backgroundRender() {
+    // 게임 화면 렌더링 (예: 그리기 작업)
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    Background.Instance().animateBackground();
+  }
 
-    /**
-     *
-     * canvas 클릭이벤트 처리
-     * @param {event} event
-     */
-    onClickCanvas(event) {
-        const mouseX = event.offsetX;
-        const mouseY = event.offsetY;
+  constructor() {
+    
+  }
+  
 
-        // 클릭한 위치 확인
-        GameLoop.instance.objects.some((object) => {
-        if (object.isOverlapPoint({ x: mouseX, y: mouseY })) {
-            return object.OnClick() === true;
-        }
-        });
-    }
+  
+  /**
+   *
+   * canvas 클릭이벤트 처리
+   * @param {event} event
+   */
+  onClickCanvas(event) {
+   
+    const mouseX = event.offsetX;
+    const mouseY = event.offsetY;
+
+    // 클릭한 위치 확인
+    GameLoop.instance.objects.some((object) => {
+      if (object.isOverlapPoint({ x: mouseX, y: mouseY })) {
+        return object.OnClick() === true;
+      }
+    });
+  }
 }
 // 게임시스템 우주 배경 반영
 export class Background {
