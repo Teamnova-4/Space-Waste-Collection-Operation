@@ -31,16 +31,14 @@
         <button id="repay-debt-btn">빚 갚기</button>
     </div>
 
-    <div id="ui-container">
+    <div id="ui-container" style="display: none;">
         <div id="credit-display" class="credit-left">
             <p>현재 크레딧: <span id="credits">100</span></p>
         </div>
-
-
     </div>
 
     <!-- 기지 업그레이드 (오른쪽 하단) 현석 -->
-    <div id="base-upgrade-container" class="base-right">
+    <div id="base-upgrade-container" class="base-right hidden">
         <h1>함선 업그레이드</h1>
         <div id="base-upgrade">
             <p>방어 레벨: <span id="base-defense-level">1</span></p>
@@ -78,38 +76,34 @@
                 <div class="tab-buttons">
                     <button class="tab-btn active" data-tab="drone-slots">드론 관리</button>
                     <button class="tab-btn" data-tab="drone-shop">드론 상점</button>
+                    <button class="tab-btn" data-tab="drone-upgrade">업그레이드</button>
                 </div>
-                <h2 class="panel-title">드론 관리</h2>
-                <div class="spacer"></div>
             </div>
 
-            <!-- 드론 슬롯 관리 탭 -->
-            <div class="tab-content active" id="drone-slots">
-                <div class="slot-list-container">
-                    <div class="drone-slot-container">
-                        <!-- 드론 슬롯들이 여기에 동적으로 추가됨 -->
+            <div class="panel-body">
+
+                <!-- 드론 슬롯 관리 탭 -->
+                <div class="tab-content active" id="drone-slots">
+                    <div class="slot-list-container">
+                        <div class="drone-slot-container">
+                            <!-- 드론 슬롯들이 여기에 동적으로 추가됨 -->
+                        </div>
+                        <button id="add-slot-btn" class="add-slot-btn">
+                            <span>+</span>
+                            <span>슬롯 추가</span>
+                        </button>
                     </div>
-                    <button id="add-slot-btn" class="add-slot-btn">
-                        <span>+</span>
-                        <span>슬롯 추가</span>
-                    </button>
                 </div>
-            </div>
 
-            <!-- 드론 상점 탭 -->
-            <!-- <div class="tab-content" id="drone-shop">
-                <div class="shop-container"> -->
-            <!-- DroneShop의 droneTypes 기반으로 동적 생성 -->
-            <!-- <div class="drone-item" data-type="basic">
-                        <img src="Resources/drone.png" alt="기본 드론">
-                        <h3>기본 드론</h3>
-                        <p>가격: 500 크레딧</p>
-                        <button class="buy-drone-btn" data-type="basic">구매</button>
-                    </div> -->
-            <!--  TODO : 다른 드론 아이템들 추가 -->
-            <!-- </div> -->
+                <!-- 드론 상점 탭 -->
+                <div class="tab-content" id="drone-shop">
+                    <div class="shop-container">
+
+                    </div>
+                </div>
+            
+            </div>
         </div>
-    </div>
 
     </div>
 
@@ -220,10 +214,9 @@
             resizeCanvas(canvas, ctx);
 
             // spaceStation 의 위치를 캔버스 오른쪽 끝 중간위치로 재조정
-            // 브라우저 창의 너비와 높이 가져오기
-            spaceStation.transform.position.x = window.innerWidth - 300;
-            spaceStation.transform.position.y =  window.innerHeight / 2;
-
+            // 전체 너비에서 패널 너비를 뺀 값이 우주 정거장이 위치할 x 좌표
+            spaceStation.transform.position.x = window.innerWidth - document.getElementById("station-pannel").offsetWidth;
+            spaceStation.transform.position.y = window.innerHeight / 2;
         });
     </script>
 </body>
