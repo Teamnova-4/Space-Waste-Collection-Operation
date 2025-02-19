@@ -239,3 +239,23 @@
    text-align: center;
    margin: 5px 0;
 }
+
+.credit-left {
+    position: absolute;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 5px;
+    color: white;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.coin-icon {
+    width: 40px;
+    height: 24px;
+}
+
+
+
