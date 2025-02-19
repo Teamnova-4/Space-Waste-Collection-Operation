@@ -164,16 +164,19 @@ class Transform {
     }
 
     /**
+     *
      * x, y 좌표를 받아 해당 좌표를 바라보도록 회전 각도를 설정한다.
-     * 특정 좌표를 바라보도록 회전 각도를 설정하는 메서드
+     *
      * @param {{x,y}} targetPosition {x, y} 좌표
-     * dx, dy를 계산하여 현재 위치 this.position와의 각도를 계산한다.
-     * 계산된 각도를 degree로 변환하여 this.rotation에 저장한다.
      */
     LookAt(targetPosition) {
+        // 타겟 위치와 현재 위치의 차이를 구한다.
         const dx = targetPosition.x - this.position.x;
         const dy = targetPosition.y - this.position.y;
+        // Math.atan2(dy, dx) 는 라디안 단위로 값을 반환함으로 이를 도 단위로 변환하려면 Transform.rad2deg를 곱해준다.
+        // Transform.rad2deg = 180 / Math.PI
         this.rotation = Math.atan2(dy, dx) * Transform.rad2deg;
+
     }
 
     Distance(targetPosition) {
@@ -347,6 +350,17 @@ export class GameLoop {
         GameLoop.instance = this;
         GameLoop.instance.start();
 
+        // 우클릭 방지 코드 추가
+        addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+        });
+
+        // 드래그 방지 코드 추가
+        addEventListener('selectstart', (event) => {
+            event.preventDefault();
+        });
+
+        // 클릭 메서드
         canvas.addEventListener("click", this.onClickCanvas);
     }
 
@@ -513,18 +527,9 @@ export class Background {
         // // 캔버스 클리어 후 새로운 배경 그리기
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(
-            this.image,
-            -this.x,
-            0,
-            this.canvas.width,
-            this.canvas.height
-        );
-        this.ctx.drawImage(
-            this.image,
-            this.canvas.width - this.x,
-            0,
-            this.canvas.width,
-            this.canvas.height
-        );
+            this.image, -this.x, 0,
+            this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.image, this.canvas.width - this.x, 0,
+            this.canvas.width, this.canvas.height);
     }
 }

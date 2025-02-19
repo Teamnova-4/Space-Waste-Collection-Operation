@@ -47,7 +47,7 @@
 #ui-container {
     position: absolute;
     top: 20px; /* 원하는 위치에 따라 top, bottom, left, right 등을 설정 */
-    right: 20px; /* 예시: 왼쪽 상단 20px 위치 */
+    right: 320px; /* 예시: 왼쪽 상단 20px 위치 */
     display: flex; /* 가로 배치 */
 }
 

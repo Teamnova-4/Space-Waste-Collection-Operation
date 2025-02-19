@@ -16,6 +16,10 @@ export class EventBase {
 
     }
 
+    UpdateEvent(){
+
+    }
+
     StopEvent() {
 
     }
@@ -77,7 +81,7 @@ export class EventSystem {
      */
     PlayEvent(event){
         this.currentEvent = event;
-        this.StartEvent();
+        this.currentEvent.StartEvent();
     }
 
     /**
@@ -86,5 +90,14 @@ export class EventSystem {
     StopEvent(){
         this.currentEvent.StopEvent();
         this.currentEvent = null;
+    }
+
+    /**
+     * 업데이트 이벤트
+     */
+    UpdateEvent() {
+        if (this.currentEvent !== null){
+            this.currentEvent.UpdateEvent();
+        }
     }
 }
