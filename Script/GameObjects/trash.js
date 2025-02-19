@@ -42,7 +42,6 @@ export class Trash extends GameObject {
     Start() {
         // 이미지 로딩 상태 확인
         this.resource.image.onload = () => this.handleImageLoad();
-
         this.resource.image.onerror = () => {
             console.error("이미지 로드 실패:", this.imageSrc);
         };

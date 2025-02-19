@@ -349,13 +349,14 @@ export class GameLoop {
     // 우클릭 방지 코드 추가
     addEventListener('contextmenu', (event) => {
       event.preventDefault();
-      console.log('우클릭이 감지되었습니다.');
     });
 
     // 드래그 방지 코드 추가
-    addEventListener('dragstart', (event) => {
+    addEventListener('selectstart', (event) => {
       event.preventDefault(); 
     });
+    
+    // 클릭 메서드드
         canvas.addEventListener("click", this.onClickCanvas);
     }
 
