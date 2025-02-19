@@ -65,13 +65,16 @@ export class SpaceStation extends GameObject {
 
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
     Update() {
-        // console.log("spaceStation Update");
+        // TrashFactory의 nearTrashList 정렬 업데이트
+        TrashFactory.Instance().nearTrashList = [...TrashFactory.Instance().trashList].sort(
+            (a, b) => b.transform.position.x - a.transform.position.x
+        );
 
         // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
         // this.transform.rotation += 0;
-        if (TrashFactory.Instance().trashList.length > 0){
+        if (TrashFactory.Instance().nearTrashList.length > 0){
             DroneManager.Instance().getDrones().filter(drone => !drone.isWorking).forEach(drone => { 
-                const trash = TrashFactory.Instance().trashList.shift()
+                const trash = TrashFactory.Instance().nearTrashList.shift();
                 if (trash !== null && trash !== undefined) {
                     drone.StartWork(trash);
                     trash.target(drone);
