@@ -20,6 +20,7 @@
         }
 
     </style>
+    <link rel="stylesheet" href="css/alert.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/layout/canvas.css">
     <link rel="stylesheet" href="css/Upgrade.css">
@@ -28,6 +29,14 @@
 
 <body>
     <script type="module" src="./Script/StructureCode/GameSystem.js"></script>
+    <script type="module" src="./Script/AlertSystem.js"></script>
+    <div id="alertOverlay" class="overlay hidden">
+        <div id="alertBox">
+            <h2 id="alertTitle">알림</h2>
+            <p id="alertMessage">게임 시작!</p>
+            <button id="alertButton">확인</button>
+        </div>
+    </div>
 
     <!-- 빚 정보 UI 추가 -->
     <div id="debt-info">
