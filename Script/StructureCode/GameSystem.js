@@ -432,17 +432,32 @@ export class GameLoop {
    * @param {event} event
    */
   onClickCanvas(event) {
+
+    addEventListener('contextmenu', (event) => {
+      event.preventDefault(); // 기본 우클릭 메뉴 방지
+      console.log('우클릭이 감지되었습니다.');
+      return false;
+    });
+
+    addEventListener('dragstart', (event) => {
+      event.preventDefault(); // 드래그 시작을 막음
+      console.log('드래그가 감지되었습니다.');
+      return false;
+    });
+
     const mouseX = event.offsetX;
     const mouseY = event.offsetY;
 
     // 클릭한 위치 확인
     GameLoop.instance.objects.some((object) => {
       if (object.isOverlapPoint({ x: mouseX, y: mouseY })) {
+        console.log("클릭한 오브젝트: ", object);
         return object.OnClick() === true;
       }
     });
   }
 }
+
 // 게임시스템 우주 배경 반영
 export class Background {
   constructor() {
