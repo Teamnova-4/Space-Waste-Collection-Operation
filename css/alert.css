@@ -50,3 +50,16 @@
     max-width: 200px;
     margin: 15px auto 0; /* 중앙 정렬 */
 }
+
+/* 버튼 호버 효과 */
+#alertButton:hover {
+    background: linear-gradient(45deg, #ff6600, #ff3300);
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* 버튼 클릭 효과 */
+#alertButton:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
