@@ -43,7 +43,9 @@ export class Drone extends GameObject {
         this.transform.scale.y = 0.5; // 크기 설정
         this.transform.anchor.x = 0.5; // 앵커 설정
         this.transform.anchor.y = 0.5; // 앵커 설정
-        this.transform.rotation = 0; // 초기 회전 값
+        this.transform.rotation = 180; // 초기 회전 값
+    
+
     }
 
     Update() {
@@ -51,17 +53,13 @@ export class Drone extends GameObject {
         if (this.isWorking) {
             // 드론 현재 위치값을 바탕으로 타겟 위치값을 바라보도록 회전
             this.transform.LookAt(this.targetPosition);
-            // transform 의 방향을 기반으로 속도를 정하는 메서드
             this.physics.setVelocityInDirection({ x: this.speed, y: this.speed });
-
             const distance = this.transform.Distance(this.targetPosition);
 
             if (!this.isReturning && distance < this.catchDistance) {
                 this.targetTrash.catch(this);
                 this.Returning();
-
             } else if (this.isReturning && distance < this.catchDistance) {
-
                 this.DestructionTrash();
             }
         }
