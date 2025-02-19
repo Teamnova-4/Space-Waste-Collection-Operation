@@ -17,6 +17,7 @@ export class DroneSlotView {
    * @param {Function} onSellClick - 판매 버튼 클릭 시 실행할 콜백 함수
    */
   renderSlots(slots, onSlotClick, onSellClick) {
+    
     if (!this.container) {
       console.error("드론 슬롯 컨테이너를 찾을 수 없습니다.");
       return;

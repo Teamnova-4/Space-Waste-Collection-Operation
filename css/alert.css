@@ -33,3 +33,20 @@
     margin: 10px 0;
 }
 .hidden { display: none; }
+
+#alertButton {
+    background: linear-gradient(45deg, #ffcc00, #ff6600); /* 그라디언트 효과 */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 15px auto 0; /* 중앙 정렬 */
+}
