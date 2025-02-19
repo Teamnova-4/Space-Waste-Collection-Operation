@@ -39,242 +39,240 @@ export class GameEvent {
 }
 
 export class GameObject extends GameEvent {
-  constructor() {
-    super();
+    constructor() {
+        super();
 
-    this.transform = new Transform(this);
-    this.resource = new GameResource(this);
-    this.physics = new Physics(this);
-    GameLoop.AddObject(this);
-  }
-
-  Destroy() {
-    GameLoop.AddDestroyObject(this);
-  }
-
-  static Destroy(gameObject) {
-    if (gameObject instanceof GameObject) {
-      gameObject.Destroy();
+        this.transform = new Transform(this);
+        this.resource = new GameResource(this);
+        this.physics = new Physics(this);
+        GameLoop.AddObject(this);
     }
-  }
 
-  /**
-   * 그리기 함수
-   * Update와 LateUpdate사이에서 호출됨
-   */
-  OnDraw(ctx) {
+    Destroy() {
+        GameLoop.AddDestroyObject(this);
+    }
 
-    this.resource.draw(ctx);
+    static Destroy(gameObject) {
+        if (gameObject instanceof GameObject) {
+        gameObject.Destroy();
+        }
+    }
 
-  }
+    /**
+     * 그리기 함수
+     * Update와 LateUpdate사이에서 호출됨
+     */
+    OnDraw(ctx) {
 
-  /**
-   * 겹치는 부분이 있는지 확인
-   * @param {*} point
-   * @returns
-   */
-  isOverlapPoint(point) {
-    const [p1, p2, p3, p4] = this.physics.corners;
+        this.resource.draw(ctx);
 
-    const d1 =
-      (point.x - p2.x) * (p1.y - p2.y) - (point.y - p2.y) * (p1.x - p2.x);
-    const d2 =
-      (point.x - p3.x) * (p2.y - p3.y) - (point.y - p3.y) * (p2.x - p3.x);
-    const d3 =
-      (point.x - p4.x) * (p3.y - p4.y) - (point.y - p4.y) * (p3.x - p4.x);
-    const d4 =
-      (point.x - p1.x) * (p4.y - p1.y) - (point.y - p1.y) * (p4.x - p1.x);
+    }
 
-    // Point is inside if all signs are the same (all positive or all negative)
-    const hasNeg = d1 < 0 || d2 < 0 || d3 < 0 || d4 < 0;
-    const hasPos = d1 > 0 || d2 > 0 || d3 > 0 || d4 > 0;
+    /**
+     * 겹치는 부분이 있는지 확인
+     * @param {*} point
+     * @returns
+     */
+    isOverlapPoint(point) {
+        const [p1, p2, p3, p4] = this.physics.corners;
 
-    return !(hasNeg && hasPos);
-  }
+        const d1 =
+        (point.x - p2.x) * (p1.y - p2.y) - (point.y - p2.y) * (p1.x - p2.x);
+        const d2 =
+        (point.x - p3.x) * (p2.y - p3.y) - (point.y - p3.y) * (p2.x - p3.x);
+        const d3 =
+        (point.x - p4.x) * (p3.y - p4.y) - (point.y - p4.y) * (p3.x - p4.x);
+        const d4 =
+        (point.x - p1.x) * (p4.y - p1.y) - (point.y - p1.y) * (p4.x - p1.x);
 
-  InternalLogicUpdate() {
-    this.physics.Update();
-    this.transform.Update();
-  }
+        // Point is inside if all signs are the same (all positive or all negative)
+        const hasNeg = d1 < 0 || d2 < 0 || d3 < 0 || d4 < 0;
+        const hasPos = d1 > 0 || d2 > 0 || d3 > 0 || d4 > 0;
+
+        return !(hasNeg && hasPos);
+    }
+
+    InternalLogicUpdate() {
+        this.physics.Update();
+        this.transform.Update();
+    }
 }
 
 /**
  * 오브젝트의 위치, 회전, 크기를 관리하는 클래스
  */
 class Transform {
-  constructor(gameObject) {
-    Transform.rad2deg = 180 / Math.PI; // 라디안을 도(degree)로 변환
-    Transform.deg2rad = Math.PI / 180; // 도(degree)를 라디안으로 변환
+    constructor(gameObject) {
+        Transform.rad2deg = 180 / Math.PI; // 라디안을 도(degree)로 변환
+        Transform.deg2rad = Math.PI / 180; // 도(degree)를 라디안으로 변환
 
-    this.gameObject = gameObject;
-    this.anchor = { x: 0.5, y: 0.5 }; // 회전 고정점
-    this.position = { x: 0, y: 0 }; // 위치
-    this.rotation = 0; // 회전 각도 (도 단위)
-    this.scale = { x: 1, y: 1 }; // 크기
-  }
-
-  Update() {
-    this.calculateRotation();
-  }
-
-  calculateRotation() {
-    if (this.rotation > 360) {
-      this.rotation -= 360;
-    } else if (this.rotation < 0) {
-      this.rotation += 360;
+        this.gameObject = gameObject;
+        this.anchor = { x: 0.5, y: 0.5 }; // 회전 고정점
+        this.position = { x: 0, y: 0 }; // 위치
+        this.rotation = 0; // 회전 각도 (도 단위)
+        this.scale = { x: 1, y: 1 }; // 크기
     }
-  }
-  // 선형 보간 (Lerp) 함수
-  lerp(start, end, t) {
-    return start + (end - start) * t;
-  }
-  // Ease-in Ease-out 함수
-  easeInOut(t) {
-    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-  }
 
-  /**
-   * 이동 회전 동시에 부드럽게 보간
-   *
-   * */
-  moveWithRotationEase(targetPosition, speed, progress) {
-    const startPosition = { x: this.position.x, y: this.position.y };
-    const startRotation = this.rotation;
-
-    // 목표 위치와 회전 각도 계산
-    const dx = targetPosition.x - startPosition.x;
-    const dy = targetPosition.y - startPosition.y;
-    const targetRotation = Math.atan2(dy, dx);
-
-    if (progress < 1.0) {
-      // Ease-in, Ease-out으로 부드럽게 회전
-      const t = progress;
-      const easedT = this.easeInOut(t);
-      this.rotation = this.lerp(startRotation, targetRotation, easedT);
-
-      // 부드러운 이동
-      const movementSpeed = speed * progress; // 이동 거리 계산
-      this.position.x += movementSpeed * Math.cos(this.rotation);
-      this.position.y += movementSpeed * Math.sin(this.rotation);
-    } else {
-      // 목표 위치에 정확히 도달
-      this.position = targetPosition;
-      this.rotation = targetRotation;
+    Update() {
+        this.calculateRotation();
     }
-  }
 
-  /**
-   * x, y 좌표를 받아 해당 좌표를 바라보도록 회전 각도를 설정한다.
-   * 특정 좌표를 바라보도록 회전 각도를 설정하는 메서드
-   * @param {{x,y}} targetPosition {x, y} 좌표
-   * dx, dy를 계산하여 현재 위치 this.position와의 각도를 계산한다.
-   * 계산된 각도를 degree로 변환하여 this.rotation에 저장한다.
-   */
-  LookAt(targetPosition) {
-    const dx = targetPosition.x - this.position.x;
-    const dy = targetPosition.y - this.position.y;
-    // 드론의 앞부분(위쪽)이 타겟을 향하도록 하기 위해 0도로 설정
-    this.rotation = Math.atan2(dy, dx) * Transform.rad2deg;
-  }
+    calculateRotation() {
+        if (this.rotation > 360) {
+            this.rotation -= 360;
+        } else if (this.rotation < 0) {
+            this.rotation += 360;
+        }
+    }
+    // 선형 보간 (Lerp) 함수
+    lerp(start, end, t) {
+        return start + (end - start) * t;
+    }
+    // Ease-in Ease-out 함수
+    easeInOut(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
 
-  Distance(targetPosition) {
-    const dx = targetPosition.x - this.position.x;
-    const dy = targetPosition.y - this.position.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
+    /**
+     * 이동 회전 동시에 부드럽게 보간
+     *
+     * */
+    moveWithRotationEase(targetPosition, speed, progress) {
+        const startPosition = { x: this.position.x, y: this.position.y };
+        const startRotation = this.rotation;
+
+        // 목표 위치와 회전 각도 계산
+        const dx = targetPosition.x - startPosition.x;
+        const dy = targetPosition.y - startPosition.y;
+        const targetRotation = Math.atan2(dy, dx);
+
+        if (progress < 1.0) {
+        // Ease-in, Ease-out으로 부드럽게 회전
+        const t = progress;
+        const easedT = this.easeInOut(t);
+        this.rotation = this.lerp(startRotation, targetRotation, easedT);
+
+        // 부드러운 이동
+        const movementSpeed = speed * progress; // 이동 거리 계산
+        this.position.x += movementSpeed * Math.cos(this.rotation);
+        this.position.y += movementSpeed * Math.sin(this.rotation);
+        } else {
+        // 목표 위치에 정확히 도달
+        this.position = targetPosition;
+        this.rotation = targetRotation;
+        }
+    }
+
+    /**
+     *
+     * x, y 좌표를 받아 해당 좌표를 바라보도록 회전 각도를 설정한다.
+     *
+     * @param {{x,y}} targetPosition {x, y} 좌표
+     */
+    LookAt(targetPosition) {
+        const dx = targetPosition.x - this.position.x;
+        const dy = targetPosition.y - this.position.y;
+        this.rotation = Math.atan2(dy, dx) * Transform.rad2deg;
+    }
+
+    Distance(targetPosition) {
+        const dx = targetPosition.x - this.position.x;
+        const dy = targetPosition.y - this.position.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 }
 
 /**
  * 오브젝트의 물리적 속성을 관리하는 클래스
  */
 class Physics {
-  constructor(gameObject) {
-    this.gameObject = gameObject;
-    // 오브젝트의 이동속도
-    this.velocity = { x: 0, y: 0 };
-    // 오브젝트의 가속도
-    this.acceleration = { x: 0, y: 0 };
-    // 오브젝트 충돌체
-    this.collider = { offset: { x: 0, y: 0 }, size: { x: 1, y: 1 } };
-    // [외부접근 하면 안됨] 충돌체의 네 모서리 좌표
-    this.corners = [];
-  }
+    constructor(gameObject) {
+        this.gameObject = gameObject;
+        // 오브젝트의 이동속도
+        this.velocity = { x: 0, y: 0 };
+        // 오브젝트의 가속도
+        this.acceleration = { x: 0, y: 0 };
+        // 오브젝트 충돌체
+        this.collider = { offset: { x: 0, y: 0 }, size: { x: 1, y: 1 } };
+        // [외부접근 하면 안됨] 충돌체의 네 모서리 좌표
+        this.corners = [];
+    }
 
-  Update() {
-    this.OnCalculatePhysics();
-    this.updateCollider();
-  }
+    Update() {
+        this.OnCalculatePhysics();
+        this.updateCollider();
+    }
 
-  /**
-   * 물리계산 함수
-   * Update와 LateUpdate사이에서 호출됨
-   */
-  OnCalculatePhysics() {
-    this.gameObject.transform.position.x +=
-      this.velocity.x * GameLoop.deltaTime;
-    this.gameObject.transform.position.y +=
-      this.velocity.y * GameLoop.deltaTime;
+    /**
+     * 물리계산 함수
+     * Update와 LateUpdate사이에서 호출됨
+     */
+    OnCalculatePhysics() {
+        this.gameObject.transform.position.x +=
+        this.velocity.x * GameLoop.deltaTime;
+        this.gameObject.transform.position.y +=
+        this.velocity.y * GameLoop.deltaTime;
 
-    this.velocity.x += this.acceleration.x * GameLoop.deltaTime;
-    this.velocity.y += this.acceleration.y * GameLoop.deltaTime;
-  }
+        this.velocity.x += this.acceleration.x * GameLoop.deltaTime;
+        this.velocity.y += this.acceleration.y * GameLoop.deltaTime;
+    }
 
-  // 오브젝트의 충돌체를 업데이트하는 메서드
-  updateCollider() {
+    // 오브젝트의 충돌체를 업데이트하는 메서드
+    updateCollider() {
 
-    // 리소스 크기가 정의되지 않았을 경우 에러 출력 - 현석
+        // 리소스 크기가 정의되지 않았을 경우 에러 출력 - 현석
 
-    const size = this.gameObject.resource.size;
-    const pivot = this.gameObject.transform.position;
-    const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
+        const size = this.gameObject.resource.size;
+        const pivot = this.gameObject.transform.position;
+        const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
-    const corners = [
-      { x: this.collider.offset.x, y: this.collider.offset.y },
-      {
-        x: this.collider.offset.x + size.x * this.collider.size.x,
-        y: this.collider.offset.y,
-      },
-      {
-        x: this.collider.offset.x + size.x * this.collider.size.x,
-        y: this.collider.offset.y + size.y * this.collider.size.y,
-      },
-      {
-        x: this.collider.offset.x,
-        y: this.collider.offset.y + size.y * this.collider.size.y,
-      },
-    ];
+        const corners = [
+        { x: this.collider.offset.x, y: this.collider.offset.y },
+        {
+            x: this.collider.offset.x + size.x * this.collider.size.x,
+            y: this.collider.offset.y,
+        },
+        {
+            x: this.collider.offset.x + size.x * this.collider.size.x,
+            y: this.collider.offset.y + size.y * this.collider.size.y,
+        },
+        {
+            x: this.collider.offset.x,
+            y: this.collider.offset.y + size.y * this.collider.size.y,
+        },
+        ];
 
-    //corners회전 계산
-    this.corners = corners.map((corner) => {
-      const dx = corner.x - size.x * this.gameObject.transform.anchor.x;
-      const dy = corner.y - size.y * this.gameObject.transform.anchor.y;
-      const rotatedX =
-        pivot.x + dx * Math.cos(radians) - dy * Math.sin(radians);
-      const rotatedY =
-        pivot.y + dx * Math.sin(radians) + dy * Math.cos(radians);
-      return { x: rotatedX, y: rotatedY };
-    });
-  }
+        //corners회전 계산
+        this.corners = corners.map((corner) => {
+        const dx = corner.x - size.x * this.gameObject.transform.anchor.x;
+        const dy = corner.y - size.y * this.gameObject.transform.anchor.y;
+        const rotatedX =
+            pivot.x + dx * Math.cos(radians) - dy * Math.sin(radians);
+        const rotatedY =
+            pivot.y + dx * Math.sin(radians) + dy * Math.cos(radians);
+        return { x: rotatedX, y: rotatedY };
+        });
+    }
 
-  /**
-   * transform 의 방향을 기반으로 속도를 정하는 메서드
-   * @param {{x, y}} velocity {x, y} 로 이루언진 velocity
-   */
-  setVelocityInDirection(velocity) {
-    const radians = this.gameObject.transform.rotation * Transform.deg2rad;
-    this.velocity.x = Math.cos(radians) * velocity.x;
-    this.velocity.y = Math.sin(radians) * velocity.y;
-  }
+    /**
+     * transform 의 방향을 기반으로 속도를 정하는 메서드
+     * @param {{x, y}} velocity {x, y} 로 이루언진 velocity
+     */
+    setVelocityInDirection(velocity) {
+        const radians = this.gameObject.transform.rotation * Transform.deg2rad;
+        this.velocity.x = Math.cos(radians) * velocity.x;
+        this.velocity.y = Math.sin(radians) * velocity.y;
+    }
 
-  /**
-   * transform의 방향을 기반으로 가속도를 정하는 메서드
-   * @param {{x, y}} acceleration {x, y} 로 이루언진 acceleration
-   */
-  setAccelerationInDirection(acceleration) {
-    const radians = this.gameObject.transform.rotation * Transform.deg2rad;
-    this.acceleration.x = Math.cos(radians) * acceleration.x;
-    this.acceleration.y = Math.sin(radians) * acceleration.y;
-  }
+    /**
+     * transform의 방향을 기반으로 가속도를 정하는 메서드
+     * @param {{x, y}} acceleration {x, y} 로 이루언진 acceleration
+     */
+    setAccelerationInDirection(acceleration) {
+        const radians = this.gameObject.transform.rotation * Transform.deg2rad;
+        this.acceleration.x = Math.cos(radians) * acceleration.x;
+        this.acceleration.y = Math.sin(radians) * acceleration.y;
+    }
 }
 
 /**
@@ -332,33 +330,32 @@ class GameResource {
 }
 
 export class GameLoop {
-  constructor(canvas, ctx) {
-    this.canvas = canvas;
-    this.ctx = ctx;
+    constructor(canvas, ctx) {
+        this.canvas = canvas;
+        this.ctx = ctx;
 
-    if (GameLoop.instance) {
-      return GameLoop.instance;
-    }
+        if (GameLoop.instance) {
+            return GameLoop.instance;
+        }
 
-    this.isRunning = false; // 게임 루프가 실행 중인지 여부
-    this.objects = [];
-    this.destroyedObjects = [];
-    this.newObjects = [];
+        this.isRunning = false; // 게임 루프가 실행 중인지 여부
+        this.objects = [];
+        this.destroyedObjects = [];
+        this.newObjects = [];
 
-    GameLoop.instance = this;
-    GameLoop.instance.start();
+        GameLoop.instance = this;
+        GameLoop.instance.start();
 
     // 우클릭 방지 코드 추가
     addEventListener('contextmenu', (event) => {
       event.preventDefault();
-      console.log('우클릭이 감지되었습니다.');
     });
 
     // 드래그 방지 코드 추가
     addEventListener('selectstart', (event) => {
       event.preventDefault(); 
-      console.log('텍스트 선택이 감지 되었습니다');
     });
+
 
     // 클릭 메서드
     canvas.addEventListener("click", this.onClickCanvas);
@@ -370,177 +367,175 @@ export class GameLoop {
   static Instance() {
     if (!GameLoop.instance) {
       GameLoop.instance = new GameLoop();
-      GameLoop.instance.Initialize();
+            GameLoop.instance.Initialize();
+        }
+        return GameLoop.instance;
     }
-    return GameLoop.instance;
-  }
 
-  /**
-   * 싱클톤 초기화 함수
-   */
-  Initialize() { }
+    /**
+     * 싱클톤 초기화 함수
+     */
+    Initialize() { }
 
-  static AddObject(object) {
-    if (object instanceof GameObject) {
-      GameLoop.instance.newObjects.push(object);
-    } else {
-      console.error("Object must be an instance of GameEvent");
+    static AddObject(object) {
+        if (object instanceof GameObject) {
+            GameLoop.instance.newObjects.push(object);
+        } else {
+            console.error("Object must be an instance of GameEvent");
+        }
     }
-  }
 
-  static AddDestroyObject(object) {
-    if (object instanceof GameObject && GameLoop.instance.objects.includes(object)) {
-      GameLoop.instance.destroyedObjects.push(object);
-    } else {
-      console.error("Object must be an instance of GameEvent");
+    static AddDestroyObject(object) {
+        if ( object instanceof GameObject && GameLoop.instance.objects.includes(object)) {
+            GameLoop.instance.destroyedObjects.push(object);
+        } else {
+            console.error("Object must be an instance of GameEvent");
+        }
     }
-  }
 
-  start() {
-    if (this.isRunning) return;
+    start() {
+        if (this.isRunning) return;
 
-    this.isRunning = true;
-    this.lastFrameTime = performance.now(); // 게임 시작 시간 설정
-    console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
+        this.isRunning = true;
+        this.lastFrameTime = performance.now(); // 게임 시작 시간 설정
+        console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
 
-    AlertSystem.AddAlert("GameStart", "게임 시작했습니다.");
+        AlertSystem.AddAlert("GameStart", "게임 시작했습니다.");
 
-    this.loop(); // 게임 루프 시작
-  }
+        this.loop(); // 게임 루프 시작
+    }
 
-  stop() {
-    this.isRunning = false;
-  }
+    stop() {
+        this.isRunning = false;
+    }
 
-  loop() {
-    if (!this.isRunning) return;
+    loop() {
+        if (!this.isRunning) return;
 
-    this.backgroundRender(); // 화면 렌더링
-    // 현재 시간 기록
-    const currentTime = performance.now();
-    GameLoop.deltaTime = currentTime - this.lastFrameTime;
+        this.backgroundRender(); // 화면 렌더링
+        // 현재 시간 기록
+        const currentTime = performance.now();
+        GameLoop.deltaTime = currentTime - this.lastFrameTime;
 
-    this.newObjects.forEach((object) => {
-      this.objects.push(object);
-      object.Start();
-    });
-    this.newObjects.length = 0; // 배열 초기화
+        this.newObjects.forEach((object) => {
+            this.objects.push(object);
+            object.Start();
+        });
+        this.newObjects.length = 0; // 배열 초기화
 
-    this.objects.forEach((object) => {
-      object.Update();
-      object.OnDraw(this.ctx);
-      object.InternalLogicUpdate();
-      object.LateUpdate();
-    });
+        this.objects.forEach((object) => {
+            object.Update();
+            object.OnDraw(this.ctx);
+            object.InternalLogicUpdate();
+            object.LateUpdate();
+        });
 
-    this.destroyedObjects.forEach((object) => {
-      let index = this.objects.indexOf(object); // image2의 인덱스를 찾음
-      this.objects.splice(index, 1); // 해당 인덱스의 요소를 제거
-      object.OnDestroy();
-    });
-    this.destroyedObjects.length = 0; // 배열 초기화
+        this.destroyedObjects.forEach((object) => {
+        let index = this.objects.indexOf(object); // image2의 인덱스를 찾음
+        this.objects.splice(index, 1); // 해당 인덱스의 요소를 제거
+        object.OnDestroy();
+        });
+        this.destroyedObjects.length = 0; // 배열 초기화
 
-    this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
-    // requestAnimationFrame을 사용해 다음 프레임을 요청
-    requestAnimationFrame(() => this.loop());
-  }
+        this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
+        // requestAnimationFrame을 사용해 다음 프레임을 요청
+        requestAnimationFrame(() => this.loop());
+    }
 
-  backgroundRender() {
-    // 게임 화면 렌더링 (예: 그리기 작업)
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    Background.Instance().animateBackground();
-  }
+    backgroundRender() {
+        // 게임 화면 렌더링 (예: 그리기 작업)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        Background.Instance().animateBackground();
+    }
 
+    /**
+     *
+     * canvas 클릭이벤트 처리
+     * @param {event} event
+     */
+    onClickCanvas(event) {
+        const mouseX = event.offsetX;
+        const mouseY = event.offsetY;
 
-  /**
-   *
-   * canvas 클릭이벤트 처리
-   * @param {event} event
-   */
-  onClickCanvas(event) {
-
-    const mouseX = event.offsetX;
-    const mouseY = event.offsetY;
-
-    // 클릭한 위치 확인
-    GameLoop.instance.objects.some((object) => {
-      if (object.isOverlapPoint({ x: mouseX, y: mouseY })) {
-        return object.OnClick() === true;
-      }
-    });
-  }
+        // 클릭한 위치 확인
+        GameLoop.instance.objects.some((object) => {
+        if (object.isOverlapPoint({ x: mouseX, y: mouseY })) {
+            return object.OnClick() === true;
+        }
+        });
+    }
 }
 // 게임시스템 우주 배경 반영
 export class Background {
-  constructor() {
-    if (Background.instance) {
-      return Background.instance;
+    constructor() {
+        if (Background.instance) {
+            return Background.instance;
+        }
+
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.image = new Image();
+        this.image.src = "Resources/BackGround.png";
+        this.speed = 0.01;
+        this.x = 0; // 배경의 초기 위치
+        this.isRunning = false;
+
+        this.Initialize();
+        Background.instance = this;
     }
 
-    this.canvas = canvas;
-    this.ctx = ctx;
-    this.image = new Image();
-    this.image.src = "Resources/BackGround.png";
-    this.speed = 0.01;
-    this.x = 0; // 배경의 초기 위치
-    this.isRunning = false;
-
-    this.Initialize();
-    Background.instance = this;
-  }
-
-  /**
-   * 싱클톤 인스턴스 반환 함수
-   */
-  static Instance() {
-    if (!Background.instance) {
-      Background.instance = new Background();
-      Background.instance.Initialize();
-    }
-    return Background.instance;
-  }
-
-  /**
-   * 싱클톤 초기화 함수
-   */
-  Initialize() { }
-
-  start() {
-    if (this.isRunning) return;
-    this.isRunning = true;
-    this.animateBackground();
-  }
-
-  stop() {
-    this.isRunning = false;
-    cancelAnimationFrame(this.animationId);
-  }
-
-  animateBackground() {
-    // GameSystem.backgroundRender();
-    if (!this.isRunning) return;
-
-    // // 배경 위치 업데이트 (왼쪽에서 오른쪽으로 이동)
-    this.x += this.speed;
-    if (this.x >= this.canvas.width) {
-      this.x = 0; // 화면 끝에 도달하면 처음으로 되돌리기
+    /**
+     * 싱클톤 인스턴스 반환 함수
+     */
+    static Instance() {
+        if (!Background.instance) {
+            Background.instance = new Background();
+            Background.instance.Initialize();
+        }
+        return Background.instance;
     }
 
-    // // 캔버스 클리어 후 새로운 배경 그리기
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.drawImage(
-      this.image,
-      -this.x,
-      0,
-      this.canvas.width,
-      this.canvas.height
-    );
-    this.ctx.drawImage(
-      this.image,
-      this.canvas.width - this.x,
-      0,
-      this.canvas.width,
-      this.canvas.height
-    );
-  }
+    /**
+     * 싱클톤 초기화 함수
+     */
+    Initialize() { }
+
+    start() {
+        if (this.isRunning) return;
+        this.isRunning = true;
+        this.animateBackground();
+    }
+
+    stop() {
+        this.isRunning = false;
+        cancelAnimationFrame(this.animationId);
+    }
+
+    animateBackground() {
+        // GameSystem.backgroundRender();
+        if (!this.isRunning) return;
+
+        // // 배경 위치 업데이트 (왼쪽에서 오른쪽으로 이동)
+        this.x += this.speed;
+        if (this.x >= this.canvas.width) {
+            this.x = 0; // 화면 끝에 도달하면 처음으로 되돌리기
+        }
+
+        // // 캔버스 클리어 후 새로운 배경 그리기
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(
+        this.image,
+        -this.x,
+        0,
+        this.canvas.width,
+        this.canvas.height
+        );
+        this.ctx.drawImage(
+        this.image,
+        this.canvas.width - this.x,
+        0,
+        this.canvas.width,
+        this.canvas.height
+        );
+    }
 }
