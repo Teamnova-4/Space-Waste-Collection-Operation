@@ -1,5 +1,6 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
 import { SpaceStation } from "../GameObjects/SpaceStation.js";
+import { Util } from "../Util.js";
 
 // 기본 Trash 클래스
 export class Trash extends GameObject {
@@ -37,17 +38,9 @@ export class Trash extends GameObject {
         // });
         
         // 이미지가 로드된 후에 scale 계산
-        this.transform.scale.x = this.width / this.resource.image.width;
-        this.transform.scale.y = this.height / this.resource.image.height;
     }
 
     Start() {
-        // 이미지 로딩 상태 확인
-        this.resource.image.onload = () => this.handleImageLoad();
-        
-        this.resource.image.onerror = () => {
-            console.error("이미지 로드 실패:", this.imageSrc);
-        };
         
         this.resource.image.src = this.imageSrc;
         // console.log("이미지 로딩 시작:", this.imageSrc);
@@ -93,6 +86,9 @@ export class Trash extends GameObject {
     }
 
     OnLoad(image) {
+        // 이미지 로딩 상태 확인
+        this.transform.scale.x = this.width / this.resource.image.width;
+        this.transform.scale.y = this.height / this.resource.image.height;
     }
 
     /**
@@ -140,7 +136,6 @@ export class Wreck extends Trash {
         // 사진의 크기 정하기
         this.width = 100;
         this.height = 100;
-        console.log("Wreck speed: " + speed + "Wreck 회전: " + randomRum);
     }
     Start() {
         super.Start();

@@ -29,4 +29,12 @@ export class Util {
     static getRandomInt(start, range){
         return start + Math.floor(Math.random() * range);
     }
+
+    static ErrorFormat(title, content, extra){
+        let error = {title: title, content: content};
+        if (extra !== null && extra !== undefined){
+            Object.assign(error, extra);
+        }
+        return error;
+    }
 }

@@ -1,4 +1,5 @@
 import AlertSystem from "../AlertSystem.js";
+import { Util } from "../Util.js";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -23,6 +24,14 @@ export class GameEvent {
     OnDestroy() { }
 
     OnLoad(image) { }
+
+    /**
+     * error 발생시 호출되는 함수
+     * error.title : 에러 제목
+     * error.message : 에러 메시지
+     * @param {*} error 
+     */
+    OnError(error) { }
 
     OnClick() {
         return false
@@ -280,7 +289,8 @@ class GameResource {
         };
         this.image.onerror = () => {
             console.trace(`[이미지 로드 실패] ${this.image.src}`);
-            this.gameObject.OnError(this.image);
+            const error = Util.ErrorFormat("이미지 로드 실패", this.image.src, {image: this.image})
+            this.gameObject.OnError(error);
         };
     }
 
@@ -396,16 +406,16 @@ export class GameLoop {
         GameLoop.deltaTime = currentTime - this.lastFrameTime;
 
         this.newObjects.forEach((object) => {
-        this.objects.push(object);
-        object.Start();
+            this.objects.push(object);
+            object.Start();
         });
         this.newObjects.length = 0; // 배열 초기화
 
         this.objects.forEach((object) => {
-        object.Update();
-        object.OnDraw(this.ctx);
-        object.InternalLogicUpdate();
-        object.LateUpdate();
+            object.Update();
+            object.OnDraw(this.ctx);
+            object.InternalLogicUpdate();
+            object.LateUpdate();
         });
 
         this.destroyedObjects.forEach((object) => {
