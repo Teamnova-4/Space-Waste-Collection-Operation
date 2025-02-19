@@ -40,6 +40,7 @@ export class TrashFactory {
         this.trashInterval = null; // setInterval 참조를 저장할 변수
         this.explosionChance = 1; // 폭발 확률 주기 - 현석
         this.trashList = [];
+        this.nearTrashList = []; // 가까운 쓰레기 리스트
     }
 
     // 우주 쓰레기 생성 시작
