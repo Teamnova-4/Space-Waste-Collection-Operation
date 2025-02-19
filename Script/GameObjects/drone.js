@@ -44,8 +44,6 @@ export class Drone extends GameObject {
         this.transform.anchor.x = 0.5; // 앵커 설정
         this.transform.anchor.y = 0.5; // 앵커 설정
         this.transform.rotation = 180; // 초기 회전 값
-    
-
     }
 
     Update() {
