@@ -25,7 +25,7 @@ export default class AlertSystem{
         this.alertMessage = document.getElementById('alertMessage');
         this.alertButton = document.getElementById('alertButton');
 
-        this.alertBox.onclick = () => {this.CloseAlert()}
+        this.alertButton.onclick = () => {this.CloseAlert()}
     }
 
     /**
