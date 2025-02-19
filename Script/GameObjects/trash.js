@@ -15,7 +15,7 @@ export class Trash extends GameObject {
         this.isExploding = false;
         // 폭발 프레임 - 현석
         this.rotationSpeed = rotationSpeed;
-        // 폭발 이미지 객체 생성 - 현석석
+        // 폭발 이미지 객체 생성 - 현석
         // this.explosionImage = new Image();
         // 폭발 스프라이트 이미지
         // this.explosionImage.src = "../../Resources/explosion.png";
@@ -36,12 +36,17 @@ export class Trash extends GameObject {
         //         y: this.transform.position.y
         //     }
         // });
-        
         // 이미지가 로드된 후에 scale 계산
     }
 
     Start() {
-        
+        // 이미지 로딩 상태 확인
+        this.resource.image.onload = () => this.handleImageLoad();
+
+        this.resource.image.onerror = () => {
+            console.error("이미지 로드 실패:", this.imageSrc);
+        };
+
         this.resource.image.src = this.imageSrc;
         // console.log("이미지 로딩 시작:", this.imageSrc);
         this.transform.position.x = 0;
