@@ -53,5 +53,8 @@ export default class AlertSystem{
     CloseAlert(){
         this.alertOverlay.style.display = "none";
         this.isShowing = false;
+        if (this.alertList.length > 0) {
+            this.ShowAlert()
+        }
     }
 }

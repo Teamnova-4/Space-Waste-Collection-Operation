@@ -1,5 +1,6 @@
-import { AdditionalExpensesEvent } from "./EventList/AdditionalExpensesEvent";
-import { Util } from "./Util";
+import AlertSystem from "./AlertSystem.js";
+import { User } from "./Upgrade.js";
+import { Util } from "./Util.js";
 
 export class EventBase {
 
@@ -71,25 +72,27 @@ export class EventSystem {
     /**
      * 이벤트 하나 뽑는 메서드
      */
-    SelectEvent() {
-        const event = Util.getRandomElement(this.eventList);
+    static SelectEvent() {
+        const event = Util.getRandomElement(EventSystem.Instance().eventList);
         return event;
     }
 
     /**
      * 이벤트 실행 메서드
      */
-    PlayEvent(event){
-        this.currentEvent = event;
-        this.currentEvent.StartEvent();
+    static PlayEvent(event){
+
+        EventSystem.Instance().currentEvent = event;
+        AlertSystem.AddAlert(event.eventName, event.eventDescription);
+        EventSystem.Instance().currentEvent.StartEvent();
     }
 
     /**
      * 현제 실행 이벤트 중지 메서드
      */
-    StopEvent(){
-        this.currentEvent.StopEvent();
-        this.currentEvent = null;
+    static StopEvent(){
+        EventSystem.Instance().currentEvent.StopEvent();
+        EventSystem.Instance().currentEvent = null;
     }
 
     /**
@@ -99,5 +102,25 @@ export class EventSystem {
         if (this.currentEvent !== null){
             this.currentEvent.UpdateEvent();
         }
+    }
+}
+
+
+export class AdditionalExpensesEvent extends EventBase {
+    constructor() {
+        super({ 
+            eventName: "추가 비용 발생", 
+            eventDescription: "추가 비용이 발생하여 갑작스러운 지출이 발생합니다.",
+        });
+
+        this.additionalDebt = 100000; // 추가로 발생하는 빚
+    }   
+
+    StartEvent() {
+        User.Instance().credits -= this.additionalDebt;
+    }
+
+    StopEvent() {
+
     }
 }
