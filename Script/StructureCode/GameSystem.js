@@ -9,7 +9,6 @@ export class GameEvent {
       throw new Error("Cannot instantiate abstract class");
     }
 
-    this.deltaTime = 0;
   }
 
   // 이벤트가 시작될 때 호출될 메서드 (예: 초기화)
@@ -329,6 +328,23 @@ class GameResource {
   }
 }
 
+class Loop{
+    constructor(interval, func, order){
+        this.interval = interval;
+        this.func = func;
+        this.order = order;
+        this.currentTime = 0;
+    }
+
+    checkInterval(deltaTime) {
+        this.currentTime += deltaTime;
+        if(this.currentTime >= this.interval){
+            this.currentTime -= this.interval;
+            return true;
+        } 
+        return false;
+    }
+}
 export class GameLoop {
     constructor(canvas, ctx) {
         this.canvas = canvas;
@@ -338,26 +354,8 @@ export class GameLoop {
             return GameLoop.instance;
         }
 
-        this.isRunning = false; // 게임 루프가 실행 중인지 여부
-        this.objects = [];
-        this.destroyedObjects = [];
-        this.newObjects = [];
-
         GameLoop.instance = this;
-        GameLoop.instance.start();
-
-    // 우클릭 방지 코드 추가
-    addEventListener('contextmenu', (event) => {
-      event.preventDefault();
-    });
-
-    // 드래그 방지 코드 추가
-    addEventListener('selectstart', (event) => {
-      event.preventDefault(); 
-    });
-    
-    // 클릭 메서드드
-        canvas.addEventListener("click", this.onClickCanvas);
+        GameLoop.instance.Initialize();
     }
 
     /**
@@ -366,7 +364,6 @@ export class GameLoop {
     static Instance() {
         if (!GameLoop.instance) {
             GameLoop.instance = new GameLoop(canvas, ctx);
-            GameLoop.instance.Initialize();
         }
         return GameLoop.instance;
     }
@@ -374,7 +371,21 @@ export class GameLoop {
     /**
      * 싱클톤 초기화 함수
      */
-    Initialize() { }
+    Initialize() { 
+        this.isRunning = false; // 게임 루프가 실행 중인지 여부
+
+        this.objects = [];
+        this.destroyedObjects = [];
+        this.newObjects = [];
+
+        this.loops = {};
+        this.loopIntervals = {};
+        this.newLoops = [];
+
+        GameLoop.instance.start();
+        GameLoop.playTime = 0;
+        GameLoop.GameSpeed = 1;
+    }
 
     static AddObject(object) {
         if (object instanceof GameObject) {
@@ -392,14 +403,44 @@ export class GameLoop {
         }
     }
 
+    /**
+     * 
+     * order는 양의 정수 (0 이상의값) 이여야함
+     * 
+     * @param {*} object 
+     * @param {*} timeout 
+     * @param {*} order 
+     */
+    static AddLoop(object, timeout, order = 0){
+        if (object instanceof Function) {
+            GameLoop.instance.newLoops.push(new Loop(timeout, object, order));
+        } else {
+            console.error("Object must be an instance of Function");
+        }
+    }
+
     start() {
         if (this.isRunning) return;
 
         this.isRunning = true;
         this.lastFrameTime = performance.now(); // 게임 시작 시간 설정
+        this.gameStartTime = performance.now();
         console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
 
         AlertSystem.AddAlert("GameStart", "게임 시작했습니다.");
+
+        // 우클릭 방지 코드 추가
+        addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+        });
+
+        // 드래그 방지 코드 추가
+        addEventListener('selectstart', (event) => {
+            event.preventDefault(); 
+        });
+        
+        // 클릭 메서드드
+        canvas.addEventListener("click", this.onClickCanvas);
 
         this.loop(); // 게임 루프 시작
     }
@@ -414,7 +455,10 @@ export class GameLoop {
         this.backgroundRender(); // 화면 렌더링
         // 현재 시간 기록
         const currentTime = performance.now();
-        GameLoop.deltaTime = currentTime - this.lastFrameTime;
+        GameLoop.deltaTime = (currentTime - this.lastFrameTime) * GameLoop.GameSpeed;
+        GameLoop.playTime += GameLoop.deltaTime;
+
+        // ============================Start====================== 
 
         this.newObjects.forEach((object) => {
             this.objects.push(object);
@@ -422,19 +466,36 @@ export class GameLoop {
         });
         this.newObjects.length = 0; // 배열 초기화
 
+        this.newLoops.forEach((loop) =>{
+            Util.autoAddToDictList(this.loops, loop.order, loop);
+        });
+        this.newLoops.length = 0; // 배열 초기화
+
+        // ============================Update====================== 
+
         this.objects.forEach((object) => {
             object.Update();
             object.OnDraw(this.ctx);
             object.InternalLogicUpdate();
+
             object.LateUpdate();
         });
 
+        Util.mergeDictToList(this.loops) 
+        .filter((loop)=>loop.checkInterval(GameLoop.deltaTime)) 
+        .forEach((loop)=>loop.func());
+
+        // ============================Destroy====================== 
+
         this.destroyedObjects.forEach((object) => {
-        let index = this.objects.indexOf(object); // image2의 인덱스를 찾음
-        this.objects.splice(index, 1); // 해당 인덱스의 요소를 제거
-        object.OnDestroy();
+            let index = this.objects.indexOf(object); // image2의 인덱스를 찾음
+            this.objects.splice(index, 1); // 해당 인덱스의 요소를 제거
+            object.OnDestroy();
         });
         this.destroyedObjects.length = 0; // 배열 초기화
+
+        //==========================================================
+
 
         this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
         // requestAnimationFrame을 사용해 다음 프레임을 요청

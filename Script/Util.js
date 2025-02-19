@@ -37,4 +37,63 @@ export class Util {
         }
         return error;
     }
+
+    /**
+     * 
+     * {1: ["a", "b"], 2: ["a", "c", "e"]}
+     * 이런식의 사전에
+     * 값을 자동으로 추가해주는 메서드
+     * @param {*} dict 
+     * @param {*} key 
+     * @param {*} value 
+     * @returns 
+     */
+    static autoAddToDictList(dict, key, value){
+        if (!dict[key]){
+            dict[key] = [];
+        } 
+        dict[key].push(value);
+        return dict;
+    }
+
+    /**
+     * 
+     * value는 값 형태도 가능하고 [] 형태도 가능하다.
+     * 
+     * @param {*} dict 
+     * @param {*} value 
+     * @returns 
+     */
+    static autoRemoveInDictList(dict, value){
+        Object.keys(dict).forEach(key => {
+            if (value instanceof Array) {
+                dict[key] = dict[key].filter(item => value.includes(item));
+                if(dict[key].length === 0){
+                    delete dict[key];
+                }
+            } else {
+                dict[key] = dict[key].filter(item => item !== value);
+                if(dict[key].length === 0){
+                    delete dict[key];
+                }
+            }
+        });
+
+        return dict;
+    }
+
+    static mergeAndSortDictToList(dict){
+        return Object.keys(dict)
+        .sort((a,b)=> a - b)
+        .reduce((acc, key)=>{
+            return acc.concat(dict[key]);
+        }, []);
+    }
+
+    static mergeDictToList(dict){
+        return Object.keys(dict)
+        .reduce((acc, key)=>{
+            return acc.concat(dict[key]);
+        }, []);
+    }
 }
