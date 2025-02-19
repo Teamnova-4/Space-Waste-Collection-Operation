@@ -20,9 +20,37 @@ export class Trash extends GameObject {
         // this.explosionImage.src = "../../Resources/explosion.png";
     }
 
+    // 이미지 로드 후 처리를 위한 함수
+    handleImageLoad() {
+        // console.log("이미지 로드 성공:", this.imageSrc);
+        // console.log("이미지 크기:", {
+        //     width: this.resource.image.width,
+        //     height: this.resource.image.height,
+        //     scale: {
+        //         x: this.transform.scale.x,
+        //         y: this.transform.scale.y
+        //     },
+        //     position: {
+        //         x: this.transform.position.x,
+        //         y: this.transform.position.y
+        //     }
+        // });
+        
+        // 이미지가 로드된 후에 scale 계산
+        this.transform.scale.x = this.width / this.resource.image.width;
+        this.transform.scale.y = this.height / this.resource.image.height;
+    }
+
     Start() {
-        // 이미지 경로 매개변수 받은것 적용
+        // 이미지 로딩 상태 확인
+        this.resource.image.onload = () => this.handleImageLoad();
+        
+        this.resource.image.onerror = () => {
+            console.error("이미지 로드 실패:", this.imageSrc);
+        };
+        
         this.resource.image.src = this.imageSrc;
+        // console.log("이미지 로딩 시작:", this.imageSrc);
         this.transform.position.x = 0;
 
         const padding = 50;
@@ -108,25 +136,21 @@ export class Trash extends GameObject {
 export class Wreck extends Trash {
     constructor(speed) {
         const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
-        super(speed, "../../Resources/trash_1.png", 0, randomRum); // 난파선 이미지 20%폭발
+        super(speed, "Resources/trash_1.png", 0, randomRum); // 난파선 이미지 20%폭발
         // 사진의 크기 정하기
         this.width = 100;
         this.height = 100;
         console.log("Wreck speed: " + speed + "Wreck 회전: " + randomRum);
     }
     Start() {
-        // 시작 상속받아서
         super.Start();
-        // 사진의 새로운 크기를 입력합니다.
-        this.transform.scale.x = this.width / this.resource.image.width;
-        this.transform.scale.y = this.height / this.resource.image.height;
     }
 }
 
 export class cementStone extends Trash {
     constructor(speed) {
         const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
-        super(speed, "../../Resources/trash_2.png", 0, randomRum); // 시멘트 돌덩이 이미지 10%폭발
+        super(speed, "Resources/trash_2.png", 0, randomRum); // 시멘트 돌덩이 이미지 10%폭발
         // 사진의 크기 정하기
         this.width = 150;
         this.height = 150;
@@ -134,47 +158,34 @@ export class cementStone extends Trash {
         console.log("cementStone speed: " + speed + "cementStone 회전: " + randomRum);
     }
     Start() {
-        // 시작 상속받아서
         super.Start();
-        // 사진의 새로운 크기를 입력합니다.
-        this.transform.scale.x = this.width / this.resource.image.width;
-        this.transform.scale.y = this.height / this.resource.image.height;
     }
 }
 
 export class WreckPart extends Trash {
     constructor(speed) {
         const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
-        super(speed, "../../Resources/trash_3.png", 0, randomRum); // 난파선 부품 이미지, 30%폭발
+        super(speed, "Resources/trash_3.png", 0, randomRum); // 난파선 부품 이미지, 30%폭발
         // 사진의 크기 정하기
         this.width = 150;
         this.height = 150;
         console.log("WreckPart speed: " + speed + "WreckPart 회전: " + randomRum);
     }
     Start() {
-        // 시작 상속받아서
         super.Start();
-        // 사진의 새로운 크기를 입력합니다.
-        this.transform.scale.x = this.width / this.resource.image.width;
-        this.transform.scale.y = this.height / this.resource.image.height;
-
     }
 }
+
 export class WreckCircle extends Trash {
     constructor(speed) {
         const randomRum = Math.random() * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
-        super(speed, "../../Resources/trash_4.png", 0, randomRum); // 난파선 부품 동그라미 이미지, 25%
+        super(speed, "Resources/trash_4.png", 0, randomRum); // 난파선 부품 동그라미 이미지, 25%
         // 사진의 크기 정하기
         this.width = 150;
         this.height = 150;
         console.log("WreckCircle speed: " + speed + "WreckCircle 회전: " + randomRum);
     }
     Start() {
-        // 시작 상속받아서
         super.Start();
-        // 사진의 새로운 크기를 입력합니다.
-        this.transform.scale.x = this.width / this.resource.image.width;
-        this.transform.scale.y = this.height / this.resource.image.height;
     }
-
 }
