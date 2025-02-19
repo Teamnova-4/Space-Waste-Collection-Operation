@@ -41,6 +41,7 @@ export class GameObject extends GameEvent {
     constructor() {
         super();
 
+        this.layer = 0;
         this.transform = new Transform(this);
         this.resource = new GameResource(this);
         this.physics = new Physics(this);
@@ -477,7 +478,9 @@ export class GameLoop {
 
         // ============================Update====================== 
 
-        this.objects.forEach((object) => {
+        this.objects
+        .sort((objA, objB)=> objA.layer - objB.layer)
+        .forEach((object) => {
             object.Update();
             object.OnDraw(this.ctx);
             object.InternalLogicUpdate();

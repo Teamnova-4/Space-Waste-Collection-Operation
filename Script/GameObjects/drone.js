@@ -10,6 +10,7 @@ export class Drone extends GameObject {
 
         this.id = ++Drone.lastId; // 드론의 id (식별 용)
         this.name = `드론 ${this.id}호`; // 드론 이름
+        this.layer = 5;
 
         if (template) {
             this.type = template.id;
