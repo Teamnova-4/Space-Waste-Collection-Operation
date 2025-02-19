@@ -347,7 +347,17 @@ export class GameLoop {
 
     GameLoop.instance = this;
     GameLoop.instance.start();
-  
+
+    // 우클릭 방지 코드 추가
+    addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+      console.log('우클릭이 감지되었습니다.');
+    });
+
+    // 드래그 방지 코드 추가
+    addEventListener('dragstart', (event) => {
+      event.preventDefault(); 
+    });
     canvas.addEventListener("click", this.onClickCanvas);
   }
 
@@ -438,19 +448,14 @@ export class GameLoop {
     Background.Instance().animateBackground();
   }
 
-  constructor() {
-    
-  }
-  
 
-  
   /**
    *
    * canvas 클릭이벤트 처리
    * @param {event} event
    */
   onClickCanvas(event) {
-   
+
     const mouseX = event.offsetX;
     const mouseY = event.offsetY;
 
