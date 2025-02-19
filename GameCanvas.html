@@ -5,26 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        canvas {
-            display: block;
-            width: 100vw;
-            height: 100vh;
-            z-index: -5;
-        }
-
-    </style>
     <link rel="stylesheet" href="css/alert.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/layout/canvas.css">
     <link rel="stylesheet" href="css/Upgrade.css">
-    <link rel="stylesheet" href="css/layout/station-pannel.css">
 </head>
 
 <body>
@@ -53,7 +36,7 @@
             <p>현재 크레딧: <span id="credits">100</span></p>
         </div>
 
-        
+
     </div>
 
     <!-- 기지 업그레이드 (오른쪽 하단) 현석 -->
@@ -83,14 +66,13 @@
         <p id="rateCount" style="color: white;">현재 생산량 0.5</p>
         <p id="speedCount" style="color: white;">현재 속도 0.5</p>
     </div>
-    
 
 
     <!-- 게임화면, 패널 묶음 -->
     <div id="game-row">
         <canvas id="canvas"></canvas>
 
-        <!-- 하단 드론 관리 패널 -->
+        <!-- 드론 관리 패널 -->
         <div id="station-pannel">
             <div class="panel-header">
                 <div class="tab-buttons">
@@ -136,7 +118,7 @@
     <script type="module">
         import { GameLoop, Background } from "./Script/StructureCode/GameSystem.js";
         // 우주 정거장 추가 - 현석
-        import { SpaceStation } from "./Script/GameObjects/SpaceStation.js";
+        import { SpaceStation } from "./Script/GameObjects/spaceStation.js";
         // 드론 추가 - 현석
         import { Drone } from "./Script/GameObjects/drone.js";
         // 업그레이드 - 현석
@@ -147,7 +129,7 @@
         import { DroneManager } from "./Script/DronePannel/DroneManager.js";
         // 빚 갚기 시스템 추가
         import { DebtSystem } from "./Script/DebtSystem.js";
-        
+
 
         /**
          * 캔버스의 크기를 브라우저 창 크기에 맞게 조정하고, 디바이스 픽셀 비율을 고려하여 스케일을 조정하는 함수.
@@ -183,11 +165,6 @@
         // 초기 캔버스 크기 설정
         resizeCanvas(canvas, ctx);
 
-        // 화면 리사이즈 이벤트에 resizeCanvas 함수 연결
-        window.addEventListener('resize', () => {
-            resizeCanvas(canvas, ctx);
-        });
-
         let trashFactory = null; // 우주 쓰레기 생성 공장
         // 배경 인스턴스 생성
 
@@ -197,11 +174,12 @@
         // 우주 쓰레기 생성
         trashFactory = new TrashFactory();
         trashFactory.startTrashSpawn();
+
         // 게임 루프 인스턴스 생성
         const gameLoop = new GameLoop(canvas, ctx);
 
         // 우주정거장 생성 현석
-        let spaceStation = new SpaceStation();
+        const spaceStation = new SpaceStation();
 
         // 드론 매니저 (화면하단 드론 패널이 실제도 동작하도록 만드는 코드)
         const droneManager = new DroneManager();
@@ -236,6 +214,17 @@
         // 배경 애니메이션 시작
         background.start();
 
+        // 화면 리사이즈시 ui 위치, 크기 조정
+        window.addEventListener('resize', () => {
+            // 캔버스 크기를 현재 브라우저 크기에 맞춤 
+            resizeCanvas(canvas, ctx);
+
+            // spaceStation 의 위치를 캔버스 오른쪽 끝 중간위치로 재조정
+            // 브라우저 창의 너비와 높이 가져오기
+            spaceStation.transform.position.x = window.innerWidth - 300;
+            spaceStation.transform.position.y =  window.innerHeight / 2;
+
+        });
     </script>
 </body>
 
