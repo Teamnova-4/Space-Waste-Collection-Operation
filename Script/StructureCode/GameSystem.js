@@ -163,8 +163,9 @@ class Transform {
   LookAt(targetPosition) {
     const dx = targetPosition.x - this.position.x;
     const dy = targetPosition.y - this.position.y;
+    // 드론의 앞부분(위쪽)이 타겟을 향하도록 하기 위해 0도로 설정
     this.rotation = Math.atan2(dy, dx) * Transform.rad2deg;
-  }
+}
 
   Distance(targetPosition) {
     const dx = targetPosition.x - this.position.x;

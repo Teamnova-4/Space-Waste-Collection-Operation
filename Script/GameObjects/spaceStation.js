@@ -28,23 +28,23 @@ export class SpaceStation extends GameObject {
     return SpaceStation.instance;
   }
 
-    /**
-     * 싱클톤 초기화 함수
-     */
-    Initialize() {
-    }
-    
-    // 게임 오브젝트가 시작될 때 호출되는 메서드
-    Start() {
-        console.log("spaceStation Start");
+  /**
+   * 싱클톤 초기화 함수
+   */
+  Initialize() {
+  }
+
+  // 게임 오브젝트가 시작될 때 호출되는 메서드
+  Start() {
+    console.log("spaceStation Start");
 
     // 이미지 파일을 로드합니다. 여기서 'Resources/test.png'는 이미지 경로입니다.
     // this.resource.image.src = "Resources/TransparentImageTest.png";
     this.resource.image.src = "Resources/spaceStation.png";
 
-        // 게임 오브젝트의 초기 위치를 설정
-        this.transform.position.x = window.innerWidth;  // 화면 좌측 X
-        this.transform.position.y = window.innerHeight / 2; // 화면 중앙 Y
+    // 게임 오브젝트의 초기 위치를 설정
+    this.transform.position.x = window.innerWidth;  // 화면 좌측 X
+    this.transform.position.y = window.innerHeight / 2; // 화면 중앙 Y
 
     // 게임 오브젝트의 크기를 설정합니다.
     // X와 Y 방향으로 각각 0.4배 크기로 설정합니다.
@@ -63,25 +63,25 @@ export class SpaceStation extends GameObject {
     this.physics.velocity.y = 0;
   }
 
-    // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
-    Update() {
-        // TrashFactory의 nearTrashList 정렬 업데이트
-        TrashFactory.Instance().nearTrashList = [...TrashFactory.Instance().trashList].sort(
-            (a, b) => b.transform.position.x - a.transform.position.x
-        );
+  // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
+  Update() {
+    // TrashFactory의 nearTrashList 정렬 업데이트
+    TrashFactory.Instance().nearTrashList = [...TrashFactory.Instance().trashList].sort(
+      (a, b) => b.transform.position.x - a.transform.position.x
+    );
 
-        // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
-        // this.transform.rotation += 0;
-        if (TrashFactory.Instance().nearTrashList.length > 0){
-            DroneManager.Instance().getDrones().filter(drone => !drone.isWorking).forEach(drone => { 
-                const trash = TrashFactory.Instance().nearTrashList.shift();
-                if (trash !== null && trash !== undefined) {
-                    drone.StartWork(trash);
-                    trash.target(drone);
-                }
-            });
+    // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
+    // this.transform.rotation += 0;
+    if (TrashFactory.Instance().nearTrashList.length > 0) {
+      DroneManager.Instance().getDrones().filter(drone => !drone.isWorking).forEach(drone => {
+        const trash = TrashFactory.Instance().nearTrashList.shift();
+        if (trash !== null && trash !== undefined) {
+          drone.StartWork(trash);
+          trash.target(drone);
         }
+      });
     }
+  }
 
   // 게임 오브젝트가 매 프레임의 마지막에 업데이트될 때 호출되는 메서드
   LateUpdate() {
@@ -97,26 +97,26 @@ export class SpaceStation extends GameObject {
     // 예를 들어, 자원 해제 작업이나 관련 데이터 삭제 등이 가능합니다.
   }
 
-    // 게임 오브젝트의 이미지가 로드될 때 호출되는 메서드
-    OnLoad(image) {
-        console.log("spaceStation OnLoad" + image.src);
-        // 이미지가 로드되었을 때 호출되어 해당 이미지를 확인하거나 초기화 작업을 할 수 있습니다.
-    }
+  // 게임 오브젝트의 이미지가 로드될 때 호출되는 메서드
+  OnLoad(image) {
+    console.log("spaceStation OnLoad" + image.src);
+    // 이미지가 로드되었을 때 호출되어 해당 이미지를 확인하거나 초기화 작업을 할 수 있습니다.
+  }
 
-    // static AddDrone() {
-    //     let drone = new Drone();
-    //     drone.transform.position.x= SpaceStation.Instance().transform.position.x;
-    //     drone.transform.position.y = SpaceStation.Instance().transform.position.y;
-    //     SpaceStation.Instance().droneList.push(drone);
-    //     console.log(drone.transform.position);
-    //     console.log(SpaceStation.Instance().transform.position);
-    // }
+  // static AddDrone() {
+  //     let drone = new Drone();
+  //     drone.transform.position.x= SpaceStation.Instance().transform.position.x;
+  //     drone.transform.position.y = SpaceStation.Instance().transform.position.y;
+  //     SpaceStation.Instance().droneList.push(drone);
+  //     console.log(drone.transform.position);
+  //     console.log(SpaceStation.Instance().transform.position);
+  // }
 
-    static RemoveTrash(trash) {
-        const idx = TrashFactory.Instance().trashList.indexOf(trash);
-        if (idx !== -1) {
-            TrashFactory.Instance().trashList.splice(idx, 1);
-            console.log("RemoveTrash");
-        }
+  static RemoveTrash(trash) {
+    const idx = TrashFactory.Instance().trashList.indexOf(trash);
+    if (idx !== -1) {
+      TrashFactory.Instance().trashList.splice(idx, 1);
+      console.log("RemoveTrash");
     }
+  }
 }
