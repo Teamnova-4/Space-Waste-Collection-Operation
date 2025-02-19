@@ -58,52 +58,57 @@
         <p id="rateCount" style="color: white;">현재 생산량 0.5</p>
         <p id="speedCount" style="color: white;">현재 속도 0.5</p>
     </div>
-    
+
     <button id="rateUp">생산량 증가</button><button id="rateDown">생산량 감소</button>
     <button id="speedUp">속도 증가</button><button id="speedDown">속도 감소</button>
     <button id="moneyCheat">돈 100원 추가</button>
 
 
-    <canvas id="canvas"></canvas>
+    <!-- 게임화면, 패널 묶음 -->
+    <div id="game-row">
+        <canvas id="canvas"></canvas>
 
-    <!-- 하단 드론 관리 패널 -->
-    <div id="station-pannel">
-        <div class="panel-header">
-            <div class="tab-buttons">
-                <button class="tab-btn active" data-tab="drone-slots">드론 관리</button>
-                <button class="tab-btn" data-tab="drone-shop">드론 상점</button>
-            </div>
-            <h2 class="panel-title">드론 관리</h2>
-            <div class="spacer"></div>
-        </div>
-
-        <!-- 드론 슬롯 관리 탭 -->
-        <div class="tab-content active" id="drone-slots">
-            <div class="slot-list-container">
-                <div class="drone-slot-container">
-                    <!-- 드론 슬롯들이 여기에 동적으로 추가됨 -->
+        <!-- 하단 드론 관리 패널 -->
+        <div id="station-pannel">
+            <div class="panel-header">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="drone-slots">드론 관리</button>
+                    <button class="tab-btn" data-tab="drone-shop">드론 상점</button>
                 </div>
-                <button id="add-slot-btn" class="add-slot-btn">
-                    <span>+</span>
-                    <span>슬롯 추가</span>
-                </button>
+                <h2 class="panel-title">드론 관리</h2>
+                <div class="spacer"></div>
             </div>
-        </div>
 
-        <!-- 드론 상점 탭 -->
-        <div class="tab-content" id="drone-shop">
-            <div class="shop-container">
-                <!-- DroneShop의 droneTypes 기반으로 동적 생성 -->
-                <div class="drone-item" data-type="basic">
-                    <img src="Resources/drone.png" alt="기본 드론">
-                    <h3>기본 드론</h3>
-                    <p>가격: 500 크레딧</p>
-                    <button class="buy-drone-btn" data-type="basic">구매</button>
+            <!-- 드론 슬롯 관리 탭 -->
+            <div class="tab-content active" id="drone-slots">
+                <div class="slot-list-container">
+                    <div class="drone-slot-container">
+                        <!-- 드론 슬롯들이 여기에 동적으로 추가됨 -->
+                    </div>
+                    <button id="add-slot-btn" class="add-slot-btn">
+                        <span>+</span>
+                        <span>슬롯 추가</span>
+                    </button>
                 </div>
-                <!--  TODO : 다른 드론 아이템들 추가 -->
             </div>
+
+            <!-- 드론 상점 탭 -->
+            <!-- <div class="tab-content" id="drone-shop">
+                <div class="shop-container"> -->
+            <!-- DroneShop의 droneTypes 기반으로 동적 생성 -->
+            <!-- <div class="drone-item" data-type="basic">
+                        <img src="Resources/drone.png" alt="기본 드론">
+                        <h3>기본 드론</h3>
+                        <p>가격: 500 크레딧</p>
+                        <button class="buy-drone-btn" data-type="basic">구매</button>
+                    </div> -->
+            <!--  TODO : 다른 드론 아이템들 추가 -->
+            <!-- </div> -->
         </div>
     </div>
+
+    </div>
+
 
 
     <script type="module">
@@ -119,27 +124,45 @@
         // 하단 드론 패널
         import { DroneManager } from "./Script/DronePannel/DroneManager.js";
 
+
+        /**
+         * 캔버스의 크기를 브라우저 창 크기에 맞게 조정하고, 디바이스 픽셀 비율을 고려하여 스케일을 조정하는 함수.
+         * 화면 리사이즈 이벤트에 연결하여 사용하면 됩니다.
+         *
+         * @param {HTMLCanvasElement} canvas 크기를 조정할 캔버스 엘리먼트
+         * @param {CanvasRenderingContext2D} ctx 캔버스의 2D 렌더링 컨텍스트
+         */
+        function resizeCanvas(canvas, ctx) {
+            // 디바이스 픽셀 비율 가져오기 (기본값은 1)
+            const ratio = window.devicePixelRatio || 1;
+
+            // 브라우저 창의 너비와 높이 가져오기
+            const width = window.innerWidth - 300;
+            const height = window.innerHeight;
+
+            // 캔버스 크기를 브라우저 창 크기에 맞게 조정 (디바이스 픽셀 비율 곱하기)
+            canvas.width = width * ratio;   // 실제 렌더링될 캔버스의 픽셀 크기
+            canvas.height = height * ratio; // 실제 렌더링될 캔버스의 픽셀 크기
+
+            // CSS 스타일로 캔버스 크기 조정 (화면에 표시되는 크기)
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+
+            // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
+            ctx.scale(ratio, ratio);
+        }
+
         // 캔버스 및 WebGL 컨텍스트 가져오기
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d")
 
-        // 디바이스 픽셀 비율 가져오기
-        const ratio = window.devicePixelRatio || 1;
+        // 초기 캔버스 크기 설정
+        resizeCanvas(canvas, ctx);
 
-        // 브라우저 창의 너비와 높이 가져오기
-        const width = window.innerWidth;
-        const height = window.innerHeight - parseInt(getComputedStyle(document.documentElement).getPropertyValue('--panel-height')); // 적용된 css값 참조
-
-        // 캔버스 크기를 브라우저 창 크기에 맞게 조정
-        canvas.width = width * ratio;   // 실제 캔버스 크기
-        canvas.height = height * ratio; // 실제 캔버스 크기
-
-        // 화면에 표시되는 캔버스 크기는 그대로 유지 (CSS로 설정)
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-
-        // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
-        ctx.scale(ratio, ratio);
+        // 화면 리사이즈 이벤트에 resizeCanvas 함수 연결
+        window.addEventListener('resize', () => {
+            resizeCanvas(canvas, ctx);
+        });
 
         let trashFactory = null; // 우주 쓰레기 생성 공장
         // 배경 인스턴스 생성
@@ -166,19 +189,19 @@
         // 우주 쓰레기 팩토리 테스트
         document.getElementById("rateUp").onclick = function () {
             trashFactory.setSpawnRate(trashFactory.spawnRate + 1);
-            document.getElementById("rateCount").innerText = "현재 생산량 "+trashFactory.spawnRate;
+            document.getElementById("rateCount").innerText = "현재 생산량 " + trashFactory.spawnRate;
         }
         document.getElementById("rateDown").onclick = function () {
             trashFactory.setSpawnRate(trashFactory.spawnRate - 1);
-            document.getElementById("rateCount").innerText = "현재 생산량 "+trashFactory.spawnRate;
+            document.getElementById("rateCount").innerText = "현재 생산량 " + trashFactory.spawnRate;
         }
         document.getElementById("speedUp").onclick = function () {
             trashFactory.setSpeed(trashFactory.speed + 1);
-            document.getElementById("speedCount").innerText = "현재 속도 "+trashFactory.speed;
+            document.getElementById("speedCount").innerText = "현재 속도 " + trashFactory.speed;
         }
         document.getElementById("speedDown").onclick = function () {
             trashFactory.setSpeed(trashFactory.speed - 1);
-            document.getElementById("speedCount").innerText = "현재 속도 "+trashFactory.speed;
+            document.getElementById("speedCount").innerText = "현재 속도 " + trashFactory.speed;
         }
 
         SpaceStation.AddDrone();
