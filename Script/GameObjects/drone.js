@@ -73,14 +73,14 @@ export class Drone extends GameObject {
                 // DroneManager.js의 slots를 순회하며 현재 드론이 담겨져 있는지 파악함
                 // 없으면 그 즉시 화면에서 해당 드론 제거
 
+                /*
                 // DroneManager의 slots를 순회하며 현재 드론이 존재하는지 확인
                 console.log("현재 보유중인 드론 id 목록:");
                 console.log(DroneManager.Instance().slots
                     .filter(slot => slot.isOccupied && slot.drone)
                     .map(slot => slot.drone.id)
                 );
-
-                console.log("현재 드론 id = ", this.id);
+                */
                 const droneExists = DroneManager.Instance().slots.some(
                     slot => slot.isOccupied && slot.drone && slot.drone.id === this.id
                 );

@@ -117,7 +117,7 @@ export class AdditionalExpensesEvent extends EventBase {
     }   
 
     StartEvent() {
-        User.Instance().credits -= this.additionalDebt;
+        User.UseCredit(this.additionalDebt);
     }
 
     StopEvent() {
