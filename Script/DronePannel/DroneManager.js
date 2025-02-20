@@ -257,6 +257,7 @@ export class DroneManager {
             // 드론 이동 로직 (판매 후 빈 슬롯 채우기):
             this.shiftDrones();
             this.updateView(); // UI 업데이트
+            drone.Destroy();
         }
     }
 

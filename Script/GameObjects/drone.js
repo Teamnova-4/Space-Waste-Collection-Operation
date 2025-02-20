@@ -69,36 +69,8 @@ export class Drone extends GameObject {
                 this.Returning();
             } else if (this.isReturning && distance < this.catchDistance) {
                 this.DestructionTrash();
-                // 현재 드론이 팔렸다면 수거를 마치고 제거됨
-                // DroneManager.js의 slots를 순회하며 현재 드론이 담겨져 있는지 파악함
-                // 없으면 그 즉시 화면에서 해당 드론 제거
-
-                // DroneManager의 slots를 순회하며 현재 드론이 존재하는지 확인
-                const droneExists = DroneManager.Instance().slots.some(
-                    slot => slot.isOccupied && slot.drone && slot.drone.id === this.id
-                );
-
-                // 드론이 더 이상 존재하지 않으면 (팔린 상태)
-                if (!droneExists) {
-                    this.StopWork(); // 작업 중지
-                    this.Destroy(); // 드론 객체 제거
-                }
-            }
-        } else {
-
-            const droneExists = DroneManager.Instance().slots.some(
-                slot => slot.isOccupied && slot.drone && slot.drone.id === this.id
-            );
-
-
-            // 드론이 더 이상 존재하지 않으면 (팔린 상태)
-            if (!droneExists) {
-                this.StopWork(); // 작업 중지
-                this.Destroy(); // 드론 객체 제거
             }
         }
-
-
     }
 
     LateUpdate() {
@@ -107,7 +79,10 @@ export class Drone extends GameObject {
 
     OnDestroy() {
         // 드론이 파괴될 때 호출
-        console.log("Drone OnDestroy");
+        if(this.isWorking && this.targetTrash !== null){
+            this.targetTrash.isCaught = false;
+            this.targetTrash.targetedBy = null;
+        }
     }
 
     OnLoad(image) {
