@@ -132,6 +132,15 @@ export class Drone extends GameObject {
 
     DestructionTrash() {
         this.targetTrash.Destroy();
-        User.AddCredits(200);
+        User.AddCredits(200); // 크레딧 증가
+
+        // 코인 아이콘에 반짝이는 효과 추가
+        const coinIcon = document.querySelector(".coin-icon");
+        if (coinIcon) {
+            coinIcon.classList.add("animate-coin");
+            setTimeout(() => {
+                coinIcon.classList.remove("animate-coin");
+            }, 1000); // 1초 후에 애니메이션 클래스 제거
+        }
     }
 }

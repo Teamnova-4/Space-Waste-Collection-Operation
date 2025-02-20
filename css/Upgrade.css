@@ -131,3 +131,14 @@
 #repay-debt-btn:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
+
+/* 코인 반짝임 효과 */
+@keyframes coinShine {
+    0% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0.5; transform: scale(1); }
+}
+
+.animate-coin {
+    animation: coinShine 1s ease-in-out;
+}
