@@ -56,20 +56,19 @@ export class TrashFactory {
             // 쓰레기 변수
             let newTrash;
             // 랜덤 속도 (0.1 ~ 0.4) 차감형식: (기본쓰레기속도 0.5 - (0.1 ~ 0.4))
-            const randomSpeed = Math.random() * 0.4; // 0.1과 0.4 사이의 랜덤 값 생성
             // 쓰레기 타입에 따라 쓰레기 생성
             switch (randomType) {
                 case 0:
-                    newTrash = new Wreck(this.speed - randomSpeed); // 난파선 쓰레기기
+                    newTrash = new Wreck(); // 난파선 쓰레기기
                     break;
                 case 1:
-                    newTrash = new cementStone(this.speed - randomSpeed); // 씨멘트+벽돌 쓰레기
+                    newTrash = new cementStone(); // 씨멘트+벽돌 쓰레기
                     break;
                 case 2:
-                    newTrash = new WreckPart(this.speed - randomSpeed); // 난파선 부품 쓰레기
+                    newTrash = new WreckPart(); // 난파선 부품 쓰레기
                     break;
                 case 3:
-                    newTrash = new WreckCircle(this.speed - randomSpeed); //난파선 부품 쓰레기(동그라미)
+                    newTrash = new WreckCircle(); //난파선 부품 쓰레기(동그라미)
                     break;
             }
             TrashFactory.Instance().trashList.push(newTrash);

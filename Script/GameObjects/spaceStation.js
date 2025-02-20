@@ -65,8 +65,7 @@ export class SpaceStation extends GameObject {
     Update() {
         // TrashFactory의 nearTrashList 정렬 업데이트
         TrashFactory.Instance().nearTrashList = [...TrashFactory.Instance().trashList].sort(
-            (a, b) => this.transform.Distance(a.transform.position) - this.transform.Distance(b.transform.position)
-        );
+            (a, b) => (this.transform.position.x - a.transform.position.x) + (this.transform.position.y - b.transform.position.y));
 
 
         if (TrashFactory.Instance().trashList.length > 0) {
