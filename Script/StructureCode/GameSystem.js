@@ -305,13 +305,13 @@ class GameResource {
         const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
         this.size = {
-            x: this.gameObject.transform.scale.x * this.image.width * Background.SCALE,
-            y: this.gameObject.transform.scale.y * this.image.height * Background.SCALE
+            x: this.gameObject.transform.scale.x * this.image.width * Background.SCALE / window.devicePixelRatio,
+            y: this.gameObject.transform.scale.y * this.image.height * Background.SCALE / window.devicePixelRatio
         }
 
         const pivot = {
-            x: this.gameObject.transform.position.x * Background.SCALE,
-            y: this.gameObject.transform.position.y * Background.SCALE,
+            x: this.gameObject.transform.position.x * Background.SCALE / window.devicePixelRatio,
+            y: this.gameObject.transform.position.y * Background.SCALE / window.devicePixelRatio,
         }
 
         // 캔버스 상태 저장
@@ -575,7 +575,6 @@ export class Background {
      */
     Initialize() {
         var backGroundMusic = new Audio('Resources/background-music.mp3');
-        this.canvas = canvas;
         this.ctx = ctx;
         this.image = new Image();
         this.image.src = "Resources/BackGround.png";
@@ -587,7 +586,7 @@ export class Background {
     static INIT_SCALE(scale) {
 
         // 실제 캔버스 크기
-        Background.REAL_CANVAS_SIZE = { width: Background.Instance().canvas.width, height: Background.Instance().canvas.height };
+        Background.REAL_CANVAS_SIZE = { width: canvas.width, height: canvas.height };
 
         // 게임 캔버스 크기
         Background.CANVAS_SIZE = { width: scale, height: scale / Background.REAL_CANVAS_SIZE.width * Background.REAL_CANVAS_SIZE.height };
@@ -613,17 +612,18 @@ export class Background {
         if (!this.isRunning) return;
 
         // // 배경 위치 업데이트 (왼쪽에서 오른쪽으로 이동)
-        this.x += this.speed;
-        if (this.x >= this.canvas.width) {
+        this.x += this.speed + 1;
+        if (this.x >= canvas.width) {
             this.x = 0; // 화면 끝에 도달하면 처음으로 되돌리기
         }
 
         // // 캔버스 클리어 후 새로운 배경 그리기
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(
-            this.image, -this.x, 0,
-            this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(this.image, this.canvas.width - this.x, 0,
-            this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.drawImage(this.image,
+            0, 0, this.image.width, this.image.height,
+            -this.x, 0, canvas.width, canvas.height);
+        this.ctx.drawImage(this.image,
+            0, 0, this.image.width, this.image.height,
+            canvas.width - this.x, 0, canvas.width, canvas.height);
     }
 }

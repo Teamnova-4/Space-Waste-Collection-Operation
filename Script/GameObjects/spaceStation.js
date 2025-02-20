@@ -49,6 +49,10 @@ export class SpaceStation extends GameObject {
         this.transform.position.x = Background.CANVAS_SIZE.width - 10;  // 화면 좌측 X
         this.transform.position.y = Background.CANVAS_SIZE.height / 2; // 화면 중앙 Y
 
+        console.log(`trasform postion x: ${this.transform.position.x} y: ${this.transform.position.y}`);
+        console.log(`CANVAS SIZE x: ${Background.CANVAS_SIZE.width} y: ${Background.CANVAS_SIZE.height}`);
+        console.log(`R CANVAS SIZE x: ${Background.REAL_CANVAS_SIZE.width} y: ${Background.REAL_CANVAS_SIZE.height}`);
+
         // 게임 오브젝트의 크기를 설정합니다.
         this.transform.scale.x = 1.7;
         this.transform.scale.y = 1.3;
@@ -75,15 +79,13 @@ export class SpaceStation extends GameObject {
 
         // TrashFactory의 nearTrashList 정렬 업데이트
         TrashFactory.Instance().trashList
-        .sort((a, b) =>{
-            const d1 = (a.transform.position.x - this.transform.position.x)**2 + (a.transform.position.y - this.transform.position.y)**2;
-            const d2 = (b.transform.position.x - this.transform.position.x)**2 + (b.transform.position.y - this.transform.position.y)**2;
-            return d1 - d2;
-        });
+            .sort((a, b) => {
+                const d1 = (a.transform.position.x - this.transform.position.x) ** 2 + (a.transform.position.y - this.transform.position.y) ** 2;
+                const d2 = (b.transform.position.x - this.transform.position.x) ** 2 + (b.transform.position.y - this.transform.position.y) ** 2;
+                return d1 - d2;
+            });
 
         // console.log(TrashFactory.Instance().trashList);
-
-
 
         if (TrashFactory.Instance().trashList.length > 0) {
             DroneManager.Instance().getDrones().filter(drone => !drone.isWorking).forEach(drone => {

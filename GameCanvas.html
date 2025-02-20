@@ -94,6 +94,7 @@
                         <button id="add-slot-btn" class="add-slot-btn">
                             <span>+</span>
                             <span>슬롯 추가</span>
+                            <span id="slot-upgrade-price">1000 크레딧</span>
                         </button>
                     </div>
                 </div>
@@ -129,7 +130,11 @@
             <div class="game-stats">
 
                 <p>플레이 시간: <span id="survival-time">10:00</span></p>
+<<<<<<< HEAD
                 <p>갚은 금액: <span id="credits-debt">10000</span></p>
+=======
+                <p>남은 빚: <span id="credits-debt">10000</span></p>
+>>>>>>> f539fcaa8c0041722db27c28b8792d5060685ab1
 
                 <hr>
               
@@ -198,7 +203,7 @@
          */
         function resizeCanvas(canvas, ctx) {
             // 디바이스 픽셀 비율 가져오기 (기본값은 1)
-            const ratio = window.devicePixelRatio || 1;
+            const ratio =  window.devicePixelRatio || 1;
 
             // 브라우저 창의 너비와 높이 가져오기
             const width = window.innerWidth - 300;
@@ -215,7 +220,7 @@
             Background.INIT_SCALE(1000);
 
             // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
-            ctx.scale(ratio, ratio);
+            ctx.scale(ratio,  ratio);
         }
 
         // 캔버스 및 WebGL 컨텍스트 가져오기
