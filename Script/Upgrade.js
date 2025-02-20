@@ -48,7 +48,7 @@ export class User {
 
     static UseCredit(value){
         if (User.Instance().credits - value >= 0){
-            User.Instance().credits -= value;
+            User.Instance().setCredits(User.Instance().credits - value);
             return true;
         }
         AlertSystem.AddAlert("크레딧 부족", "크레딧이 부족합니다.");
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 돈 치트 버튼
     document.getElementById("moneyCheat").onclick = function () {
-        user.credits += 100;
+        user.credits += 1000;
         document.getElementById("credits").innerText = user.credits;
         console.log("돈 치트 버튼 클릭: 현재 보유 크레딧 = " + user.credits);
     }

@@ -79,15 +79,13 @@ export class SpaceStation extends GameObject {
 
         // TrashFactory의 nearTrashList 정렬 업데이트
         TrashFactory.Instance().trashList
-        .sort((a, b) =>{
-            const d1 = (a.transform.position.x - this.transform.position.x)**2 + (a.transform.position.y - this.transform.position.y)**2;
-            const d2 = (b.transform.position.x - this.transform.position.x)**2 + (b.transform.position.y - this.transform.position.y)**2;
-            return d1 - d2;
-        });
+            .sort((a, b) => {
+                const d1 = (a.transform.position.x - this.transform.position.x) ** 2 + (a.transform.position.y - this.transform.position.y) ** 2;
+                const d2 = (b.transform.position.x - this.transform.position.x) ** 2 + (b.transform.position.y - this.transform.position.y) ** 2;
+                return d1 - d2;
+            });
 
         // console.log(TrashFactory.Instance().trashList);
-
-
 
         if (TrashFactory.Instance().trashList.length > 0) {
             DroneManager.Instance().getDrones().filter(drone => !drone.isWorking).forEach(drone => {
