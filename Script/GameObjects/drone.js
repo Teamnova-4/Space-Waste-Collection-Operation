@@ -167,7 +167,7 @@ export class Drone extends GameObject {
 
     DestructionTrash() {
         this.targetTrash.Destroy();
-        User.AddCredits(200); // 크레딧 증가
+        User.AddCredits(20); // 크레딧 증가
 
         // 코인 아이콘에 반짝이는 효과 추가
         const coinIcon = document.querySelector(".coin-icon");

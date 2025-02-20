@@ -68,7 +68,7 @@ export class DebtSystem {
             document.getElementById('remaining-debt').textContent = this.totalDebt;
 
             AlertSystem.AddAlert(`1달이 지났습니다!`, `남은 빛 ${this.totalDebt + this.interestRate} 에서 ${this.interestRate}$ 만큼 빛을 갚았습니다.`);
-            EventSystem.PlayEvent(EventSystem.SelectEvent());
+            //EventSystem.PlayEvent(EventSystem.SelectEvent());
         } else {
             this.gameOver();
         }
