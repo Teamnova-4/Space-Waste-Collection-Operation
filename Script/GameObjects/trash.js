@@ -29,12 +29,12 @@ export class Trash extends GameObject {
 
         this.resource.image.src = this.imageSrc;
         // console.log("이미지 로딩 시작:", this.imageSrc);
-        this.transform.position.x = -50;
 
-        const padding = 100;
+        const padding = 100 / Background.SCALE;
         const randomPoint = Math.random();
         this.pointY = randomPoint * (Background.CANVAS_SIZE.height -  padding * 2) + padding;
 
+        this.transform.position.x = -50;
         this.transform.position.y = this.pointY;
 
         this.transform.scale.x = 1;
