@@ -64,7 +64,7 @@ export class SpaceStation extends GameObject {
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
     Update() {
         // TrashFactory의 nearTrashList 정렬 업데이트
-        TrashFactory.Instance().nearTrashList = [...TrashFactory.Instance().trashList].sort(
+        TrashFactory.Instance().nearTrashList = TrashFactory.Instance().trashList.sort(
             (a, b) => this.transform.Distance(a.transform.position) - this.transform.Distance(b.transform.position)
         );
 
