@@ -131,7 +131,7 @@
 
                 <p>남은 시간: <span id="remaining-time">10:00</span></p>
                 <p>남은 빚: <span id="remaining-debt">10000</span></p>
-         
+
                 <hr>
                 <p>TOTAL SCORE: <span id="total-score">8,888,888</span></p>
             </div>
@@ -147,10 +147,10 @@
             <h1>GAME OVER....</h1>
             <p>아....정말 살기 힘들다..!!!!!!!!!으아아!!!</p>
             <div class="game-stats">
-                <p>생존 시간: <span id="survival-time">10:00</span></p>
-                <p>달성 레벨: <span id="achievement-level">30</span></p>
-                <p>처리한 쓰레기 갯수: <span id="trash-count">420</span></p>
-                <p>벌어들인 크레딧: <span id="credits-earned">667</span></p>
+                
+                <p>남은 시간: <span id="remaining-time">10:00</span></p>
+                <p>남은 빚: <span id="remaining-debt">10000</span></p>
+
                 <hr>
                 <p>TOTAL SCORE: <span id="total-score">8,888,888</span></p>
             </div>
@@ -161,6 +161,7 @@
         </div>
     </div>
 
+    <h1>쓰레기 처리 카운트: <span id="trashCount" style="display: none;">0</span></h1>
     <!-- 설정 팝업 -->
     <div id="SettingModal" class="SettingModal hidden">
         <div class="modal-message">
@@ -208,9 +209,11 @@
             canvas.width = width * ratio;   // 실제 렌더링될 캔버스의 픽셀 크기
             canvas.height = height * ratio; // 실제 렌더링될 캔버스의 픽셀 크기
 
+
             // CSS 스타일로 캔버스 크기 조정 (화면에 표시되는 크기)
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
+            Background.INIT_SCALE(1000);
 
             // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
             ctx.scale(ratio, ratio);
@@ -251,7 +254,7 @@
 
         // 빚 시스템 초기화
         const debtSystem = new DebtSystem();
-
+     
         // 우주 쓰레기 팩토리 테스트
         document.getElementById("rateUp").onclick = function () {
             trashFactory.setSpawnRate(trashFactory.spawnRate + 1);
@@ -269,7 +272,7 @@
             trashFactory.setSpeed(trashFactory.speed - 1);
             document.getElementById("speedCount").innerText = "현재 속도 " + trashFactory.speed;
         }
-
+       
         //SpaceStation.AddDrone();
 
         // 배경 애니메이션 시작
@@ -279,11 +282,10 @@
         window.addEventListener('resize', () => {
             // 캔버스 크기를 현재 브라우저 크기에 맞춤 
             resizeCanvas(canvas, ctx);
-
             // spaceStation 의 위치를 캔버스 오른쪽 끝 중간위치로 재조정
             // 브라우저 창의 너비와 높이 가져오기
-            spaceStation.transform.position.x = window.innerWidth - 300;
-            spaceStation.transform.position.y = window.innerHeight / 2;
+            //spaceStation.transform.position.x = window.innerWidth - 300;
+            //spaceStation.transform.position.y = window.innerHeight / 2;
 
         });
     </script>
@@ -307,7 +309,6 @@
             // 볼륨 슬라이더 이벤트 리스너
             document.getElementById('volume-slider').addEventListener('input', (event) => {
                 const volume = event.target.value;
-                volumeManager.setVolume(volume); // 볼륨 값 변경
             });
 
             // 팝업 외부 클릭 시 팝업 닫기

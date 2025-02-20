@@ -1,6 +1,6 @@
 import { GameObject } from "../StructureCode/GameSystem.js";
-import { SpaceStation } from "./spaceStation.js";
 import { User } from "../Upgrade.js";
+import { SpaceStation } from "./spaceStation.js";
 
 export class Drone extends GameObject {
     static lastId = 0; // 마지막으로 부여된 id, 새 드론은 마지막 id + 1 이 부여된다.
@@ -13,13 +13,13 @@ export class Drone extends GameObject {
         this.layer = 5;
 
         if (template) {
-            this.type = template.id;
+            this.type = template.typeId;
             this.price = template.price;
             this.speed = template.speed;
             this.capacity = template.capacity;
             this.imageSrc = template.imageSrc;
         } else {
-            this.type = "default";
+            this.type = "basic";
             this.price = null;
             this.speed = 0.33;
             this.capacity = 1;
@@ -35,25 +35,33 @@ export class Drone extends GameObject {
     Start() {
         // 드론 초기화
         console.log("Drone Start");
+        console.log(this.type);
         // TODO: this.type 값에 따라 각기 다른 값 넣어야함
+
         // 드론의 초기 상태 설정
+
         this.resource.image.src = this.imageSrc; // 드론 이미지 로드
-        this.transform.position.x = 400; // 초기 X 위치
-        this.transform.position.y = 400; // 초기 Y 위치
-        this.transform.scale.x = 0.5; // 크기 설정
-        this.transform.scale.y = 0.5; // 크기 설정
+
+        // 드론 생성위치는 기지위치와 동일
+        this.transform.position.x = SpaceStation.Instance().transform.position.x;
+        this.transform.position.y = SpaceStation.Instance().transform.position.y;
+
+        this.transform.scale.x = 2; // 크기 설정
+        this.transform.scale.y = 2; // 크기 설정
         this.transform.anchor.x = 0.5; // 앵커 설정
         this.transform.anchor.y = 0.5; // 앵커 설정
-        this.transform.rotation = 180; // 초기 회전 값
+        this.transform.rotation = 270; // 초기 회전 값
     }
 
     Update() {
         // 드론의 상태 업데이트
         if (this.isWorking) {
-            // 드론 현재 위치값을 바탕으로 타겟 위치값을 바라보도록 회전
             this.transform.LookAt(this.targetPosition);
             this.physics.setVelocityInDirection({ x: this.speed, y: this.speed });
             const distance = this.transform.Distance(this.targetPosition);
+
+            // 이동방향 계산후 올바른 각도로 드론이미지가 출력되도록 재설정 
+            this.transform.rotation = this.transform.rotation + 90;
 
             if (!this.isReturning && distance < this.catchDistance) {
                 this.targetTrash.catch(this);

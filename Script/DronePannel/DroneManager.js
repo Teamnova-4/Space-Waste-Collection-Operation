@@ -138,7 +138,9 @@ export class DroneManager {
      * 게임 시작 시 기본 드론 1개 제공
      */
     addDefaultDrone() {
+        console.log("addDefaultDrone");
         const defaultTemplate = this.shop.getDroneTemplate("basic"); // "basic" 드론 템플릿 가져오기
+        console.log(defaultTemplate);
         const defaultDrone = new Drone(defaultTemplate);  // 드론 객체 생성
         this.slots[0].setDrone(defaultDrone);  // 첫 번째 슬롯에 드론 배치
         this.updateView(); // UI 업데이트
@@ -181,6 +183,8 @@ export class DroneManager {
         // 드론 템플릿 가져오기
         const droneTemplate = this.shop.getDroneTemplate(typeId);
         const dronePrice = droneTemplate.price;
+
+        console.log("상점에서 선택한 드론 정보 : ", droneTemplate);
 
         // 크레딧 부족 검사
         let isCreditOk = User.UseCredit(dronePrice);
