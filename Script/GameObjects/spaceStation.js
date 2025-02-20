@@ -42,19 +42,19 @@ export class SpaceStation extends GameObject {
         this.resource.image.src = "Resources/spaceStation.png";
 
         // 게임 오브젝트의 초기 위치를 설정
-        this.transform.position.x = Background.CANVAS_SIZE.width - 50;  // 화면 좌측 X
+        this.transform.position.x = Background.CANVAS_SIZE.width - 10;  // 화면 좌측 X
         this.transform.position.y = Background.CANVAS_SIZE.height / 2; // 화면 중앙 Y
 
         // 게임 오브젝트의 크기를 설정합니다.
-        this.transform.scale.x = 0.5;
-        this.transform.scale.y = 0.5;
+        this.transform.scale.x = 1.7;
+        this.transform.scale.y = 1.3;
 
         // 앵커를 설정하여 오브젝트가 화면의 중심을 기준으로 회전할 수 있도록 합니다.
-        this.transform.anchor.x = 0.2;
+        this.transform.anchor.x = 0.5;
         this.transform.anchor.y = 0.5;
 
         // 게임 오브젝트의 초기 회전값을 0으로 설정합니다.
-        this.transform.rotation = 0;
+        this.transform.rotation = -90;
 
         // 물리 엔진에서의 속도 설정 (고정된 우주선이므로 속도는 0으로 설정)
         this.physics.velocity.x = 0;

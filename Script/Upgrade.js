@@ -76,6 +76,7 @@ export class User {
         this.credits = value;
         document.getElementById('credits').textContent = this.credits;
     }
+
     static AddCredits(amount) {
         User.Instance().setCredits(User.Instance().credits + amount);
     }
