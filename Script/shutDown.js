@@ -1,5 +1,3 @@
-import { SpaceStation } from "../Script/GameObjects/spaceStation.js";
-
 export class shutDown {
     constructor() {
         if (shutDown.instance) {

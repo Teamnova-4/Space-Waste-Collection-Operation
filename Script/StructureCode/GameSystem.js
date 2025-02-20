@@ -116,7 +116,7 @@ class Transform {
         this.calculateRotation();
     }
 
-    setScale(value){
+    setScale(value) {
         this.scale.x = value;
         this.scale.y = value;
     }
@@ -334,8 +334,8 @@ class GameResource {
     }
 }
 
-class Loop{
-    constructor(interval, func, order){
+class Loop {
+    constructor(interval, func, order) {
         this.interval = interval;
         this.func = func;
         this.order = order;
@@ -344,10 +344,10 @@ class Loop{
 
     checkInterval(deltaTime) {
         this.currentTime += deltaTime;
-        if(this.currentTime >= this.interval){
+        if (this.currentTime >= this.interval) {
             this.currentTime -= this.interval;
             return true;
-        } 
+        }
         return false;
     }
 }
@@ -378,7 +378,7 @@ export class GameLoop {
     /**
      * 싱클톤 초기화 함수
      */
-    Initialize() { 
+    Initialize() {
         this.isRunning = false; // 게임 루프가 실행 중인지 여부
 
         this.objects = [];
@@ -391,6 +391,7 @@ export class GameLoop {
 
         GameLoop.playTime = 0;
         GameLoop.GameSpeed = 1;
+
     }
 
     static AddObject(object) {
@@ -417,7 +418,7 @@ export class GameLoop {
      * @param {*} timeout 
      * @param {*} order 
      */
-    static AddLoop(object, timeout, order = 0){
+    static AddLoop(object, timeout, order = 0) {
         if (object instanceof Function) {
             GameLoop.instance.newLoops.push(new Loop(timeout, object, order));
         } else {
@@ -441,14 +442,14 @@ export class GameLoop {
 
         // 드래그 방지 코드 추가
         addEventListener('selectstart', (event) => {
-            event.preventDefault(); 
+            event.preventDefault();
         });
 
         // 백그라운드 BGM 시작
         var backGroundMusic = new Audio('Resources/background-music.mp3');
         backGroundMusic.loop = true; // BGM 반복재생 여부
         backGroundMusic.play(); // BGM 시작
-        
+
         // 클릭 메서드드
         canvas.addEventListener("click", this.onClickCanvas);
 
@@ -460,6 +461,7 @@ export class GameLoop {
     }
 
     loop() {
+    
         if (!this.isRunning) return;
 
         this.backgroundRender(); // 화면 렌더링
@@ -476,7 +478,7 @@ export class GameLoop {
         });
         this.newObjects.length = 0; // 배열 초기화
 
-        this.newLoops.forEach((loop) =>{
+        this.newLoops.forEach((loop) => {
             Util.autoAddToDictList(this.loops, loop.order, loop);
         });
         this.newLoops.length = 0; // 배열 초기화
@@ -484,18 +486,18 @@ export class GameLoop {
         // ============================Update====================== 
 
         this.objects
-        .sort((objA, objB)=> objA.layer - objB.layer)
-        .forEach((object) => {
-            object.Update();
-            object.OnDraw(this.ctx);
-            object.InternalLogicUpdate();
+            .sort((objA, objB) => objA.layer - objB.layer)
+            .forEach((object) => {
+                object.Update();
+                object.OnDraw(this.ctx);
+                object.InternalLogicUpdate();
 
-            object.LateUpdate();
-        });
+                object.LateUpdate();
+            });
 
-        Util.mergeDictToList(this.loops) 
-        .filter((loop)=>loop.checkInterval(GameLoop.deltaTime)) 
-        .forEach((loop)=>loop.func());
+        Util.mergeDictToList(this.loops)
+            .filter((loop) => loop.checkInterval(GameLoop.deltaTime))
+            .forEach((loop) => loop.func());
 
         // ============================Destroy====================== 
 
@@ -564,10 +566,10 @@ export class Background {
     /**
      * 싱클톤 초기화 함수
      */
-    Initialize() { 
+    Initialize() {
         var backGroundMusic = new Audio('Resources/background-music.mp3');
         backGroundMusic.loop = true; // BGM 반복재생 여부
-        backGroundMusic.play();    
+        backGroundMusic.play();
         this.canvas = canvas;
         this.ctx = ctx;
         this.image = new Image();
@@ -580,14 +582,14 @@ export class Background {
     static INIT_SCALE(scale) {
 
         // 실제 캔버스 크기
-        Background.REAL_CANVAS_SIZE = {width: Background.Instance().canvas.width, height: Background.Instance().canvas.height};
+        Background.REAL_CANVAS_SIZE = { width: Background.Instance().canvas.width, height: Background.Instance().canvas.height };
 
         // 게임 캔버스 크기
-        Background.CANVAS_SIZE = {width: scale, height: scale / Background.REAL_CANVAS_SIZE.width * Background.REAL_CANVAS_SIZE.height};
+        Background.CANVAS_SIZE = { width: scale, height: scale / Background.REAL_CANVAS_SIZE.width * Background.REAL_CANVAS_SIZE.height };
 
 
         // 게임 캔버스 대비 실제 비율
-        Background.SCALE = Background.REAL_CANVAS_SIZE.width / scale; 
+        Background.SCALE = Background.REAL_CANVAS_SIZE.width / scale;
     }
 
     start() {

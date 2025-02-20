@@ -22,7 +22,7 @@ export class DebtSystem {
     }
 
     Initialize() {
-        this.totalDebt = 10000; // 초기 빚
+        this.totalDebt = 0; // 초기 빚
         this.interestRate = 500; // 1분마다 갚아야 할 할당량
         this.gameTime = 0; // 게임 시작부터 경과한 시간 (초)
         this.totalGameTime = 5; // 총 게임 시간 (10분 = 600초)
@@ -100,17 +100,15 @@ export class DebtSystem {
 
     gameComplete() {
         const pushshutDown = shutDown.Instance();
-
-
         if (this.totalDebt <= 0) {
-            showModal("축하합니다! 모든 빚을 변제 했습니다.");
+            // showModal("축하합니다! 모든 빚을 변제 했습니다.");
             pushshutDown.handleGameWin();
-
         } else {
             // showModal(`게임 종료! 남은 빚: ${this.totalDebt}`);
             pushshutDown.handleGameLose();
         }
-
+        // 게임 루프 정지하는 함수 추가
+        GameLoop.Instance().stop();  
         // 모달 닫기 버튼에 이벤트 리스너 추가
         const closeBtn = document.getElementById("modal-close-btn");
         closeBtn.onclick = () => {
