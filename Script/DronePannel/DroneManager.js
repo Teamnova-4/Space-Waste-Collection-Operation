@@ -186,17 +186,12 @@ export class DroneManager {
             return;
         }
 
-        if (this.user.credits < this.slotUpgradePrice) {
-            // this.showModal("크레딧이 부족합니다.");
-            console.log("크레딧이 부족합니다.");
-            return;
+        if(User.UseCredit(this.slotUpgradePrice)){
+            this.slots.push(new DroneSlot(this.slots.length));
+            // 다음 슬롯 확장 시 50% 가격 인상
+            this.slotUpgradePrice = Math.floor(this.slotUpgradePrice * 1.5);
+            this.updateView();
         }
-
-        this.user.credits -= this.slotUpgradePrice;
-        this.slots.push(new DroneSlot(this.slots.length));
-        // 다음 슬롯 확장 시 50% 가격 인상
-        this.slotUpgradePrice = Math.floor(this.slotUpgradePrice * 1.5);
-        this.updateView();
     }
 
     /**

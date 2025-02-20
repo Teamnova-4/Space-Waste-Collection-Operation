@@ -34,8 +34,8 @@ export default class AlertSystem{
      */
     static AddAlert(title, description) {
         // TODO 디버깅을 하기 위해 번거로운 알림은 모두 종료함 추후 주석 해제할 것
-        // AlertSystem.Instance().alertList.push({title: title, description: description});
-        // AlertSystem.Instance().ShowAlert();
+        AlertSystem.Instance().alertList.push({title: title, description: description});
+        AlertSystem.Instance().ShowAlert();
     }
 
     ShowAlert(){
@@ -43,7 +43,7 @@ export default class AlertSystem{
             this.isShowing = true;
 
             const alert = this.alertList.shift();
-            console.log(`!Alert! title: ${alert.title} description: ${alert.description}`);
+            console.log(`%c [Alert] title: ${alert.title} description: ${alert.description}`, "background: red; color:white; font-weight:bold");
             this.alertTitle.innerHTML = alert.title ?? "Alert";
             this.alertMessage.innerHTML = alert.description ?? "default alert";
             this.alertOverlay.style.display = "block";

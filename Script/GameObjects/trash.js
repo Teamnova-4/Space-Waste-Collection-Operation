@@ -154,7 +154,6 @@ export class cementStone extends Trash {
         this.width = 150;
         this.height = 150;
 
-        console.log("cementStone speed: " + speed + "cementStone 회전: " + randomRum);
     }
     Start() {
         super.Start();
@@ -168,7 +167,6 @@ export class WreckPart extends Trash {
         // 사진의 크기 정하기
         this.width = 150;
         this.height = 150;
-        console.log("WreckPart speed: " + speed + "WreckPart 회전: " + randomRum);
     }
     Start() {
         super.Start();
@@ -182,7 +180,6 @@ export class WreckCircle extends Trash {
         // 사진의 크기 정하기
         this.width = 150;
         this.height = 150;
-        console.log("WreckCircle speed: " + speed + "WreckCircle 회전: " + randomRum);
     }
     Start() {
         super.Start();
