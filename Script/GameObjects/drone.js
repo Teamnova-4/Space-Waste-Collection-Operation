@@ -43,8 +43,8 @@ export class Drone extends GameObject {
         this.resource.image.src = this.imageSrc; // 드론 이미지 로드
 
         // 드론 생성위치는 기지위치와 동일
-        this.transform.position.x = window.innerWidth - 300;  // 화면 좌측 X
-        this.transform.position.y = window.innerHeight / 2; // 화면 중앙 Y
+        this.transform.position.x = SpaceStation.Instance().transform.position.x;
+        this.transform.position.y = SpaceStation.Instance().transform.position.y;
 
         this.transform.scale.x = 2; // 크기 설정
         this.transform.scale.y = 2; // 크기 설정
@@ -57,7 +57,6 @@ export class Drone extends GameObject {
         // 드론의 상태 업데이트
         if (this.isWorking) {
             this.transform.LookAt(this.targetPosition);
-            // 드론 이미지가 진행 방향을 향하도록 90도 보정
             this.physics.setVelocityInDirection({ x: this.speed, y: this.speed });
             const distance = this.transform.Distance(this.targetPosition);
 
