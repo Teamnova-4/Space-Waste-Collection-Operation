@@ -48,7 +48,7 @@ export class User {
 
     static UseCredit(value){
         if (User.Instance().credits - value >= 0){
-            User.Instance().credits -= value;
+            User.Instance().setCredits(User.Instance().credits - value);
             return true;
         }
         AlertSystem.AddAlert("크레딧 부족", "크레딧이 부족합니다.");
