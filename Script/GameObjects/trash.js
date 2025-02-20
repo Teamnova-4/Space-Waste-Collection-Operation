@@ -48,7 +48,7 @@ export class Trash extends GameObject {
 
         this.resource.image.src = this.imageSrc;
         // console.log("이미지 로딩 시작:", this.imageSrc);
-        this.transform.position.x = 0;
+        this.transform.position.x = -100;
 
         const padding = 50;
         const min = padding;
