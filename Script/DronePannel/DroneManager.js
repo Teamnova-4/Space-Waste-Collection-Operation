@@ -1,5 +1,6 @@
 import { Drone } from "../GameObjects/drone.js";
 import { User } from "../Upgrade.js";
+import AlertSystem from "../AlertSystem.js";
 import { DroneShop } from "./DroneShop.js";
 import { DroneSlot } from "./DroneSlot.js";
 import { DroneSlotView } from "./DroneSlotView.js";
@@ -164,7 +165,7 @@ export class DroneManager {
             return;
         }
 
-        if(User.UseCredit(this.slotUpgradePrice)){
+        if (User.UseCredit(this.slotUpgradePrice)) {
             this.slots.push(new DroneSlot(this.slots.length));
             // 다음 슬롯 확장 시 50% 가격 인상
             this.slotUpgradePrice = Math.floor(this.slotUpgradePrice * 1.5);
@@ -179,10 +180,14 @@ export class DroneManager {
     purchaseDrone(typeId) {
         // 드론 템플릿 가져오기
         const droneTemplate = this.shop.getDroneTemplate(typeId);
+        const dronePrice = droneTemplate.price;
 
         // 크레딧 부족 검사
-        if (this.user.credits < droneTemplate.price) {
-            console.log("크레딧이 부족합니다.");
+        let isCreditOk = User.UseCredit(dronePrice);
+
+        // 크레딧이 충분하지 않으면 return
+        if (!isCreditOk) {
+            console.log("드론 구매 실패 - 크레딧 부족 (가격, 가지고 있는 돈) : ", dronePrice, User.Instance().credits);
             return;
         }
 
@@ -191,6 +196,7 @@ export class DroneManager {
 
         if (!emptySlot) { // 빈 슬롯이 없으면
             console.log("드론 슬롯이 가득 찼습니다.");
+            AlertSystem.AddAlert("드론 슬롯 부족", "드론 슬롯이 부족합니다.");
             return;
         }
 
@@ -198,9 +204,8 @@ export class DroneManager {
         const newDrone = new Drone(droneTemplate);
         emptySlot.setDrone(newDrone);
 
-        // 크레딧 차감
-        this.user.credits -= droneTemplate.price;
-        this.updateView(); // UI 업데이트
+        // UI 업데이트 추가
+        this.updateView();
     }
 
     /**
