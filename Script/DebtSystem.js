@@ -1,6 +1,4 @@
 import AlertSystem from "./AlertSystem.js";
-import { EventSystem } from "./EventSystem.js";
-import { GameLoop } from "./StructureCode/GameSystem.js";
 import { User } from "./Upgrade.js";
 
 export class DebtSystem {
@@ -28,7 +26,7 @@ export class DebtSystem {
         this.lastCollectionTime = 0; // 마지막 징수 시간
         
         // 1초마다 시간 체크
-        GameLoop.AddLoop(()=>{this.updateGameTime()}, 1000, 0);
+        setInterval(() => this.updateGameTime(), 1000);
         
         // 빚 갚기 버튼 이벤트 리스너 추가
         document.getElementById('repay-debt-btn').addEventListener('click', () => this.repayDebt());
@@ -64,10 +62,8 @@ export class DebtSystem {
         if (user.credits >= this.interestRate && this.totalDebt > 0) {
             user.setCredits(user.credits - this.interestRate);
             this.totalDebt -= this.interestRate;
-            document.getElementById('remaining-debt').textContent = this.totalDebt;
-
             AlertSystem.AddAlert(`1달이 지났습니다!`, `남은 빛 ${this.totalDebt + this.interestRate} 에서 ${this.interestRate}$ 만큼 빛을 갚았습니다.`);
-            EventSystem.PlayEvent(EventSystem.SelectEvent());
+            document.getElementById('remaining-debt').textContent = this.totalDebt;
         } else {
             this.gameOver();
         }
