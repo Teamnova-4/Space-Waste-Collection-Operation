@@ -64,7 +64,7 @@
         <button id="rateDown" class="debug-button">생산량 감소</button>
         <button id="speedUp" class="debug-button">속도 증가</button>
         <button id="speedDown" class="debug-button">속도 감소</button>
-        <button id="moneyCheat" class="debug-button">돈 100원 추가</button>
+        <button id="moneyCheat" class="debug-button">돈 1000원 추가</button>
         <p id="rateCount" style="color: white;">현재 생산량 0.5</p>
         <p id="speedCount" style="color: white;">현재 속도 0.5</p>
         <button id="shutDown" class="debug-button">게임 강제종료</button>
@@ -95,6 +95,7 @@
                         <button id="add-slot-btn" class="add-slot-btn">
                             <span>+</span>
                             <span>슬롯 추가</span>
+                            <span id="slot-upgrade-price">1000 크레딧</span>
                         </button>
                     </div>
                 </div>
@@ -128,8 +129,9 @@
             <h1>GAME CLEAR</h1>
             <p>하... 대출금 다 갚았다... 난 이제 해방이야!!!!!!</p>
             <div class="game-stats">
-                <p>남은 시간: <span id="remaining-time">10:00</span></p>
-                <p>남은 빚: <span id="remaining-debt">10000</span></p>
+
+                <p>플레이 시간: <span id="survival-time">10:00</span></p>
+                <p>남은 빚: <span id="credits-debt">10000</span></p>
 
                 <hr>
                 <p>TOTAL SCORE: <span id="total-score">8,888,888</span></p>
@@ -147,8 +149,8 @@
             <p>아....정말 살기 힘들다..!!!!!!!!!으아아!!!</p>
             <div class="game-stats">
                 
-                <p>남은 시간: <span id="remaining-time">10:00</span></p>
-                <p>남은 빚: <span id="remaining-debt">10000</span></p>
+                <p>플레이 시간: <span id="survival-time">10:00</span></p>
+                <p>남은 빚: <span id="credits-debt">10000</span></p>
 
                 <hr>
                 <p>TOTAL SCORE: <span id="total-score">8,888,888</span></p>
@@ -198,7 +200,7 @@
          */
         function resizeCanvas(canvas, ctx) {
             // 디바이스 픽셀 비율 가져오기 (기본값은 1)
-            const ratio = window.devicePixelRatio || 1;
+            const ratio =  window.devicePixelRatio || 1;
 
             // 브라우저 창의 너비와 높이 가져오기
             const width = window.innerWidth - 300;
@@ -215,7 +217,7 @@
             Background.INIT_SCALE(1000);
 
             // 캔버스에 그릴 때 스케일을 맞추기 위해 ctx.scale() 사용
-            ctx.scale(ratio, ratio);
+            ctx.scale(ratio,  ratio);
         }
 
         // 캔버스 및 WebGL 컨텍스트 가져오기

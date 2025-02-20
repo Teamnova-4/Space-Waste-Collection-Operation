@@ -1,6 +1,6 @@
+import AlertSystem from "../AlertSystem.js";
 import { Drone } from "../GameObjects/drone.js";
 import { User } from "../Upgrade.js";
-import AlertSystem from "../AlertSystem.js";
 import { DroneShop } from "./DroneShop.js";
 import { DroneSlot } from "./DroneSlot.js";
 import { DroneSlotView } from "./DroneSlotView.js";
@@ -161,17 +161,24 @@ export class DroneManager {
      * 드론 슬롯 확장
      */
     upgradeSlot() {
-        // 최대 슬롯 개수 제한 확인
-        if (this.slots.length >= this.maxSlots) {
-            console.log("최대 슬롯 개수에 도달했습니다.");
-            return;
-        }
-
         if (User.UseCredit(this.slotUpgradePrice)) {
             this.slots.push(new DroneSlot(this.slots.length));
             // 다음 슬롯 확장 시 50% 가격 인상
             this.slotUpgradePrice = Math.floor(this.slotUpgradePrice * 1.5);
             this.updateView();
+
+            document.getElementById("slot-upgrade-price").innerHTML = `${this.slotUpgradePrice} 크레딧`;
+        }
+
+        // 최대 슬롯 개수 제한 확인
+        if (this.slots.length >= this.maxSlots) {
+            console.log("최대 슬롯 개수에 도달했습니다.");
+
+            // 슬롯 추가 버튼 숨기기
+            const slotUpgradeButton = document.getElementById("add-slot-btn");
+            if (slotUpgradeButton) {
+                slotUpgradeButton.style.display = 'none'; // 또는 'visibility = hidden' 등
+            }
         }
     }
 
