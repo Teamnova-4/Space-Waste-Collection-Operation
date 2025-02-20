@@ -303,8 +303,8 @@ class GameResource {
         const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
         this.size = {
-            x: this.gameObject.transform.scale.x * this.image.width,
-            y: this.gameObject.transform.scale.y * this.image.height
+            x: this.gameObject.transform.scale.x * this.image.width * Background.SCALE,
+            y: this.gameObject.transform.scale.y * this.image.height * Background.SCALE
         }
 
         const pivot = {
@@ -431,6 +431,19 @@ export class GameLoop {
         this.gameStartTime = performance.now();
         console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
 
+        // 이미지는 가로 길이 기준으로 스케일링
+        // 가로 300px 세로 full
+        Background.REAL_SIZE = {width: this.canvas.width, height: this.canvas.height};
+        Background.FIXED_SIZE = {width: 1920, height: 1080};
+        Background.PANEL_SIZE = {width: 300, height: -1};
+        Background.FULL_SIZE = {
+            width: Background.REAL_SIZE.width + Background.PANEL_SIZE.width,
+            height: Background.REAL_SIZE.height
+        };
+        Background.SCALE = Background.FULL_SIZE.width / Background.FIXED_SIZE.width; 
+        console.log(Background.SCALE);
+
+
         // 우클릭 방지 코드 추가
         addEventListener('contextmenu', (event) => {
             event.preventDefault();
@@ -536,9 +549,7 @@ export class Background {
             return Background.instance;
         }
 
-        Background.WIDTH = 1920;
-        Background.HEIGHT = 1080;
-        Background.SCALE = 1;
+
 
         this.Initialize();
         Background.instance = this;
