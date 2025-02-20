@@ -159,7 +159,21 @@
     font-family: 'Arial', sans-serif;
     animation: fadeIn 0.3s ease-in-out;
 }
+.setting-message{
+    font-weight: bold;
+    background: linear-gradient(135deg, #6a6a6a, #373737); /* 부드러운 그라디언트 배경 */
+    padding: 30px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 800px;
+    margin: 15% auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    color: #fff;
+    text-align: center;
+    font-size: 1.2rem;
+}
 #close-settings-btn{
+    position: a;
     background-color: rgba(194, 194, 194, 0.2);
     color: white;
     padding: 10px 20px;
