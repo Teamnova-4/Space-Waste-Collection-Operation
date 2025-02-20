@@ -618,7 +618,6 @@ export class Background {
         }
 
         // // 캔버스 클리어 후 새로운 배경 그리기
-        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.ctx.drawImage(this.image,
             0, 0, this.image.width, this.image.height,
             this.x, 0, canvas.width, canvas.height);
