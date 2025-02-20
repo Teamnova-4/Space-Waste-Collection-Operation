@@ -536,13 +536,9 @@ export class Background {
             return Background.instance;
         }
 
-        this.canvas = canvas;
-        this.ctx = ctx;
-        this.image = new Image();
-        this.image.src = "Resources/BackGround.png";
-        this.speed = 0.01;
-        this.x = 0; // 배경의 초기 위치
-        this.isRunning = false;
+        Background.WIDTH = 1920;
+        Background.HEIGHT = 1080;
+        Background.SCALE = 1;
 
         this.Initialize();
         Background.instance = this;
@@ -554,7 +550,6 @@ export class Background {
     static Instance() {
         if (!Background.instance) {
             Background.instance = new Background();
-            Background.instance.Initialize();
         }
         return Background.instance;
     }
@@ -562,7 +557,15 @@ export class Background {
     /**
      * 싱클톤 초기화 함수
      */
-    Initialize() { }
+    Initialize() { 
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.image = new Image();
+        this.image.src = "Resources/BackGround.png";
+        this.speed = 0.05;
+        this.x = 0; // 배경의 초기 위치
+        this.isRunning = false;
+    }
 
     start() {
         if (this.isRunning) return;
