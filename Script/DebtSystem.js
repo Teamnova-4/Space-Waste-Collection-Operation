@@ -32,7 +32,7 @@ export class DebtSystem {
         GameLoop.AddLoop(() => { this.updateGameTime() }, 1000, 0);
 
         // 빚 갚기 버튼 이벤트 리스너 추가
-        document.getElementById('repay-debt-btn').addEventListener('click', () => this.repayDebt());
+        // document.getElementById('repay-debt-btn').addEventListener('click', () => this.repayDebt());
 
         // 초기 빚 표시
         document.getElementById('remaining-debt').textContent = this.totalDebt;
