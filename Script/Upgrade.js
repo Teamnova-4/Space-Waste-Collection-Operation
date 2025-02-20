@@ -174,6 +174,13 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("돈 치트 버튼 클릭: 현재 보유 크레딧 = " + user.credits);
     }
 
+    // 돈 차감 치트 버튼
+    document.getElementById("moneyDeductedCheat").onclick = function () {
+        user.credits -= 1000;
+        document.getElementById("credits").innerText = user.credits;
+        console.log("돈 차감 치트 버튼 클릭: 현재 보유 크레딧 = " + user.credits);
+    }
+
     // 초기 UI 설정
     updateUI();
 });
