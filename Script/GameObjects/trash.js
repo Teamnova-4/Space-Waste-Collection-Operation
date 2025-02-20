@@ -19,7 +19,6 @@ export class Trash extends GameObject {
         // this.explosionImage = new Image();
         // 폭발 스프라이트 이미지
         // this.explosionImage.src = "../../Resources/explosion.png";
-        this.trashCount = 0; // 쓰레기 개수를 저장하는 변수
     }
 
     Start() {
@@ -67,9 +66,7 @@ export class Trash extends GameObject {
         if (this.isTargeted) {
             this.targetedBy.StopWork();
         }
-        this.trashCount++; // 쓰레기 개수를 저장하는 변수
         SpaceStation.RemoveTrash(this);
-
     }
 
     OnLoad(image) {
@@ -120,7 +117,7 @@ export class Wreck extends Trash {
     constructor() {
         const speed = TrashFactory.Instance().speed;
         const randomSpeed = Math.random() * speed; // 0.1과 0.4 사이의 랜덤 값 생성
-        const randomRum = (Math.random() - 0.5) * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
+        const randomRum = (Math.random() - 0.5) * 0.3; // 0과 0.5 사이의 랜덤 회전 값 생성
         super(randomSpeed, randomRum, "Resources/trash_1.png"); // 난파선 이미지 20%폭발
     }
     Start() {
@@ -132,7 +129,7 @@ export class cementStone extends Trash {
     constructor() {
         const speed = TrashFactory.Instance().speed;
         const randomSpeed = Math.random() * speed; // 0.1과 0.4 사이의 랜덤 값 생성
-        const randomRum = (Math.random() - 0.5) * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
+        const randomRum = (Math.random() - 0.5) * 0.3; // 0과 0.5 사이의 랜덤 회전 값 생성
         super(randomSpeed, randomRum, "Resources/trash_2.png"); // 시멘트 돌덩이 이미지 10%폭발
 
     }
@@ -145,7 +142,7 @@ export class WreckPart extends Trash {
     constructor() {
         const speed = TrashFactory.Instance().speed;
         const randomSpeed = Math.random() * speed; // 0.1과 0.4 사이의 랜덤 값 생성
-        const randomRum = (Math.random() - 0.5) * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
+        const randomRum = (Math.random() - 0.5) * 0.5; // 0과 0.5 사이의 랜덤 회전 값 생성
         super(randomSpeed, randomRum, "Resources/trash_3.png"); // 난파선 부품 이미지, 30%폭발
     }
     Start() {
@@ -158,7 +155,7 @@ export class WreckCircle extends Trash {
     constructor() {
         const speed = TrashFactory.Instance().speed;
         const randomSpeed = Math.random() * speed; // 0.1과 0.4 사이의 랜덤 값 생성
-        const randomRum = (Math.random() - 0.5) * 0.1; // 0과 0.5 사이의 랜덤 회전 값 생성
+        const randomRum = (Math.random() - 0.5) * 0.5; // 0과 0.5 사이의 랜덤 회전 값 생성
         super(randomSpeed, randomRum, "Resources/trash_4.png"); // 난파선 부품 동그라미 이미지, 25%
     }
     Start() {

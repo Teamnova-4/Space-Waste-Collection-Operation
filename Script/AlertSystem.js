@@ -40,7 +40,6 @@ export default class AlertSystem{
     ShowAlert(){
         if (!this.isShowing && this.alertList.length > 0) {
             this.isShowing = true;
-
             const alert = this.alertList.shift();
             console.log(`%c [Alert] title: ${alert.title} description: ${alert.description}`, "background: red; color:white; font-weight:bold");
             this.alertTitle.innerHTML = alert.title ?? "Alert";

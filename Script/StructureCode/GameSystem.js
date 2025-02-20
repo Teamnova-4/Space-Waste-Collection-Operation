@@ -578,7 +578,7 @@ export class Background {
         this.ctx = ctx;
         this.image = new Image();
         this.image.src = "Resources/BackGround.png";
-        this.speed = 0.05;
+        this.speed = -0.6;
         this.x = 0; // 배경의 초기 위치
         this.isRunning = false;
     }
@@ -612,8 +612,8 @@ export class Background {
         if (!this.isRunning) return;
 
         // // 배경 위치 업데이트 (왼쪽에서 오른쪽으로 이동)
-        this.x += this.speed + 1;
-        if (this.x >= canvas.width) {
+        this.x -= this.speed;
+        if (Math.abs(this.x) >= canvas.width) {
             this.x = 0; // 화면 끝에 도달하면 처음으로 되돌리기
         }
 
@@ -621,9 +621,9 @@ export class Background {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.ctx.drawImage(this.image,
             0, 0, this.image.width, this.image.height,
-            -this.x, 0, canvas.width, canvas.height);
+            this.x, 0, canvas.width, canvas.height);
         this.ctx.drawImage(this.image,
             0, 0, this.image.width, this.image.height,
-            canvas.width - this.x, 0, canvas.width, canvas.height);
+            -canvas.width + this.x, 0, canvas.width, canvas.height);
     }
 }
