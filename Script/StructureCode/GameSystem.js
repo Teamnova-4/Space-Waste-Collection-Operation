@@ -305,13 +305,13 @@ class GameResource {
         const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
         this.size = {
-            x: this.gameObject.transform.scale.x * this.image.width * Background.SCALE,
-            y: this.gameObject.transform.scale.y * this.image.height * Background.SCALE
+            x: this.gameObject.transform.scale.x * this.image.width * Background.SCALE / window.devicePixelRatio,
+            y: this.gameObject.transform.scale.y * this.image.height * Background.SCALE / window.devicePixelRatio
         }
 
         const pivot = {
-            x: this.gameObject.transform.position.x * Background.SCALE,
-            y: this.gameObject.transform.position.y * Background.SCALE,
+            x: this.gameObject.transform.position.x * Background.SCALE / window.devicePixelRatio,
+            y: this.gameObject.transform.position.y * Background.SCALE / window.devicePixelRatio,
         }
 
         // 캔버스 상태 저장

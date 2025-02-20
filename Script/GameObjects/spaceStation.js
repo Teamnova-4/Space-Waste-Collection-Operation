@@ -45,6 +45,10 @@ export class SpaceStation extends GameObject {
         this.transform.position.x = Background.CANVAS_SIZE.width - 10;  // 화면 좌측 X
         this.transform.position.y = Background.CANVAS_SIZE.height / 2; // 화면 중앙 Y
 
+        console.log(`trasform postion x: ${this.transform.position.x} y: ${this.transform.position.y}`);
+        console.log(`CANVAS SIZE x: ${Background.CANVAS_SIZE.width} y: ${Background.CANVAS_SIZE.height}`);
+        console.log(`R CANVAS SIZE x: ${Background.REAL_CANVAS_SIZE.width} y: ${Background.REAL_CANVAS_SIZE.height}`);
+
         // 게임 오브젝트의 크기를 설정합니다.
         this.transform.scale.x = 1.7;
         this.transform.scale.y = 1.3;
