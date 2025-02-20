@@ -442,9 +442,10 @@ export class GameLoop {
         });
 
         // 백그라운드 BGM 시작
-        var backGroundMusic = new Audio('Resources/background-music.mp3');
-        backGroundMusic.loop = true; // BGM 반복재생 여부
-        backGroundMusic.play(); // BGM 시작
+        this.backGroundMusic = new Audio('Resources/background-music.mp3'); // BGM 오디오 요소 생성
+        this.backGroundMusic.loop = true; // 반복 재생 설정
+        this.backGroundMusic.volume = 1.0; // 초기 볼륨 설정
+        this.backGroundMusic.play(); // BGM 재생
         
         // 클릭 메서드드
         canvas.addEventListener("click", this.onClickCanvas);
@@ -480,6 +481,13 @@ export class GameLoop {
 
         // ============================Update====================== 
 
+        // 슬라이더에서 볼륨 값을 가져와 BGM 볼륨을 설정
+        const volumeSlider = document.getElementById('volume-slider');
+        if (volumeSlider) {
+            const volume = parseFloat(volumeSlider.value); // 슬라이더의 현재 값
+            this.backGroundMusic.volume = volume; // BGM 볼륨 설정
+        }
+
         this.objects
         .sort((objA, objB)=> objA.layer - objB.layer)
         .forEach((object) => {
@@ -504,7 +512,6 @@ export class GameLoop {
         this.destroyedObjects.length = 0; // 배열 초기화
 
         //==========================================================
-
 
         this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
         // requestAnimationFrame을 사용해 다음 프레임을 요청

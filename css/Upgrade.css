@@ -142,3 +142,30 @@
 .animate-coin {
     animation: coinShine 1s ease-in-out;
 }
+
+/* 설정 팝업 스타일 */
+.hidden {
+    display: none; /* 요소를 숨김 */
+}
+
+.SettingModal{
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    animation: fadeIn 0.3s ease-in-out;
+}
+#close-settings-btn{
+    background-color: rgba(194, 194, 194, 0.2);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+}
