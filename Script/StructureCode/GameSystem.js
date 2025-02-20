@@ -116,6 +116,11 @@ class Transform {
         this.calculateRotation();
     }
 
+    setScale(value){
+        this.scale.x = value;
+        this.scale.y = value;
+    }
+
     calculateRotation() {
         if (this.rotation > 360) {
             this.rotation -= 360;
@@ -308,8 +313,8 @@ class GameResource {
         }
 
         const pivot = {
-            x: this.gameObject.transform.position.x,
-            y: this.gameObject.transform.position.y,
+            x: this.gameObject.transform.position.x * Background.SCALE,
+            y: this.gameObject.transform.position.y * Background.SCALE,
         }
 
         // 캔버스 상태 저장
@@ -430,18 +435,6 @@ export class GameLoop {
         this.lastFrameTime = performance.now(); // 게임 시작 시간 설정
         this.gameStartTime = performance.now();
         console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
-
-        // 이미지는 가로 길이 기준으로 스케일링
-        // 가로 300px 세로 full
-        Background.REAL_SIZE = {width: this.canvas.width, height: this.canvas.height};
-        Background.FIXED_SIZE = {width: 1920, height: 1080};
-        Background.PANEL_SIZE = {width: 300, height: -1};
-        Background.FULL_SIZE = {
-            width: Background.REAL_SIZE.width + Background.PANEL_SIZE.width,
-            height: Background.REAL_SIZE.height
-        };
-        Background.SCALE = Background.FULL_SIZE.width / Background.FIXED_SIZE.width; 
-        console.log(Background.SCALE);
 
 
         // 우클릭 방지 코드 추가
@@ -576,6 +569,19 @@ export class Background {
         this.speed = 0.05;
         this.x = 0; // 배경의 초기 위치
         this.isRunning = false;
+    }
+
+    static INIT_SCALE(scale) {
+
+        // 실제 캔버스 크기
+        Background.REAL_CANVAS_SIZE = {width: Background.Instance().canvas.width, height: Background.Instance().canvas.height};
+
+        // 게임 캔버스 크기
+        Background.CANVAS_SIZE = {width: scale, height: scale / Background.REAL_CANVAS_SIZE.width * Background.REAL_CANVAS_SIZE.height};
+
+
+        // 게임 캔버스 대비 실제 비율
+        Background.SCALE = Background.REAL_CANVAS_SIZE.width / scale; 
     }
 
     start() {
