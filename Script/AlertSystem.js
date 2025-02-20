@@ -33,9 +33,8 @@ export default class AlertSystem{
      * @param {} alert 
      */
     static AddAlert(title, description) {
-        // TODO 디버깅을 하기 위해 번거로운 알림은 모두 종료함 추후 주석 해제할 것
-        // AlertSystem.Instance().alertList.push({title: title, description: description});
-        // AlertSystem.Instance().ShowAlert();
+        AlertSystem.Instance().alertList.push({title: title, description: description});
+        AlertSystem.Instance().ShowAlert();
     }
 
     ShowAlert(){

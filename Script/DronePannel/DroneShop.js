@@ -15,22 +15,24 @@ export class DroneShop {
          * @property {number} capacity - 적재 용량
          * @property {string} imageSrc - 드론 이미지 경로
          */
-        this.droneTypes = {
-            basic: {
+        this.droneTypes = [ 
+            {
+                typeId: "basic", 
                 name: "기본 드론",
                 price: 500,
                 speed: 0.33,
                 capacity: 1,
                 imageSrc: "Resources/drone.png",
             },
-            advanced: {
+            {
+                typeId: "advanced", 
                 name: "고급 드론",
                 price: 1000,
                 speed: 0.5,
                 capacity: 2,
                 imageSrc: "Resources/drone_2.png",
             },
-        };
+        ];
 
         this.view = new DroneShopView(document.querySelector(".shop-container"));
     }
