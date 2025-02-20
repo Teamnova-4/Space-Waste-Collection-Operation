@@ -11,6 +11,10 @@ export class SpaceStation extends GameObject {
         if (SpaceStation.instance) {
             return SpaceStation.instance;
         }
+        // 쓰레기 처리 갯수 변수 선언
+        this.trashCount = 0;
+        // 최근 쓰레기 처리 개수를 저장할 속성 추가
+        this.lastTrashCount = 0;
 
         this.Initialize();
         SpaceStation.instance = this;
@@ -68,6 +72,7 @@ export class SpaceStation extends GameObject {
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
     Update() {
 
+
         // 게임 오브젝트의 초기 위치를 설정
         this.transform.position.x = Background.CANVAS_SIZE.width - 10;  // 화면 좌측 X
         this.transform.position.y = Background.CANVAS_SIZE.height / 2; // 화면 중앙 Y
@@ -93,6 +98,16 @@ export class SpaceStation extends GameObject {
                 }
             });
         }
+    }
+    getTrashCount() {
+        return this.trashCount;
+    }
+    incrementTrashCount() {
+        this.trashCount++;
+        // 최근 값 저장
+        this.lastTrashCount = this.trashCount;
+        console.log(`쓰레기 처리 갯수: ${this.trashCount}, 최근 처리된 개수: ${this.lastTrashCount}`);
+        return this.trashCount; // 변경된 부분
     }
 
     // 게임 오브젝트가 매 프레임의 마지막에 업데이트될 때 호출되는 메서드
@@ -125,10 +140,22 @@ export class SpaceStation extends GameObject {
     // }
 
     static RemoveTrash(trash) {
+
         const idx = TrashFactory.Instance().trashList.indexOf(trash);
+        const instance = SpaceStation.Instance();
+
+        // console.log(`RemoveTrash 실행 전: lastTrashCount = ${instance.lastTrashCount}`);
+        // let con = instance.incrementTrashCount();
+        // console.log(`RemoveTrash 실행 후: lastTrashCount = ${instance.lastTrashCount}`);
+
         if (idx !== -1) {
             TrashFactory.Instance().trashList.splice(idx, 1);
-            // console.log("RemoveTrash");
         }
+        // return con;
+    }
+    static GetLastTrashCount() {
+        const instance = SpaceStation.Instance();
+        // console.log(`GetLastTrashCount 실행: lastTrashCount = ${instance.lastTrashCount}`);
+        return instance.lastTrashCount;
     }
 }

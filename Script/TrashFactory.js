@@ -34,6 +34,7 @@ export class TrashFactory {
      * 싱클톤 초기화 함수
      */
     Initialize() {
+    
         this.speed = 0.5; // 쓰레기 기본 이동속도
         this.spawnRate = 0.5; // 초당 생성 개수
         this.isRunning = false; // 쓰레기 생성이 실행 중인지 여부
@@ -101,6 +102,5 @@ export class TrashFactory {
             this.stopTrashSpawn(); // 기존 setInterval 중지
             this.startTrashSpawn(); // 새로운 setInterval 시작
         }
-
     }
 }

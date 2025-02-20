@@ -34,7 +34,7 @@
         <button id="repay-debt-btn">빚 갚기</button>
     </div>
 
-    <div id="ui-container">
+    <div id="ui-container"">
         <div id="credit-display" class="credit-left">
             <img src="Resources/coin.png" alt="코인" class="coin-icon">
             <span id="credits">100</span>
@@ -131,7 +131,7 @@
 
                 <p>남은 시간: <span id="remaining-time">10:00</span></p>
                 <p>남은 빚: <span id="remaining-debt">10000</span></p>
-         
+
                 <hr>
                 <p>TOTAL SCORE: <span id="total-score">8,888,888</span></p>
             </div>
@@ -147,10 +147,10 @@
             <h1>GAME OVER....</h1>
             <p>아....정말 살기 힘들다..!!!!!!!!!으아아!!!</p>
             <div class="game-stats">
-                <p>생존 시간: <span id="survival-time">10:00</span></p>
-                <p>달성 레벨: <span id="achievement-level">30</span></p>
-                <p>처리한 쓰레기 갯수: <span id="trash-count">420</span></p>
-                <p>벌어들인 크레딧: <span id="credits-earned">667</span></p>
+                
+                <p>남은 시간: <span id="remaining-time">10:00</span></p>
+                <p>남은 빚: <span id="remaining-debt">10000</span></p>
+
                 <hr>
                 <p>TOTAL SCORE: <span id="total-score">8,888,888</span></p>
             </div>
@@ -161,6 +161,17 @@
         </div>
     </div>
 
+    <h1>쓰레기 처리 카운트: <span id="trashCount" style="display: none;">0</span></h1>
+    <!-- 설정 팝업 -->
+    <div id="SettingModal" class="SettingModal hidden">
+        <div class="modal-message">
+            <h2>설정</h2>
+            <label for="volume-slider">BGM 볼륨:</label>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1">
+            <button id="close-settings-btn">닫기</button>
+        </div>
+    </div>
+    <audio src="Resources/background-music.mp3" loop></audio>
 
     <script type="module">
         import { GameLoop, Background } from "./Script/StructureCode/GameSystem.js";
@@ -243,7 +254,7 @@
 
         // 빚 시스템 초기화
         const debtSystem = new DebtSystem();
-
+     
         // 우주 쓰레기 팩토리 테스트
         document.getElementById("rateUp").onclick = function () {
             trashFactory.setSpawnRate(trashFactory.spawnRate + 1);
@@ -261,7 +272,7 @@
             trashFactory.setSpeed(trashFactory.speed - 1);
             document.getElementById("speedCount").innerText = "현재 속도 " + trashFactory.speed;
         }
-
+       
         //SpaceStation.AddDrone();
 
         // 배경 애니메이션 시작
@@ -271,12 +282,41 @@
         window.addEventListener('resize', () => {
             // 캔버스 크기를 현재 브라우저 크기에 맞춤 
             resizeCanvas(canvas, ctx);
-
             // spaceStation 의 위치를 캔버스 오른쪽 끝 중간위치로 재조정
             // 브라우저 창의 너비와 높이 가져오기
             //spaceStation.transform.position.x = window.innerWidth - 300;
             //spaceStation.transform.position.y = window.innerHeight / 2;
 
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const settingsPopup = document.getElementById('SettingModal');
+            const closeSettingsBtn = document.getElementById('close-settings-btn');
+
+            // ESC 키를 눌렀을 때 설정 팝업 표시
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    settingsPopup.classList.toggle('hidden'); // 팝업 표시/숨기기
+                }
+            });
+
+            // 설정 팝업 닫기 버튼 클릭 시 팝업 숨기기
+            closeSettingsBtn.addEventListener('click', () => {
+                settingsPopup.classList.add('hidden');
+            });
+
+            // 볼륨 슬라이더 이벤트 리스너
+            document.getElementById('volume-slider').addEventListener('input', (event) => {
+                const volume = event.target.value;
+            });
+
+            // 팝업 외부 클릭 시 팝업 닫기
+            window.addEventListener('click', (event) => {
+                if (event.target === settingsPopup) {
+                    settingsPopup.classList.add('hidden'); // 팝업 숨기기
+                }
+            });
         });
     </script>
 </body>
