@@ -19,6 +19,7 @@ export class Trash extends GameObject {
         // this.explosionImage = new Image();
         // 폭발 스프라이트 이미지
         // this.explosionImage.src = "../../Resources/explosion.png";
+        this.trashCount = 0; // 쓰레기 개수를 저장하는 변수
     }
 
     Start() {
@@ -66,7 +67,9 @@ export class Trash extends GameObject {
         if (this.isTargeted) {
             this.targetedBy.StopWork();
         }
+        this.trashCount++; // 쓰레기 개수를 저장하는 변수
         SpaceStation.RemoveTrash(this);
+
     }
 
     OnLoad(image) {

@@ -116,7 +116,7 @@ class Transform {
         this.calculateRotation();
     }
 
-    setScale(value){
+    setScale(value) {
         this.scale.x = value;
         this.scale.y = value;
     }
@@ -305,13 +305,13 @@ class GameResource {
         const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
         this.size = {
-            x: this.gameObject.transform.scale.x * this.image.width * Background.SCALE,
-            y: this.gameObject.transform.scale.y * this.image.height * Background.SCALE
+            x: this.gameObject.transform.scale.x * this.image.width * Background.SCALE / window.devicePixelRatio,
+            y: this.gameObject.transform.scale.y * this.image.height * Background.SCALE / window.devicePixelRatio
         }
 
         const pivot = {
-            x: this.gameObject.transform.position.x * Background.SCALE,
-            y: this.gameObject.transform.position.y * Background.SCALE,
+            x: this.gameObject.transform.position.x * Background.SCALE / window.devicePixelRatio,
+            y: this.gameObject.transform.position.y * Background.SCALE / window.devicePixelRatio,
         }
 
         // 캔버스 상태 저장
@@ -334,8 +334,8 @@ class GameResource {
     }
 }
 
-class Loop{
-    constructor(interval, func, order){
+class Loop {
+    constructor(interval, func, order) {
         this.interval = interval;
         this.func = func;
         this.order = order;
@@ -344,10 +344,10 @@ class Loop{
 
     checkInterval(deltaTime) {
         this.currentTime += deltaTime;
-        if(this.currentTime >= this.interval){
+        if (this.currentTime >= this.interval) {
             this.currentTime -= this.interval;
             return true;
-        } 
+        }
         return false;
     }
 }
@@ -378,7 +378,7 @@ export class GameLoop {
     /**
      * 싱클톤 초기화 함수
      */
-    Initialize() { 
+    Initialize() {
         this.isRunning = false; // 게임 루프가 실행 중인지 여부
 
         this.objects = [];
@@ -391,6 +391,7 @@ export class GameLoop {
 
         GameLoop.playTime = 0;
         GameLoop.GameSpeed = 1;
+
     }
 
     static AddObject(object) {
@@ -417,7 +418,7 @@ export class GameLoop {
      * @param {*} timeout 
      * @param {*} order 
      */
-    static AddLoop(object, timeout, order = 0){
+    static AddLoop(object, timeout, order = 0) {
         if (object instanceof Function) {
             GameLoop.instance.newLoops.push(new Loop(timeout, object, order));
         } else {
@@ -441,13 +442,14 @@ export class GameLoop {
 
         // 드래그 방지 코드 추가
         addEventListener('selectstart', (event) => {
-            event.preventDefault(); 
+            event.preventDefault();
         });
 
         // 백그라운드 BGM 시작
-        var backGroundMusic = new Audio('Resources/background-music.mp3');
-        backGroundMusic.loop = true; // BGM 반복재생 여부
-        backGroundMusic.play(); // BGM 시작
+        this.backGroundMusic = new Audio('Resources/background-music.mp3'); // BGM 오디오 요소 생성
+        this.backGroundMusic.loop = true; // 반복 재생 설정
+        this.backGroundMusic.volume = 1.0; // 초기 볼륨 설정
+        this.backGroundMusic.play(); // BGM 재생
         
         // 클릭 메서드드
         canvas.addEventListener("click", this.onClickCanvas);
@@ -460,6 +462,7 @@ export class GameLoop {
     }
 
     loop() {
+    
         if (!this.isRunning) return;
 
         this.backgroundRender(); // 화면 렌더링
@@ -476,26 +479,33 @@ export class GameLoop {
         });
         this.newObjects.length = 0; // 배열 초기화
 
-        this.newLoops.forEach((loop) =>{
+        this.newLoops.forEach((loop) => {
             Util.autoAddToDictList(this.loops, loop.order, loop);
         });
         this.newLoops.length = 0; // 배열 초기화
 
         // ============================Update====================== 
 
+        // 슬라이더에서 볼륨 값을 가져와 BGM 볼륨을 설정
+        const volumeSlider = document.getElementById('volume-slider');
+        if (volumeSlider) {
+            const volume = parseFloat(volumeSlider.value); // 슬라이더의 현재 값
+            this.backGroundMusic.volume = volume; // BGM 볼륨 설정
+        }
+
         this.objects
-        .sort((objA, objB)=> objA.layer - objB.layer)
-        .forEach((object) => {
-            object.Update();
-            object.OnDraw(this.ctx);
-            object.InternalLogicUpdate();
+            .sort((objA, objB) => objA.layer - objB.layer)
+            .forEach((object) => {
+                object.Update();
+                object.OnDraw(this.ctx);
+                object.InternalLogicUpdate();
 
-            object.LateUpdate();
-        });
+                object.LateUpdate();
+            });
 
-        Util.mergeDictToList(this.loops) 
-        .filter((loop)=>loop.checkInterval(GameLoop.deltaTime)) 
-        .forEach((loop)=>loop.func());
+        Util.mergeDictToList(this.loops)
+            .filter((loop) => loop.checkInterval(GameLoop.deltaTime))
+            .forEach((loop) => loop.func());
 
         // ============================Destroy====================== 
 
@@ -507,7 +517,6 @@ export class GameLoop {
         this.destroyedObjects.length = 0; // 배열 초기화
 
         //==========================================================
-
 
         this.lastFrameTime = currentTime; // 마지막 프레임 시간 업데이트
         // requestAnimationFrame을 사용해 다음 프레임을 요청
@@ -564,11 +573,8 @@ export class Background {
     /**
      * 싱클톤 초기화 함수
      */
-    Initialize() { 
+    Initialize() {
         var backGroundMusic = new Audio('Resources/background-music.mp3');
-        backGroundMusic.loop = true; // BGM 반복재생 여부
-        backGroundMusic.play();    
-        this.canvas = canvas;
         this.ctx = ctx;
         this.image = new Image();
         this.image.src = "Resources/BackGround.png";
@@ -580,14 +586,14 @@ export class Background {
     static INIT_SCALE(scale) {
 
         // 실제 캔버스 크기
-        Background.REAL_CANVAS_SIZE = {width: Background.Instance().canvas.width, height: Background.Instance().canvas.height};
+        Background.REAL_CANVAS_SIZE = { width: canvas.width, height: canvas.height };
 
         // 게임 캔버스 크기
-        Background.CANVAS_SIZE = {width: scale, height: scale / Background.REAL_CANVAS_SIZE.width * Background.REAL_CANVAS_SIZE.height};
+        Background.CANVAS_SIZE = { width: scale, height: scale / Background.REAL_CANVAS_SIZE.width * Background.REAL_CANVAS_SIZE.height };
 
 
         // 게임 캔버스 대비 실제 비율
-        Background.SCALE = Background.REAL_CANVAS_SIZE.width / scale; 
+        Background.SCALE = Background.REAL_CANVAS_SIZE.width / scale;
     }
 
     start() {
@@ -606,17 +612,18 @@ export class Background {
         if (!this.isRunning) return;
 
         // // 배경 위치 업데이트 (왼쪽에서 오른쪽으로 이동)
-        this.x += this.speed;
-        if (this.x >= this.canvas.width) {
+        this.x += this.speed + 1;
+        if (this.x >= canvas.width) {
             this.x = 0; // 화면 끝에 도달하면 처음으로 되돌리기
         }
 
         // // 캔버스 클리어 후 새로운 배경 그리기
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(
-            this.image, -this.x, 0,
-            this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(this.image, this.canvas.width - this.x, 0,
-            this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.drawImage(this.image,
+            0, 0, this.image.width, this.image.height,
+            -this.x, 0, canvas.width, canvas.height);
+        this.ctx.drawImage(this.image,
+            0, 0, this.image.width, this.image.height,
+            canvas.width - this.x, 0, canvas.width, canvas.height);
     }
 }
