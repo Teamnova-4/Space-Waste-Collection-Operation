@@ -23,7 +23,6 @@ export class Trash extends GameObject {
 
     Start() {
         // 이미지 로딩 상태 확인
-        this.resource.image.onload = () => this.handleImageLoad();
         this.resource.image.onerror = () => {
             console.error("이미지 로드 실패:", this.imageSrc);
         };
@@ -33,9 +32,9 @@ export class Trash extends GameObject {
         this.transform.position.x = -50;
 
         const padding = 100;
-        const min = padding;
-        const max = Background.CANVAS_SIZE.height - padding;
-        this.pointY = Math.random() * (max - min) + min;
+        const randomPoint = Math.random();
+        this.pointY = randomPoint * (Background.CANVAS_SIZE.height -  padding * 2) + padding;
+
         this.transform.position.y = this.pointY;
 
         this.transform.scale.x = 1;
@@ -50,15 +49,14 @@ export class Trash extends GameObject {
     }
 
     Update() {
-        // 매 프레임마다 오른쪽으로 1px씩 이동
+    // 매 프레임마다 오른쪽으로 1px씩 이동
         if (!this.isCaught) {
-            if (!this.isCaught) {
-                this.transform.position.x += this.speed;
-                this.transform.rotation += this.rotationSpeed; // 회전 값 업데이트
-                if (this.transform.position.x > canvas.width + 100) {
-                    this.Destroy();
-                }
-            }
+            this.transform.position.y = this.pointY;
+            this.transform.position.x += this.speed;
+            this.transform.rotation += this.rotationSpeed; // 회전 값 업데이트
+            if (this.transform.position.x > Background.CANVAS_SIZE.width + 100) {
+                this.Destroy();
+            } 
         }
     }
 

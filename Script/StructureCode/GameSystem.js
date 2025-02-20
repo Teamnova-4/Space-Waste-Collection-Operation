@@ -291,11 +291,9 @@ class GameResource {
         this.gameObject = gameObject;
 
         this.image.onload = () => {
-            console.log(`[이미지 로드 완료] ${this.image.src}`);
             this.gameObject.OnLoad(this.image);
         };
         this.image.onerror = () => {
-            console.trace(`[이미지 로드 실패] ${this.image.src}`);
             const error = Util.ErrorFormat("이미지 로드 실패", this.image.src, { image: this.image })
             this.gameObject.OnError(error);
         };

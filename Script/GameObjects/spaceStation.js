@@ -63,9 +63,21 @@ export class SpaceStation extends GameObject {
 
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
     Update() {
+
+        // 게임 오브젝트의 초기 위치를 설정
+        this.transform.position.x = Background.CANVAS_SIZE.width - 10;  // 화면 좌측 X
+        this.transform.position.y = Background.CANVAS_SIZE.height / 2; // 화면 중앙 Y
+
         // TrashFactory의 nearTrashList 정렬 업데이트
-        TrashFactory.Instance().nearTrashList = [...TrashFactory.Instance().trashList].sort(
-            (a, b) => (this.transform.position.x - a.transform.position.x) + (this.transform.position.y - b.transform.position.y));
+        TrashFactory.Instance().trashList
+        .sort((a, b) =>{
+            const d1 = (a.transform.position.x - this.transform.position.x)**2 + (a.transform.position.y - this.transform.position.y)**2;
+            const d2 = (b.transform.position.x - this.transform.position.x)**2 + (b.transform.position.y - this.transform.position.y)**2;
+            return d1 - d2;
+        });
+
+        // console.log(TrashFactory.Instance().trashList);
+
 
 
         if (TrashFactory.Instance().trashList.length > 0) {
