@@ -36,9 +36,8 @@ export class DroneShopView {
             return;
         }
 
-        for (const typeId in droneTemplates) {
-            const template = droneTemplates[typeId];
-            const itemElement = this.createShopItemElement(template, typeId, onBuyClick);
+        for (const template of droneTemplates) {
+            const itemElement = this.createShopItemElement(template, template.typeId, onBuyClick);
             droneSlotContainer.appendChild(itemElement); // drone-slot-container 에 추가
         }
     }

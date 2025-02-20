@@ -85,7 +85,7 @@ export class TrashFactory {
         this.trashInterval = null;
     }
 
-    // 이동속도 설정
+    // 이동속도 설정console
     setSpeed(speed) {
         this.speed = speed;
         console.log("쓰레기 속도 변경:", this.speed);

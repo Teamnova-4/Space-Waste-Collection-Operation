@@ -68,7 +68,7 @@ export class DroneSlotView {
         ${
           slot.isOccupied
             ? `<button class="sell-btn" data-slot-index="${index}">판매</button>`
-            : `<p class="slot-hint">클릭하여 드론 구매</p>`
+            : ``
         }
       </div>
     `;
