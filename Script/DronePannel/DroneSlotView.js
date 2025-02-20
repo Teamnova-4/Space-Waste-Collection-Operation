@@ -59,8 +59,7 @@ export class DroneSlotView {
             slot.isOccupied
               ? `<img src="${slot.drone.imageSrc}" alt="${slot.drone.name}">
                  <p class="drone-name">${slot.drone.name}</p>
-                 <p class="drone-speed">속도: ${slot.drone.speed.toFixed(2)}</p>
-                 <p class="drone-capacity">적재량: ${slot.drone.capacity}</p>`
+                 <p class="drone-speed">속도: ${slot.drone.speed.toFixed(2)}</p>`
               : `<div class="empty-slot"></div>
                  <p class="slot-empty-text">비어있음</p>`
           }

@@ -193,14 +193,6 @@ export class DroneManager {
 
         console.log("상점에서 선택한 드론 정보 : ", droneTemplate);
 
-        // 크레딧 부족 검사
-        let isCreditOk = User.UseCredit(dronePrice);
-
-        // 크레딧이 충분하지 않으면 return
-        if (!isCreditOk) {
-            console.log("드론 구매 실패 - 크레딧 부족 (가격, 가지고 있는 돈) : ", dronePrice, User.Instance().credits);
-            return;
-        }
 
         // 비어 있는 슬롯 찾기 (첫 번째 빈 슬롯)
         const emptySlot = this.slots.find(slot => !slot.isOccupied);
@@ -210,6 +202,17 @@ export class DroneManager {
             AlertSystem.AddAlert("드론 슬롯 부족", "드론 슬롯이 부족합니다.");
             return;
         }
+
+
+        // 크레딧 사용 시도
+        let isCreditOk = User.UseCredit(dronePrice);
+
+        // 크레딧이 충분하지 않으면 return
+        if (!isCreditOk) {
+            console.log("드론 구매 실패 - 크레딧 부족 (가격, 가지고 있는 돈) : ", dronePrice, User.Instance().credits);
+            return;
+        }
+
 
         // 드론 생성 및 슬롯에 배치
         const newDrone = new Drone(droneTemplate);
