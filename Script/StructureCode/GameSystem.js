@@ -180,7 +180,6 @@ class Transform {
         // Math.atan2(dy, dx) 는 라디안 단위로 값을 반환함으로 이를 도 단위로 변환하려면 Transform.rad2deg를 곱해준다.
         // Transform.rad2deg = 180 / Math.PI
         this.rotation = Math.atan2(dy, dx) * Transform.rad2deg;
-
     }
 
     Distance(targetPosition) {
