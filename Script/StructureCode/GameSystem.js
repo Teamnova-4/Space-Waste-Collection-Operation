@@ -1,4 +1,3 @@
-import AlertSystem from "../AlertSystem.js";
 import { Util } from "../Util.js";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -41,6 +40,7 @@ export class GameObject extends GameEvent {
     constructor() {
         super();
 
+        this.layer = 0;
         this.transform = new Transform(this);
         this.resource = new GameResource(this);
         this.physics = new Physics(this);
@@ -431,8 +431,6 @@ export class GameLoop {
         this.gameStartTime = performance.now();
         console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
 
-        AlertSystem.AddAlert("GameStart", "게임 시작했습니다.");
-
         // 우클릭 방지 코드 추가
         addEventListener('contextmenu', (event) => {
             event.preventDefault();
@@ -477,7 +475,9 @@ export class GameLoop {
 
         // ============================Update====================== 
 
-        this.objects.forEach((object) => {
+        this.objects
+        .sort((objA, objB)=> objA.layer - objB.layer)
+        .forEach((object) => {
             object.Update();
             object.OnDraw(this.ctx);
             object.InternalLogicUpdate();

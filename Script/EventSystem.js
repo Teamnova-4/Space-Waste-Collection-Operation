@@ -113,7 +113,7 @@ export class AdditionalExpensesEvent extends EventBase {
             eventDescription: "추가 비용이 발생하여 갑작스러운 지출이 발생합니다.",
         });
 
-        this.additionalDebt = 100000; // 추가로 발생하는 빚
+        this.additionalDebt = 1000; // 추가로 발생하는 빚
     }   
 
     StartEvent() {

@@ -10,6 +10,7 @@ export class Drone extends GameObject {
 
         this.id = ++Drone.lastId; // 드론의 id (식별 용)
         this.name = `드론 ${this.id}호`; // 드론 이름
+        this.layer = 5;
 
         if (template) {
             this.type = template.id;
@@ -132,5 +133,12 @@ export class Drone extends GameObject {
     DestructionTrash() {
         this.targetTrash.Destroy();
         User.AddCredits(200);
+        // 코인 반짝임 효과 트리거
+        const coinDisplay = document.querySelector('#credit-display img');
+        coinDisplay.classList.add('coin-shine');
+        // 애니메이션 종료 후 클래스 제거
+        setTimeout(() => {
+            coinDisplay.classList.remove('coin-shine');
+        }, 1000); // 1초 후 효과 제거
     }
 }
