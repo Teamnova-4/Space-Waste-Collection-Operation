@@ -1,7 +1,7 @@
+import { DroneManager } from "../DronePannel/DroneManager.js";
 import { GameObject } from "../StructureCode/GameSystem.js";
 import { User } from "../Upgrade.js";
 import { SpaceStation } from "./spaceStation.js";
-import { DroneManager } from "../DronePannel/DroneManager.js"
 
 export class Drone extends GameObject {
     static lastId = 0; // 마지막으로 부여된 id, 새 드론은 마지막 id + 1 이 부여된다.
@@ -74,13 +74,6 @@ export class Drone extends GameObject {
                 // 없으면 그 즉시 화면에서 해당 드론 제거
 
                 // DroneManager의 slots를 순회하며 현재 드론이 존재하는지 확인
-                console.log("현재 보유중인 드론 id 목록:");
-                console.log(DroneManager.Instance().slots
-                    .filter(slot => slot.isOccupied && slot.drone)
-                    .map(slot => slot.drone.id)
-                );
-
-                console.log("현재 드론 id = ", this.id);
                 const droneExists = DroneManager.Instance().slots.some(
                     slot => slot.isOccupied && slot.drone && slot.drone.id === this.id
                 );
@@ -91,7 +84,21 @@ export class Drone extends GameObject {
                     this.Destroy(); // 드론 객체 제거
                 }
             }
+        } else {
+
+            const droneExists = DroneManager.Instance().slots.some(
+                slot => slot.isOccupied && slot.drone && slot.drone.id === this.id
+            );
+
+
+            // 드론이 더 이상 존재하지 않으면 (팔린 상태)
+            if (!droneExists) {
+                this.StopWork(); // 작업 중지
+                this.Destroy(); // 드론 객체 제거
+            }
         }
+
+
     }
 
     LateUpdate() {
