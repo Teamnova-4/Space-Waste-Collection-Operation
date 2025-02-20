@@ -57,9 +57,11 @@ export class Drone extends GameObject {
         // 드론의 상태 업데이트
         if (this.isWorking) {
             this.transform.LookAt(this.targetPosition);
-
             this.physics.setVelocityInDirection({ x: this.speed, y: this.speed });
             const distance = this.transform.Distance(this.targetPosition);
+
+            // 이동방향 계산후 올바른 각도로 드론이미지가 출력되도록 재설정 
+            this.transform.rotation = this.transform.rotation + 90;
 
             if (!this.isReturning && distance < this.catchDistance) {
                 this.targetTrash.catch(this);
