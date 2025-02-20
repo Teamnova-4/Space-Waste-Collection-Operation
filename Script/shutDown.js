@@ -130,25 +130,34 @@ export class shutDown {
     }
     // 게임클리어, 오버에 있는 모달의 내용 상태를 업데이트하는 메서드
     getGameStats() {
-        // 각 요소를 가져옵니다.
-        const playTime = document.getElementById('survival-time');
-        const creditsdebt = document.getElementById('credits-debt');
-        const totalScore = document.getElementById('total-score');
-        
-        console.log("playTime:", playTime);
-        console.log("creditsdebt:", creditsdebt);
-
+        // 게임 승리, 패배에서 플레이 시간, 갚은 금액을 표시하는 요소를 가져옵니다.
+        const playTimeElements = document.querySelectorAll("#survival-time");
+        const creditsDebtElements = document.querySelectorAll("#credits-debt"); // 수정: #credits-debt 요소 여러 개 선택
+    
+        console.log("playTimeElements:", playTimeElements);
+        console.log("creditsDebtElements:", creditsDebtElements);
+    
         // remaining-time 요소에서 시간 값을 가져옵니다 (예: "9:47")
         const remainingTimeText = this.remainingTime.textContent.trim();
-
-        // 플레이이 시간을 계산하고 표시
-        playTime.textContent = this.calculateSurvivalTime(remainingTimeText);
-
-        // 남은 빚을 표시
-        creditsdebt.textContent = this.remainingDebt.textContent;
-
-
+    
+        // 플레이 시간을 계산하고 표시
+        const survivalTime = this.calculateSurvivalTime(remainingTimeText);
+    
+        // playTimeElements에 대해 각 요소의 텍스트를 업데이트
+        playTimeElements.forEach(element => {
+            element.textContent = survivalTime;
+        });
+    
+        // creditsDebtElements에 대해 갚은 빚을 표시
+        creditsDebtElements.forEach(element => {
+            const remainingDebtValue = parseInt(this.remainingDebt.textContent, 10);  // 숫자로 변환
+            const remainingAmount = 10000 - remainingDebtValue; // 갚은 빚을 계산
+    
+            // 남은 빚이 0 이하일 경우 0으로 표시
+            element.textContent = remainingAmount >= 0 ? remainingAmount : "0";
+        });
     }
+    
 
     // 플레이(생존) 시간을 계산하는 메서드
     calculateSurvivalTime(remainingTimeText) {
@@ -209,7 +218,6 @@ export class shutDown {
     showModal() {
         console.log('셧다운 모달 표시');
         this.modal.style.display = "block";
-
     }
 
     hideModal() {
