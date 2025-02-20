@@ -131,13 +131,12 @@ export class shutDown {
     // 게임클리어, 오버에 있는 모달의 내용 상태를 업데이트하는 메서드
     getGameStats() {
         // 각 요소를 가져옵니다.
-
-        // this.titleScreenButtons = document.querySelectorAll("#titleScreenButton");
-        // this.restartButtons = document.querySelectorAll("#restartButton");
-
         const playTime = document.getElementById('survival-time');
         const creditsdebt = document.getElementById('credits-debt');
         const totalScore = document.getElementById('total-score');
+        
+        console.log("playTime:", playTime);
+        console.log("creditsdebt:", creditsdebt);
 
         // remaining-time 요소에서 시간 값을 가져옵니다 (예: "9:47")
         const remainingTimeText = this.remainingTime.textContent.trim();
@@ -175,6 +174,7 @@ export class shutDown {
 
     // 게임 승리 처리
     handleGameWin() {
+        this.getGameStats();
         // 게임 승리 모달 표시시
         this.gameWin.style.display = "block";
         // 게임 패배 모달 숨기기
@@ -190,6 +190,7 @@ export class shutDown {
     }
 
     handleGameLose() {
+        this.getGameStats();
         // 게임 승리 모달 숨기기
         this.gameWin.style.display = "none";
         // 게임 패배 모달 표시

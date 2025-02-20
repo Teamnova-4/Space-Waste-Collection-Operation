@@ -22,10 +22,10 @@ export class DebtSystem {
     }
 
     Initialize() {
-        this.totalDebt = 0; // 초기 빚
+        this.totalDebt = 10000; // 초기 빚
         this.interestRate = 500; // 1분마다 갚아야 할 할당량
         this.gameTime = 0; // 게임 시작부터 경과한 시간 (초)
-        this.totalGameTime = 5; // 총 게임 시간 (10분 = 600초)
+        this.totalGameTime = 600; // 총 게임 시간 (10분 = 600초)
         this.lastCollectionTime = 0; // 마지막 징수 시간
 
         // 1초마다 시간 체크
