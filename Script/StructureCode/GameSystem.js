@@ -116,6 +116,11 @@ class Transform {
         this.calculateRotation();
     }
 
+    setScale(value){
+        this.scale.x = value;
+        this.scale.y = value;
+    }
+
     calculateRotation() {
         if (this.rotation > 360) {
             this.rotation -= 360;
@@ -302,13 +307,13 @@ class GameResource {
         const radians = (this.gameObject.transform.rotation * Math.PI) / 180; // 도를 라디안으로 변환
 
         this.size = {
-            x: this.gameObject.transform.scale.x * this.image.width,
-            y: this.gameObject.transform.scale.y * this.image.height
+            x: this.gameObject.transform.scale.x * this.image.width * Background.SCALE,
+            y: this.gameObject.transform.scale.y * this.image.height * Background.SCALE
         }
 
         const pivot = {
-            x: this.gameObject.transform.position.x,
-            y: this.gameObject.transform.position.y,
+            x: this.gameObject.transform.position.x * Background.SCALE,
+            y: this.gameObject.transform.position.y * Background.SCALE,
         }
 
         // 캔버스 상태 저장
@@ -430,6 +435,7 @@ export class GameLoop {
         this.gameStartTime = performance.now();
         console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
 
+
         // 우클릭 방지 코드 추가
         addEventListener('contextmenu', (event) => {
             event.preventDefault();
@@ -439,6 +445,11 @@ export class GameLoop {
         addEventListener('selectstart', (event) => {
             event.preventDefault(); 
         });
+
+        // 백그라운드 BGM 시작
+        var backGroundMusic = new Audio('Resources/background-music.mp3');
+        backGroundMusic.loop = true; // BGM 반복재생 여부
+        backGroundMusic.play(); // BGM 시작
         
         // 클릭 메서드드
         canvas.addEventListener("click", this.onClickCanvas);
@@ -535,13 +546,7 @@ export class Background {
             return Background.instance;
         }
 
-        this.canvas = canvas;
-        this.ctx = ctx;
-        this.image = new Image();
-        this.image.src = "Resources/BackGround.png";
-        this.speed = 0.01;
-        this.x = 0; // 배경의 초기 위치
-        this.isRunning = false;
+
 
         this.Initialize();
         Background.instance = this;
@@ -561,7 +566,31 @@ export class Background {
     /**
      * 싱클톤 초기화 함수
      */
-    Initialize() { }
+    Initialize() { 
+        var backGroundMusic = new Audio('Resources/background-music.mp3');
+        backGroundMusic.loop = true; // BGM 반복재생 여부
+        backGroundMusic.play();    
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.image = new Image();
+        this.image.src = "Resources/BackGround.png";
+        this.speed = 0.05;
+        this.x = 0; // 배경의 초기 위치
+        this.isRunning = false;
+    }
+
+    static INIT_SCALE(scale) {
+
+        // 실제 캔버스 크기
+        Background.REAL_CANVAS_SIZE = {width: Background.Instance().canvas.width, height: Background.Instance().canvas.height};
+
+        // 게임 캔버스 크기
+        Background.CANVAS_SIZE = {width: scale, height: scale / Background.REAL_CANVAS_SIZE.width * Background.REAL_CANVAS_SIZE.height};
+
+
+        // 게임 캔버스 대비 실제 비율
+        Background.SCALE = Background.REAL_CANVAS_SIZE.width / scale; 
+    }
 
     start() {
         if (this.isRunning) return;

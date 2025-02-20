@@ -1,6 +1,6 @@
 // "GameObject" 클래스를 임포트합니다. 이 클래스는 기본적인 게임 오브젝트의 기능을 제공합니다.
 import { DroneManager } from "../DronePannel/DroneManager.js";
-import { GameObject } from "../StructureCode/GameSystem.js";
+import { Background, GameObject } from "../StructureCode/GameSystem.js";
 import { TrashFactory } from "../TrashFactory.js";
 
 // SpaceStation 클래스는 플레이어가 조작하는 우주선과 관련된 상태정보를 갖습니다.
@@ -42,20 +42,19 @@ export class SpaceStation extends GameObject {
         this.resource.image.src = "Resources/spaceStation.png";
 
         // 게임 오브젝트의 초기 위치를 설정
-        this.transform.position.x = window.innerWidth - 300;  // 화면 좌측 X
-        this.transform.position.y = window.innerHeight / 2; // 화면 중앙 Y
+        this.transform.position.x = Background.CANVAS_SIZE.width - 10;  // 화면 좌측 X
+        this.transform.position.y = Background.CANVAS_SIZE.height / 2; // 화면 중앙 Y
 
         // 게임 오브젝트의 크기를 설정합니다.
-        // X와 Y 방향으로 각각 0.4배 크기로 설정합니다.
-        this.transform.scale.x = 0.5;
-        this.transform.scale.y = 0.5;
+        this.transform.scale.x = 1.7;
+        this.transform.scale.y = 1.3;
 
         // 앵커를 설정하여 오브젝트가 화면의 중심을 기준으로 회전할 수 있도록 합니다.
         this.transform.anchor.x = 0.5;
         this.transform.anchor.y = 0.5;
 
         // 게임 오브젝트의 초기 회전값을 0으로 설정합니다.
-        this.transform.rotation = 0;
+        this.transform.rotation = -90;
 
         // 물리 엔진에서의 속도 설정 (고정된 우주선이므로 속도는 0으로 설정)
         this.physics.velocity.x = 0;
@@ -65,15 +64,14 @@ export class SpaceStation extends GameObject {
     // 게임 오브젝트가 매 프레임마다 업데이트될 때 호출되는 메서드
     Update() {
         // TrashFactory의 nearTrashList 정렬 업데이트
-        TrashFactory.Instance().nearTrashList = TrashFactory.Instance().trashList.sort(
-            (a, b) => b.transform.position.x - a.transform.position.x
+        TrashFactory.Instance().nearTrashList = [...TrashFactory.Instance().trashList].sort(
+            (a, b) => this.transform.Distance(a.transform.position) - this.transform.Distance(b.transform.position)
         );
 
-        // 매 업데이트마다 게임 오브젝트의 회전값을 1도씩 증가시킵니다.
-        // this.transform.rotation += 0;
-        if (TrashFactory.Instance().nearTrashList.length > 0) {
+
+        if (TrashFactory.Instance().trashList.length > 0) {
             DroneManager.Instance().getDrones().filter(drone => !drone.isWorking).forEach(drone => {
-                const trash = TrashFactory.Instance().nearTrashList.shift();
+                const trash = TrashFactory.Instance().trashList.shift();
                 if (trash !== null && trash !== undefined) {
                     drone.StartWork(trash);
                     trash.target(drone);
