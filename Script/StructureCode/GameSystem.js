@@ -446,6 +446,11 @@ export class GameLoop {
         addEventListener('selectstart', (event) => {
             event.preventDefault(); 
         });
+
+        // 백그라운드 BGM 시작
+        var backGroundMusic = new Audio('Resources/background-music.mp3');
+        backGroundMusic.loop = true; // BGM 반복재생 여부
+        backGroundMusic.play(); // BGM 시작
         
         // 클릭 메서드드
         canvas.addEventListener("click", this.onClickCanvas);
@@ -554,6 +559,7 @@ export class Background {
     static Instance() {
         if (!Background.instance) {
             Background.instance = new Background();
+            Background.instance.Initialize();
         }
         return Background.instance;
     }
@@ -562,6 +568,9 @@ export class Background {
      * 싱클톤 초기화 함수
      */
     Initialize() { 
+        var backGroundMusic = new Audio('Resources/background-music.mp3');
+        backGroundMusic.loop = true; // BGM 반복재생 여부
+        backGroundMusic.play();    
         this.canvas = canvas;
         this.ctx = ctx;
         this.image = new Image();

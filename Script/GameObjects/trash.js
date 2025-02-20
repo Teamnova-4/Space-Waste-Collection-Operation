@@ -1,6 +1,5 @@
 import { Background, GameObject } from "../StructureCode/GameSystem.js";
-import { SpaceStation } from "../GameObjects/SpaceStation.js";
-import { Util } from "../Util.js";
+import { SpaceStation } from "./spaceStation.js";
 
 // 기본 Trash 클래스
 export class Trash extends GameObject {

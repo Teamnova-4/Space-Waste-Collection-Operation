@@ -49,7 +49,6 @@
     top: 20px; /* 원하는 위치에 따라 top, bottom, left, right 등을 설정 */
     right: 320px; /* 예시: 왼쪽 상단 20px 위치 */
     display: flex; /* 가로 배치 */
-    z-index: 10;
 }
 
 /* 크레딧 UI */
@@ -133,31 +132,13 @@
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* 코인 아이콘 기본 스타일 */
-.coin-icon {
-    width: 36px;  /* 24px * 1.5 = 36px */
-    height: 24px;
-    vertical-align: middle;
-    margin-right: 5px;
+/* 코인 반짝임 효과 */
+@keyframes coinShine {
+    0% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0.5; transform: scale(1); }
 }
 
-/* 반짝이는 효과 애니메이션 */
-@keyframes shine {
-    0% {
-        filter: brightness(1);
-        transform: scale(1);
-    }
-    50% {
-        filter: brightness(1.5);
-        transform: scale(1.2);
-    }
-    100% {
-        filter: brightness(1);
-        transform: scale(1);
-    }
-}
-
-/* 반짝이는 효과를 위한 클래스 */
-.coin-shine {
-    animation: shine 1s ease-in-out;
+.animate-coin {
+    animation: coinShine 1s ease-in-out;
 }
