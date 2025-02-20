@@ -164,19 +164,12 @@ export class DroneManager {
             return;
         }
 
-        // 크레딧 확인
-        if (this.user.credits < this.slotUpgradePrice) {
-            console.log("크레딧이 부족합니다.");
-            return;
+        if(User.UseCredit(this.slotUpgradePrice)){
+            this.slots.push(new DroneSlot(this.slots.length));
+            // 다음 슬롯 확장 시 50% 가격 인상
+            this.slotUpgradePrice = Math.floor(this.slotUpgradePrice * 1.5);
+            this.updateView();
         }
-
-        // 크레딧 차감
-        this.user.credits -= this.slotUpgradePrice;
-        // 새 슬롯 추가 (슬롯 인덱스는 현재 슬롯 개수)
-        this.slots.push(new DroneSlot(this.slots.length));
-        // 슬롯 확장 비용 증가
-        this.slotUpgradePrice = Math.floor(this.slotUpgradePrice * 1.5);
-        this.updateView(); // UI 업데이트
     }
 
     /**

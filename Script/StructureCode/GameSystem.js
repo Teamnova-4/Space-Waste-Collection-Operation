@@ -1,4 +1,3 @@
-import AlertSystem from "../AlertSystem.js";
 import { Util } from "../Util.js";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -431,8 +430,6 @@ export class GameLoop {
         this.lastFrameTime = performance.now(); // 게임 시작 시간 설정
         this.gameStartTime = performance.now();
         console.log(`캔버스 크기: ${this.canvas.width}x${this.canvas.height}`); // 캔버스 크기 로그 추가
-
-        AlertSystem.AddAlert("GameStart", "게임 시작했습니다.");
 
         // 우클릭 방지 코드 추가
         addEventListener('contextmenu', (event) => {

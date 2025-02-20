@@ -42,7 +42,7 @@ export default class AlertSystem{
             this.isShowing = true;
 
             const alert = this.alertList.shift();
-            console.log(`!Alert! title: ${alert.title} description: ${alert.description}`);
+            console.log(`%c [Alert] title: ${alert.title} description: ${alert.description}`, "background: red; color:white; font-weight:bold");
             this.alertTitle.innerHTML = alert.title ?? "Alert";
             this.alertMessage.innerHTML = alert.description ?? "default alert";
             this.alertOverlay.style.display = "block";
