@@ -7,9 +7,22 @@ export class shutDown {
 
         }
         shutDown.instance = this;
+        this.Initialize();
+        /**
+       * 싱클톤 초기화 함수
+       */
+    }
+    static Instance() {
+        if (!shutDown.instance) {
+            shutDown.instance = new shutDown();
+        }
+        return shutDown.instance;
+    }
+
+
+    Initialize() {
         console.log("셧다운 생성");
         document.addEventListener("DOMContentLoaded", () => {
-
             this.modal = document.getElementById("gameChoseModal");
             this.gameWin = document.getElementById("gameWin");
             this.gameOver = document.getElementById("gameOver");
@@ -20,14 +33,24 @@ export class shutDown {
             this.gameClearModal = document.getElementById("gameClearModal");
             this.shutdownChoseButton = document.getElementById("shutDown");
             this.gameOverModal = document.getElementById("gameOverModal");
-
-
             this.titleScreenButtons = document.querySelectorAll("#titleScreenButton");
             this.restartButtons = document.querySelectorAll("#restartButton");
+
+            // 게임 상태요소 가져옴옴
+            this.remainingTime = document.getElementById("remaining-time");
+            this.remainingDebt = document.getElementById("remaining-debt");
+            this.nextDebt = document.getElementById("next-debt");
+
+            console.log(this.remainingTime);
 
             if (!this.gameOverModal || !this.shutdownChoseButton || !this.modal || !this.gameWin || !this.gameOver || !this.closeBtn
                 || !this.winButton || !this.loseButton || !this.cancelButton || !this.gameClearModal) {
                 console.error("❌ 셧다운 관련 요소를 찾을 수 없습니다. HTML을 확인하세요.");
+                return;
+            }
+
+            if (!this.remainingTime || !this.remainingTime) {
+                console.error("❌ 남은시간, 남은금액, 다음 징수액 요소를 찾을 수 없습니다. HTML을 확인하세요.");
                 return;
             }
             // 셧다운 게임승리, 게임 패배, 취소, 버튼 리스너
@@ -36,14 +59,11 @@ export class shutDown {
             this.setupSeceondEventListeners();
             // 셧다운 모달 숨기기
             this.modal.style.display = "none";
+
+            // const debtSystem = DebtSystem.Instance();
+
+
         });
-    }
-    /**
-   * 싱클톤 초기화 함수
-   */
-    Initialize() {
-        this.setupFirstEventListeners();
-        this.setupSeceondEventListeners();
     }
 
     setupFirstEventListeners() {
@@ -90,15 +110,57 @@ export class shutDown {
             });
         });
     }
+    // 게임클리어, 오버에 있는 모달의 내용 상태를 업데이트하는 메서드
+    getGameStats() {
+        // 각 요소를 가져옵니다.
+        const playTime = document.getElementById('survival-time');
+        const achievementLevel = document.getElementById('achievement-level');
+        const trashCount = document.getElementById('trash-count');
+        const creditsEarned = document.getElementById('credits-earned');
+        const totalScore = document.getElementById('total-score');
+
+        // remaining-time 요소에서 시간 값을 가져옵니다 (예: "9:47")
+        const remainingTimeText = this.remainingTime.textContent.trim();
+
+        // 생존 시간을 계산하고 표시
+        const calculatedSurvivalTime = this.calculateSurvivalTime(remainingTimeText);
+        playTime.textContent = calculatedSurvivalTime;
+        
+    }
+
+    // 플레이(생존) 시간을 계산하는 메서드
+    calculateSurvivalTime(remainingTimeText) {
+        // 시간과 분을 분리하여 초로 변환합니다.
+        const timeParts = remainingTimeText.split(":");
+        const minutes = parseInt(timeParts[0], 10); // 분
+        const seconds = parseInt(timeParts[1], 10); // 초
+
+        // 남은 시간을 초로 변환
+        const remainingTimeInSeconds = (minutes * 60) + seconds;
+
+        // 600초에서 남은 시간을 빼서 생존 시간 계산
+        const playTime = 600 - remainingTimeInSeconds;
+
+        // 플레이 시간을 "분:초" 형식으로 변환
+        const survivalMinutes = Math.floor(playTime / 60);
+        const survivalSeconds = playTime % 60;
+
+        // "분:초" 형식으로 반환
+        return `${survivalMinutes}:${survivalSeconds < 10 ? '0' + survivalSeconds : survivalSeconds}`;
+    }
+
 
     // 게임 승리 처리
     handleGameWin() {
+        this.getGameStats();
         // 게임 승리 모달 표시시
         this.gameWin.style.display = "block";
         // 게임 패배 모달 숨기기
         this.gameOver.style.display = "none";
         // 게임 승리 모달 표시
         this.gameClearModal.style.display = "block";
+        // this.gameClearModal.textContent = "게임 승리!";
+        this.gameStats = document.getElementById("game-stats");
         console.log("게임 승리로 종료");
         // 10초뒤 모달 닫고 타이틀로 이동
         setTimeout(() => {
@@ -108,6 +170,7 @@ export class shutDown {
     }
 
     handleGameLose() {
+        // this.getGameStats();
         // 게임 승리 모달 숨기기
         this.gameWin.style.display = "none";
         // 게임 패배 모달 표시
@@ -125,6 +188,7 @@ export class shutDown {
 
     showModal() {
         console.log('셧다운 모달 표시');
+
         this.modal.style.display = "block";
     }
 
@@ -143,10 +207,5 @@ export class shutDown {
     reStart() {
         window.location.reload();
     }
-    static Instance() {
-        if (!shutDown.instance) {
-            shutDown.instance = new shutDown();
-        }
-        return shutDown.instance;
-    }
+
 }
